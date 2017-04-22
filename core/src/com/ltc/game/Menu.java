@@ -69,7 +69,7 @@ public class Menu extends BaseScreen {
         {
             if(Gdx.input.getX()>=skin.getX() && Gdx.input.getX()<=skin.getX()+700 &&
                     Gdx.input.getY()>=skin.getY()+200 && Gdx.input.getY()<=skin.getY()+400) {
-                   // game.setScreen(new GameScreen(game));
+                    game.setScreen(new GameScreen(game));
 
             }
             if(Gdx.input.getX()>=skpl1.getX() && Gdx.input.getX()<=skpl1.getX()+150 &&
