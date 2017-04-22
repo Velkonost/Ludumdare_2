@@ -184,7 +184,7 @@ public class GameScreen extends BaseScreen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         stage.act();
-
+//
         playerVloger.processInput();
         playerProger.processInput();
 
