@@ -15,11 +15,11 @@ import com.ltc.game.entities.BotIdleEntity;
 import com.ltc.game.entities.PlayerProgerEntity;
 import com.ltc.game.entities.PlayerVlogerEntity;
 import com.ltc.game.entities.WallEntiy;
-import com.oracle.javafx.jmx.json.JSONException;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.JSONException;
 import io.socket.emitter.Emitter;
 
 import java.util.ArrayList;
@@ -302,7 +302,6 @@ public class GameScreen extends BaseScreen {
         if(timer >= UPDATE_TIME && playerVloger!=null && playerVloger.hasMoved())
         {
             JSONObject data = new JSONObject();
-            try {
                 try {
                     data.put("x", playerVloger.getBody().getPosition().x);
                 } catch (org.json.JSONException e) {
@@ -314,10 +313,6 @@ public class GameScreen extends BaseScreen {
                     e.printStackTrace();
                 }
                 socket.emit("playerMoved", data);
-            }catch (JSONException ignored){
-
-            }
-
 
         }
     }
@@ -348,30 +343,24 @@ public class GameScreen extends BaseScreen {
                     Gdx.app.log("SocketIO", "My ID: " + playerId);
                 } catch (JSONException e) {
                     Gdx.app.log("SocketIO", "Error getting ID");
-                } catch (org.json.JSONException e) {
-                    e.printStackTrace();
                 }
             }
         }).on("newPlayer", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
                 JSONObject data = (JSONObject) args[0];
+                String playerId = null;
                 try {
-                    String playerId = null;
-                    try {
-                        playerId = data.getString("id");
-                    } catch (org.json.JSONException e) {
-                        e.printStackTrace();
-                    }
-                    Gdx.app.log("SocketIO", "New Player Connect: " + id);
-                    Texture floorTexture = game.getManager().get("badlogic.jpg");
-                    PlayerVlogerEntity playerEntity = new PlayerVlogerEntity(playerVlogerTexture, playerVlogerCameraTexture, GameScreen.this, world, 1, 2);
-                    // playerEntity.setPosition(1,2);
-                    //  stage.addActor(playerEntity);
-                    friendlyPlayers.put(playerId, playerEntity);
-                }catch(JSONException e){
-                    Gdx.app.log("SocketIO", "Error getting New PlayerID");
+                    playerId = data.getString("id");
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
+                Gdx.app.log("SocketIO", "New Player Connect: " + id);
+                Texture floorTexture = game.getManager().get("badlogic.jpg");
+                PlayerVlogerEntity playerEntity = new PlayerVlogerEntity(playerVlogerTexture, playerVlogerCameraTexture, GameScreen.this, world, 1, 2);
+                // playerEntity.setPosition(1,2);
+                //  stage.addActor(playerEntity);
+                friendlyPlayers.put(playerId, playerEntity);
             }
         }).on("playerDisconnected", new Emitter.Listener() {
             @Override
@@ -384,8 +373,6 @@ public class GameScreen extends BaseScreen {
 
                 }catch(JSONException e){
                     Gdx.app.log("SocketIO", "Error getting disconnected PlayerID");
-                } catch (org.json.JSONException e) {
-                    e.printStackTrace();
                 }
             }
         }).on("playerMoved", new Emitter.Listener() {
@@ -409,8 +396,6 @@ public class GameScreen extends BaseScreen {
                     }
                 }catch(JSONException e){
                     Gdx.app.log("SocketIO", "Error getting disconnected PlayerID");
-                } catch (org.json.JSONException e) {
-                    e.printStackTrace();
                 }
             }
         }).on("getPlayers", new Emitter.Listener() {
@@ -431,8 +416,6 @@ public class GameScreen extends BaseScreen {
                     }
                 } catch(JSONException e){
 
-                } catch (org.json.JSONException e) {
-                    e.printStackTrace();
                 }
             }
         });
