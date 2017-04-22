@@ -52,7 +52,7 @@ public class PlayerProgerEntity extends Actor implements InputProcessor {
     private Fixture fixture;
 
 
-    public static final float SPEED_PROGER = 2f;
+    public static final float SPEED_PROGER = 10f;
 
     public PlayerProgerEntity(Texture texture, Texture phoneTexture, GameScreen game, World world, float x, float y) {
         this.texture = texture;

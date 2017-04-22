@@ -11,10 +11,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.ltc.game.entities.BotIdleEntity;
-import com.ltc.game.entities.PlayerProgerEntity;
-import com.ltc.game.entities.PlayerVlogerEntity;
-import com.ltc.game.entities.WallEntiy;
+import com.ltc.game.entities.*;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
@@ -57,6 +54,9 @@ public class GameScreen extends BaseScreen {
     private PlayerProgerEntity playerProger;
     private ArrayList<WallEntiy> wall;
 
+    private ArrayList<Texture> tableTextures;
+    private ArrayList<TableEntity> table;
+
 
     private Texture playerVlogerTexture;
     private Texture playerVlogerCameraTexture;
@@ -88,7 +88,10 @@ public class GameScreen extends BaseScreen {
         this.choosenVlog = choosenVlog;
         stage = new Stage(new FitViewport(1280, 720));
         world = new World(new Vector2(0, 0), true);
+
         wall = new ArrayList<WallEntiy>();
+        table = new ArrayList<TableEntity>();
+        tableTextures = new ArrayList<Texture>();
 
         botsIdle = new ArrayList();
     }
@@ -106,6 +109,12 @@ public class GameScreen extends BaseScreen {
         friendlyPlayers2 = new HashMap<String, PlayerProgerEntity>();
         Texture wallT = game.getManager().get("table8bit.jpg");
 
+        for (int i = 0; i < 7; i++)
+            tableTextures.add((Texture) game.getManager().get("table" + (i + 1) + ".png"));
+        Texture t = tableTextures.get(0);
+
+
+
         Timer.schedule(new Timer.Task() {
 
             @Override
@@ -119,24 +128,33 @@ public class GameScreen extends BaseScreen {
             }
 
         }, 1, 1);
-//        wall[0] = new WallEntiy(wallT, world,14.5f,0.5f, 21f, 1f);
-//        wall[1] = new WallEntiy(wallT, world, 25.5f,6f, 1f, 12f);
-//        wall[2] = new WallEntiy(wallT, world, 24f,12.5f, 4f, 1f);
-//        wall[3] = new WallEntiy(wallT, world, 22.5f, 14f,1f, 2f);
-//        wall[4] = new WallEntiy(wallT, world, 23.5f, 18.5f, 1f,9f);
-//        wall[5] = new WallEntiy(wallT, world, 21f, 22.5f, 6f, 1f);
-//        wall[6] = new WallEntiy(wallT, world, 18.5f, 20f, 1f, 4f);
-//        wall[7] = new WallEntiy(wallT, world, 16f, 18.5f, 4f, 1f);
-//        wall[8] = new WallEntiy(wallT, world, 14.5f, 20f, 1f,2f);
-//        wall[9] = new WallEntiy(wallT, world, 12f, 20.5f, 4f,1f);
-//        wall[10] = new WallEntiy(wallT, world, 10.5f, 19.5f, 1f,1f);
-//        wall[11] = new WallEntiy(wallT, world, 5.5f, 18.5f, 11f,1f);
-//        wall[12] = new WallEntiy(wallT, world, 0.5f, 14f, 1f,8f);
-//        wall[13] = new WallEntiy(wallT, world, 2f, 9.5f, 4f,1f);
-//        wall[14] = new WallEntiy(wallT, world, 4.5f, 5.5f, 1f,9f);
-//        wall[15] = new WallEntiy(wallT, world, 11.5f, 9.5f, 1f,1f);
-//        wall[16] = new WallEntiy(wallT, world, 18.5f, 9.5f, 1f,1f);
-        wall.add(new WallEntiy(wallT, world, 4.0f, 3.5f, 10f, 1f));
+
+        wall.add(new WallEntiy(wallT, world, 14.5f, 0.5f, 21f, 1f, 10f, 0));
+        wall.add(new WallEntiy(wallT, world, 25.5f, 6f, 1f, 12f, 0, 6.0f));
+        wall.add(new WallEntiy(wallT, world, 24f, 12.0f, 4f, 1f, 1.5f, 0));
+        wall.add(new WallEntiy(wallT, world, 4.0f, 5.0f, 1f, 9f, 0, 4.0f));
+
+        wall.add(new WallEntiy(wallT, world, 22.5f, 14f, 1f, 2f, 0, 1f));
+        wall.add(new WallEntiy(wallT, world, 22.5f, 18.5f, 1f, 9f, 0, 4f));
+        wall.add(new WallEntiy(wallT, world, 21f, 22.5f, 6f, 1f, 2.5f, 0));
+        wall.add(new WallEntiy(wallT, world, 18.5f, 20f, 1f, 4f, 0, 1.5f));
+        wall.add(new WallEntiy(wallT, world, 16f, 18.5f, 4f, 1f, 1.5f, 0));
+        wall.add(new WallEntiy(wallT, world, 14.5f, 20f, 1f, 2f, 0, 0.5f));
+        wall.add(new WallEntiy(wallT, world, 12f, 20.5f, 4f, 1f, 1.5f, 0));
+        wall.add(new WallEntiy(wallT, world, 10.5f, 19.5f, 1f, 1f, 0, 0));
+        wall.add(new WallEntiy(wallT, world, 5.5f, 18.5f, 11f,1f, 5f, 0));
+        wall.add(new WallEntiy(wallT, world, 0.5f, 14f, 1f,8f, 0, 3.5f));
+        wall.add(new WallEntiy(wallT, world, 2f, 9.5f, 4f,1f, 1f, 0));
+        wall.add(new WallEntiy(wallT, world, 11.5f, 9.5f, 1f,1f, 0, 0));
+        wall.add(new WallEntiy(wallT, world, 18.5f, 9.5f, 1f,1f, 0, 0));
+
+        table.add(new TableEntity(tableTextures.get(6), world, 7f, 17f, 6f, 2f, 2.5f, 0.5f));
+        table.add(new TableEntity(tableTextures.get(1), world, 20.f, 4.f, 2f, 6f, 0.5f, 2.5f));
+        table.add(new TableEntity(tableTextures.get(2), world, 5.5f, 4.f, 2f, 6f, 0.5f, 2.5f));
+        table.add(new TableEntity(tableTextures.get(3), world, 24.f, 4.f, 2f, 6f, 0.5f, 2.5f));
+        table.add(new TableEntity(tableTextures.get(4), world, 10.5f, 4.f, 2f, 6f, 0.5f, 2.5f));
+        table.add(new TableEntity(tableTextures.get(5), world, 15.f, 4.f, 2f, 6f, 0.5f, 2.5f));
+//        table.add(new TableEntity(tableTextures.get(0), world, 18.f, 4.f, 2f, 6f, 0, 2.5f));
 
         playerVloger = new PlayerVlogerEntity(playerVlogerTexture, playerVlogerCameraTexture, this, world, 9f, 7f);
         playerProger = new PlayerProgerEntity(playerProgerTexture, phoneTexture, this, world, 6.5f, 3.5f);
@@ -154,7 +172,9 @@ public class GameScreen extends BaseScreen {
             stage.addActor(wall.get(i));
         }
 
-
+        for(int i = 0; i < table.size(); i++){
+            stage.addActor(table.get(i));
+        }
 
       /*  stage.addActor(playerVloger);
         stage.addActor(playerProger);*/
@@ -287,9 +307,10 @@ public class GameScreen extends BaseScreen {
         sp.end();
 
         stage.act();
-//
-       /* playerVloger.processInput();
-        playerProger.processInput();*/
+
+//        playerVloger.processInput();
+//        playerProger.processInput();
+
         if(checkPlayer) {
             playerVloger.processInput();
             for (HashMap.Entry<String, PlayerProgerEntity> entry : friendlyPlayers2.entrySet()) {
