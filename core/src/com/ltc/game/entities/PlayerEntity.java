@@ -32,8 +32,7 @@ public class PlayerEntity extends Actor implements InputProcessor {
         keys.put(Keys.UP, false);
         keys.put(Keys.DOWN, false);
 
-    };
-
+    }
 
     private Texture texture;
 
@@ -100,16 +99,12 @@ public class PlayerEntity extends Actor implements InputProcessor {
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.D) {
             rightPressed();
-//            body.setLinearVelocity(SPEED, body.getLinearVelocity().y);
         } else if (keycode == Input.Keys.A) {
             leftPressed();
-//            body.setLinearVelocity(-SPEED, body.getLinearVelocity().y);
         } else if (keycode == Input.Keys.W) {
             upPressed();
-//            body.setLinearVelocity(body.getLinearVelocity().x, SPEED);
         } else if (keycode == Input.Keys.S) {
             downPressed();
-//            body.setLinearVelocity(body.getLinearVelocity().x, -SPEED);
         }
         return true;
     }
@@ -118,16 +113,12 @@ public class PlayerEntity extends Actor implements InputProcessor {
     public boolean keyUp(int keycode) {
         if (keycode == Input.Keys.D) {
             rightReleased();
-//            body.setLinearVelocity(0, body.getLinearVelocity().y);
         } else if (keycode == Input.Keys.A) {
             leftReleased();
-//            body.setLinearVelocity(0, body.getLinearVelocity().y);
         } else if (keycode == Input.Keys.W) {
             upReleased();
-//            body.setLinearVelocity(body.getLinearVelocity().x, 0);
         } else if (keycode == Input.Keys.S) {
             downReleased();
-//            body.setLinearVelocity(body.getLinearVelocity().x, 0);
         }
         return true;
     }

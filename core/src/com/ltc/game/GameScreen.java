@@ -74,21 +74,4 @@ public class GameScreen extends BaseScreen {
         world.dispose();
         renderer.dispose();
     }
-
-//    private void processInput() {
-//        if (keys.get(Keys.LEFT))
-//            player.getBody().setLinearVelocity(-PlayerEntity.SPEED, player.getBody().getLinearVelocity().y);
-//        if (keys.get(Keys.RIGHT))
-//            player.getBody().setLinearVelocity(PlayerEntity.SPEED, player.getBody().getLinearVelocity().y);
-//        if (keys.get(Keys.UP))
-//            player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, PlayerEntity.SPEED);
-//        if (keys.get(Keys.DOWN))
-//            player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, -PlayerEntity.SPEED);
-////если не выбрано направление, то стоим на месте
-//        if ((keys.get(Keys.LEFT) && keys.get(Keys.RIGHT)) || (!keys.get(Keys.LEFT) && (!keys.get(Keys.RIGHT))))
-//            player.getBody().setLinearVelocity(0, player.getBody().getLinearVelocity().y);
-//        if ((keys.get(Keys.UP) && keys.get(Keys.DOWN)) || (!keys.get(Keys.UP) && (!keys.get(Keys.DOWN))))
-//            player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 0);
-//
-//    }
 }
