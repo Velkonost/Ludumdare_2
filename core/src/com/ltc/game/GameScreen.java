@@ -41,7 +41,6 @@ public class GameScreen extends BaseScreen {
         renderer = new Box2DDebugRenderer();
         camera = new OrthographicCamera(16, 9);
         camera.translate(0, 1);
-
         Texture playerTexture = game.getManager().get("badlogic.jpg");
 
         player = new PlayerEntity(playerTexture, world, 1, 2);
