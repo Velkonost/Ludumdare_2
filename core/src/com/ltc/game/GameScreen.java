@@ -15,8 +15,15 @@ import com.ltc.game.entities.BotIdleEntity;
 import com.ltc.game.entities.PlayerProgerEntity;
 import com.ltc.game.entities.PlayerVlogerEntity;
 import com.ltc.game.entities.WallEntiy;
+import io.socket.client.IO;
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static java.lang.Math.floor;
 
@@ -25,7 +32,11 @@ import static java.lang.Math.floor;
  */
 public class GameScreen extends BaseScreen {
 
-    private final float UPDATE_TIME = 1 / 60f;
+    private final float UPDATE_TIME = 1/60f;
+    private float timer;
+    private HashMap<String, PlayerVlogerEntity> friendlyPlayers;
+    private Socket socket;
+    private String id;
 
     private Stage stage;
 
@@ -56,7 +67,7 @@ public class GameScreen extends BaseScreen {
 
     private float deltatime, tmp = 0;
 
-    private int a = 5;
+    private int a = 180;
     boolean kf = false;
 
     private GuiMenu guiMenu;
@@ -80,12 +91,14 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public void show() {
+        connectSocket();
+        configSocketEvents();
         renderer = new Box2DDebugRenderer();
         camera = new OrthographicCamera(4, 2.25f);
         camera.translate(0, 1);
         botsIdleTexture = new ArrayList<Texture>();
         getTextures();
-
+        friendlyPlayers = new HashMap<String, PlayerVlogerEntity>();
 
         Timer.schedule(new Timer.Task() {
 
@@ -218,6 +231,8 @@ public class GameScreen extends BaseScreen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        updateServer(Gdx.graphics.getDeltaTime());
+
         if(kf)
         {
             game.setScreen(new GuiMenu(game, 'l', 0));
@@ -276,5 +291,121 @@ public class GameScreen extends BaseScreen {
 
     public boolean isHasPhone() {
         return hasPhone;
+    }
+
+    public void updateServer(float dt)
+    {
+        timer+=dt;
+        if(timer >= UPDATE_TIME && playerVloger!=null && playerVloger.hasMoved())
+        {
+            JSONObject data = new JSONObject();
+            try {
+                data.put("x", playerVloger.getBody().getPosition().x);
+                data.put("y", playerVloger.getBody().getPosition().y);
+                socket.emit("playerMoved", data);
+            }catch (JSONException e){
+
+            }
+
+
+        }
+    }
+
+    public void connectSocket(){
+        try {
+            socket = IO.socket("http://localhost:3000");
+            socket.connect();
+        } catch(Exception e){
+            System.out.println(e);
+        }
+    }
+    public void configSocketEvents(){
+        socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                Gdx.app.log("SocketIO", "Connected");
+               /* Texture playerTexture = game.getManager().get("hero.png");
+                player = new PlayerEntity(playerTexture, world, new Vector2(1, 2));*/
+            }
+        }).on("socketID", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject data = (JSONObject) args[0];
+                try {
+
+                    String playerId = data.getString("id");
+                    Gdx.app.log("SocketIO", "My ID: " + playerId);
+                } catch (JSONException e) {
+                    Gdx.app.log("SocketIO", "Error getting ID");
+                }
+            }
+        }).on("newPlayer", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject data = (JSONObject) args[0];
+                try {
+                    String playerId = data.getString("id");
+                    Gdx.app.log("SocketIO", "New Player Connect: " + id);
+                    Texture floorTexture = game.getManager().get("badlogic.jpg");
+                    PlayerVlogerEntity playerEntity = new PlayerVlogerEntity(playerVlogerTexture, playerVlogerCameraTexture, GameScreen.this, world, 1, 2);
+                    // playerEntity.setPosition(1,2);
+                    //  stage.addActor(playerEntity);
+                    friendlyPlayers.put(playerId, playerEntity);
+                }catch(JSONException e){
+                    Gdx.app.log("SocketIO", "Error getting New PlayerID");
+                }
+            }
+        }).on("playerDisconnected", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject data = (JSONObject) args[0];
+                try {
+                    String playerId = data.getString("id");
+                    friendlyPlayers.get(playerId).remove();
+                    friendlyPlayers.remove(playerId);
+
+                }catch(JSONException e){
+                    Gdx.app.log("SocketIO", "Error getting disconnected PlayerID");
+                }
+            }
+        }).on("playerMoved", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject data = (JSONObject) args[0];
+                try {
+                    String playerId = data.getString("id");
+                    Double x = data.getDouble("x");
+                    Double y = data.getDouble("y");
+                    Vector2 vector2 = new Vector2();
+                    vector2.add(x.floatValue(), y.floatValue());
+                    if(friendlyPlayers.get(playerId)!=null)
+                    {
+                        friendlyPlayers.get(playerId).getBody().setTransform(vector2.x, vector2.y, 0 );
+                    }
+                }catch(JSONException e){
+                    Gdx.app.log("SocketIO", "Error getting disconnected PlayerID");
+                }
+            }
+        }).on("getPlayers", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONArray objects = (JSONArray) args[0];
+                try {
+                    for(int i = 0; i < objects.length(); i++){
+                        Texture floorTexture = game.getManager().get("badlogic.jpg");
+                        PlayerVlogerEntity coopPlayer = new PlayerVlogerEntity(playerVlogerTexture, playerVlogerCameraTexture, GameScreen.this, world, 1, 2);
+                        //coopPlayer.setPosition(1,2);
+                        Vector2 position = new Vector2();
+                        position.x = ((Double) objects.getJSONObject(i).getDouble("x")).floatValue();
+                        position.y = ((Double) objects.getJSONObject(i).getDouble("y")).floatValue();
+                        coopPlayer.setPosition(position.x, position.y);
+                        //  stage.addActor(coopPlayer);
+                        friendlyPlayers.put(objects.getJSONObject(i).getString("id"), coopPlayer);
+                    }
+                } catch(JSONException e){
+
+                }
+            }
+        });
     }
 }

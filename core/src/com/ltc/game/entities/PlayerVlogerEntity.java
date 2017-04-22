@@ -47,7 +47,7 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
     private int cameraTimer;
 
     private long time;
-
+    Vector2 previousPosition;
     private Texture texture;
     private Texture textureCamera;
 
@@ -76,7 +76,7 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
         this.textureCamera = textureCamera;
         this.world = world;
         this.game = game;
-
+        previousPosition = new Vector2(getX(), getY());
         setPosition(x, y);
         position = new Vector2(x, y);
 
@@ -185,7 +185,14 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
         }
         return true;
     }
-
+    public boolean hasMoved(){
+        if(previousPosition.x != getX() || previousPosition.y != getY()){
+            previousPosition.x = getX();
+            previousPosition.y = getY();
+            return true;
+        }
+        return false;
+    }
     @Override
     public boolean keyTyped(char character) {
         if (character == ' ' && countCameras > 0) {
