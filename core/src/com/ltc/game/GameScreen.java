@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -28,6 +30,10 @@ public class GameScreen extends BaseScreen {
 
     private Box2DDebugRenderer renderer;
 
+    BitmapFont font;
+    SpriteBatch sp;
+    CharSequence str;
+
     private OrthographicCamera camera;
 
     private String choosenProg, choosenVlog;
@@ -41,6 +47,8 @@ public class GameScreen extends BaseScreen {
     private Texture playerProgerTexture;
     private Texture phoneTexture;
     private Texture botIdleTexture;
+
+    private GuiMenu guiMenu;
 
     private ArrayList<BotIdleEntity> botsIdle;
 
@@ -68,6 +76,11 @@ public class GameScreen extends BaseScreen {
 
         playerVloger = new PlayerVlogerEntity(playerVlogerTexture, playerVlogerCameraTexture, this, world, 1, 2);
         playerProger = new PlayerProgerEntity(playerProgerTexture, phoneTexture, this, world, 6.5f, 3.5f);
+        //guiMenu = new GuiMenu()
+        font = new BitmapFont();
+        sp = new SpriteBatch();
+        str = "Tema lol";
+
 
         for (int i = 0; i < 5; i++) {
             botsIdle.add(new BotIdleEntity(botIdleTexture, this, world, i * 5, i * 2));
@@ -159,6 +172,10 @@ public class GameScreen extends BaseScreen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        sp.begin();
+        font.getData().setScale(3, 3);
+        font.draw(sp, str, Gdx.graphics.getWidth()-200,  Gdx.graphics.getHeight()-50);
+        sp.end();
 
         stage.act();
 
@@ -168,7 +185,6 @@ public class GameScreen extends BaseScreen {
         for (BotIdleEntity aBotsIdle : botsIdle) aBotsIdle.processInput();
 
         stage.getCamera().position.set(playerProger.getX(),playerProger.getY(), 0);
-
         world.step(delta, 6, 2);
         camera.update();
         renderer.render(world, camera.combined);
