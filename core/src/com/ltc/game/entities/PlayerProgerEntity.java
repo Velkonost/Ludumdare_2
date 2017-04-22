@@ -60,7 +60,7 @@ public class PlayerProgerEntity extends Actor implements InputProcessor {
         setPosition(x, y);
 
 //        Gdx.input.setInputProcessor(this);
-
+//
         BodyDef def = new BodyDef();
         def.position.set(x, y);
         def.type = BodyDef.BodyType.DynamicBody;
