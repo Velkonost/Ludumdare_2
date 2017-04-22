@@ -62,8 +62,6 @@ public class PlayerProgerEntity extends Actor implements InputProcessor {
         previousPosition = new Vector2(getX(), getY());
         setPosition(x, y);
 
-        Gdx.input.setInputProcessor(this);
-
         BodyDef def = new BodyDef();
         def.position.set(x, y);
         def.type = BodyDef.BodyType.DynamicBody;
@@ -83,7 +81,13 @@ public class PlayerProgerEntity extends Actor implements InputProcessor {
 
     }
 
-
+    public void boom(boolean boom){
+        if(boom) {
+            Gdx.input.setInputProcessor(this);
+        }else{
+            Gdx.input.setInputProcessor(null);
+        }
+    }
     public void detach() {
         body.destroyFixture(fixture);
         world.destroyBody(body);
