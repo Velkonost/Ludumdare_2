@@ -15,9 +15,9 @@ public class WallEntiy extends Actor {
     private World world;
     private Body body;
     private Fixture fixture;
-    float width, higth, x, y;
+    float width, higth, x, y, dwidth, dheight;
 
-    public WallEntiy(Texture texture, World world,  float x, float y, float widht, float higth){
+    public WallEntiy(Texture texture, World world,  float x, float y, float widht, float higth, float dwidth, float dheight){
         this.texture = texture;
         this.world = world;
 
@@ -25,7 +25,12 @@ public class WallEntiy extends Actor {
 //        y -= 0.5f;
         this.width = widht;
         this.higth = higth;
+
+        this.dwidth = dwidth;
+        this.dheight = dheight;
+
         setPosition(x, y);
+
 
         BodyDef def = new BodyDef();
         def.position.set(x, y);
@@ -43,8 +48,8 @@ public class WallEntiy extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        setPosition((body.getPosition().x - width / 2) * PIXELS_IN_METER, (body.getPosition().y - higth / 2) * PIXELS_IN_METER);
-        batch.draw(texture, getX(), getY(), getWidth() + 20, getHeight() + 10);
+        setPosition((body.getPosition().x - dwidth) * PIXELS_IN_METER , (body.getPosition().y - dheight) * PIXELS_IN_METER);
+        batch.draw(texture, getX(), getY(), getWidth(), getHeight());
     }
 
     public void detach() {

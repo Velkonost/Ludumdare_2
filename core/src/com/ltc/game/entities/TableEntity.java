@@ -16,26 +16,37 @@ public class TableEntity extends Actor {
     private World world;
     private Body body;
     private Fixture fixture;
+    float width, higth, x, y, dwidth, dheight;
 
-    public TableEntity(Texture texture, World world, Vector2 position){
+    public TableEntity(Texture texture, World world,  float x, float y, float widht, float higth, float dwidth, float dheight){
         this.texture = texture;
         this.world = world;
 
+        this.width = widht;
+        this.higth = higth;
+
+        this.dwidth = dwidth;
+        this.dheight = dheight;
+
+        setPosition(x, y);
+//
         BodyDef def = new BodyDef();
-        def.position.set(position);
+        def.position.set(x, y);
+        def.type = BodyDef.BodyType.StaticBody;
         body = world.createBody(def);
+
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(1f, 8f);
+        shape.setAsBox(widht / 2, higth / 2);
         fixture = body.createFixture(shape, 1);
-        fixture.setUserData("wall");
+        fixture.setUserData("table");
         shape.dispose();
 
-        setSize(1f * PIXELS_IN_METER, 8f * PIXELS_IN_METER);
+        setSize(width * PIXELS_IN_METER, higth * PIXELS_IN_METER);
     }
 
-     @Override
+    @Override
     public void draw(Batch batch, float parentAlpha) {
-        setPosition((body.getPosition().x) * PIXELS_IN_METER, (body.getPosition().y) * PIXELS_IN_METER);
+        setPosition((body.getPosition().x - dwidth) * PIXELS_IN_METER , (body.getPosition().y - dheight) * PIXELS_IN_METER);
         batch.draw(texture, getX(), getY(), getWidth(), getHeight());
     }
 
