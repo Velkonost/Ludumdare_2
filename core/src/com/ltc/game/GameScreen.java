@@ -17,11 +17,10 @@ import com.ltc.game.entities.PlayerVlogerEntity;
 import com.ltc.game.entities.WallEntiy;
 import io.socket.client.IO;
 import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONException;
-import io.socket.emitter.Emitter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -149,8 +148,8 @@ public class GameScreen extends BaseScreen {
         for(int i = 0; i < 17; i++){
             stage.addActor(wall[i]);
         }
-        stage.addActor(playerVloger);
-        //stage.addActor(playerProger);
+//        stage.addActor(playerVloger);
+        stage.addActor(playerProger);
 
         world.setContactListener(new ContactListener() {
             @Override
