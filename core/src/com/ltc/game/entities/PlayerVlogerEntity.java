@@ -1,7 +1,10 @@
 package com.ltc.game.entities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
@@ -44,6 +47,10 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
 
     private Fixture fixture;
 
+    private boolean isCircleDraw = false;
+
+    private int xCircle, yCircle;
+
     public static final float SPEED_VLOGER = 2f;
 
     //позиция в мире
@@ -61,7 +68,7 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
         position = new Vector2(x, y);
 
 
-//        Gdx.input.setInputProcessor(this);
+        Gdx.input.setInputProcessor(this);
 
         BodyDef def = new BodyDef();
         def.position.set(x, y);
@@ -78,7 +85,6 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
         box.dispose();
 
         setSize(PIXELS_IN_METER, PIXELS_IN_METER);
-//        body.applyLinearImpulse(-100, -100, 0, 0, true);
     }
 
 
@@ -97,16 +103,28 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
         setPosition((body.getPosition().x) * PIXELS_IN_METER,
                 (body.getPosition().y) * PIXELS_IN_METER);
         batch.draw(texture, getX(), getY(), getWidth(), getHeight());
-    }
 
-    public void update(float delta) {
-        position.add(velocity.scl(delta));
+
+        if (isCircleDraw) {
+            xCircle = (int) game.getPlayerProger().getX() + 10;
+            yCircle = (int) game.getPlayerProger().getY() + 10;
+//            System.out.println(yCircle);
+
+//            System.out.println(xCircle);
+
+            Pixmap pixmap = new Pixmap(500, 500, Pixmap.Format.RGBA8888);
+            pixmap.setColor(Color.RED);
+            pixmap.fillCircle((int) (PIXELS_IN_METER), (int) (PIXELS_IN_METER), 75);
+            Texture textureCircle = new Texture(pixmap);
+
+            batch.draw(textureCircle, xCircle ,  - yCircle );
+        }
     }
 
     @Override
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.D) {
-            System.out.println(1);
+//            System.out.println(1);
             rightPressed();
         } else if (keycode == Input.Keys.A) {
             leftPressed();
@@ -134,11 +152,12 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
 
     @Override
     public boolean keyTyped(char character) {
-        System.out.println(character);
-        if (character == Input.Keys.SPACE) {
+        if (character == ' ') {
             if (game.collisionBtwPlayers) {
                 System.out.print("WIN!");
             }
+        } else if (character == 'e') {
+            isCircleDraw = true;
         }
         return true;
     }
@@ -228,4 +247,6 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
         if ((keys.get(KeysVloger.UP) && keys.get(KeysVloger.DOWN)) || (!keys.get(KeysVloger.UP) && (!keys.get(KeysVloger.DOWN))))
             body.setLinearVelocity(body.getLinearVelocity().x, 0);
     }
+
+
 }

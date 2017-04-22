@@ -1,6 +1,5 @@
 package com.ltc.game.entities;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
@@ -54,7 +53,7 @@ public class PlayerProgerEntity extends Actor implements InputProcessor {
 
         setPosition(x, y);
 
-        Gdx.input.setInputProcessor(this);
+//        Gdx.input.setInputProcessor(this);
         BodyDef def = new BodyDef();
         def.position.set(x, y);
         def.type = BodyDef.BodyType.DynamicBody;
@@ -72,7 +71,6 @@ public class PlayerProgerEntity extends Actor implements InputProcessor {
         box.dispose();
 
         setSize(PIXELS_IN_METER, PIXELS_IN_METER);
-//        body.applyLinearImpulse(0, 0, 0, 0, true);
 
     }
 
@@ -91,6 +89,7 @@ public class PlayerProgerEntity extends Actor implements InputProcessor {
         setPosition((body.getPosition().x) * PIXELS_IN_METER,
                 (body.getPosition().y) * PIXELS_IN_METER);
         batch.draw(texture, getX(), getY(), getWidth(), getHeight());
+//        System.out.println(getY());
     }
 
     @Override
