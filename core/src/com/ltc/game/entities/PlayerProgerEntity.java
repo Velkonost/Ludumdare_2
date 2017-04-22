@@ -1,5 +1,6 @@
 package com.ltc.game.entities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
@@ -35,6 +36,10 @@ public class PlayerProgerEntity extends Actor implements InputProcessor {
     }
 
     private Texture texture;
+    private Texture phoneTexture;
+
+    private boolean hasPhone = true, isPhoneCoords = false;
+    private float phoneX, phoneY;
 
     private World world;
 
@@ -44,16 +49,18 @@ public class PlayerProgerEntity extends Actor implements InputProcessor {
 
     private Fixture fixture;
 
+
     public static final float SPEED_PROGER = 2f;
 
-    public PlayerProgerEntity(Texture texture, GameScreen game, World world, float x, float y) {
+    public PlayerProgerEntity(Texture texture, Texture phoneTexture, GameScreen game, World world, float x, float y) {
         this.texture = texture;
+        this.phoneTexture = phoneTexture;
         this.world = world;
         this.game = game;
 
         setPosition(x, y);
 
-//        Gdx.input.setInputProcessor(this);
+        Gdx.input.setInputProcessor(this);
 
         BodyDef def = new BodyDef();
         def.position.set(x, y);
@@ -90,6 +97,17 @@ public class PlayerProgerEntity extends Actor implements InputProcessor {
         setPosition((body.getPosition().x) * PIXELS_IN_METER,
                 (body.getPosition().y) * PIXELS_IN_METER);
         batch.draw(texture, getX(), getY(), getWidth(), getHeight());
+
+        if (!hasPhone) {
+            if (!isPhoneCoords) {
+                phoneX = this.getX();
+                phoneY = this.getY();
+                isPhoneCoords = true;
+            }
+
+            batch.draw(phoneTexture, phoneX, phoneY, getWidth() / 2, getHeight() / 2);
+
+        }
     }
 
     @Override
@@ -123,7 +141,10 @@ public class PlayerProgerEntity extends Actor implements InputProcessor {
 
     @Override
     public boolean keyTyped(char character) {
-        return false;
+        if ( (character == 'e' || character == 'е' || character == 'у') && hasPhone) hasPhone = false;
+
+        return true;
+
     }
 
     @Override

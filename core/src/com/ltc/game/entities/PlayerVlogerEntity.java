@@ -1,6 +1,5 @@
 package com.ltc.game.entities;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
@@ -73,7 +72,7 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
         position = new Vector2(x, y);
 
 
-        Gdx.input.setInputProcessor(this);
+//        Gdx.input.setInputProcessor(this);
 
         BodyDef def = new BodyDef();
         def.position.set(x, y);
@@ -123,8 +122,6 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
                 @Override
                 public void run() {
                     time --;
-                    System.out.println(time);
-
                     if(time == 0) isCircleDraw = false;
                 }
             }, 10).run();
