@@ -156,6 +156,7 @@ public class GameScreen extends BaseScreen {
         table.add(new TableEntity(tableTextures.get(3), world, 24.f, 4.f, 2f, 6f, 0.5f, 2.5f));
         table.add(new TableEntity(tableTextures.get(4), world, 10.5f, 4.f, 2f, 6f, 0.5f, 2.5f));
         table.add(new TableEntity(tableTextures.get(5), world, 15.f, 4.f, 2f, 6f, 0.5f, 2.5f));
+//        table.add(new TableEntity(tableTextures.get(0), world, 18.f, 4.f, 2f, 6f, 0, 2.5f));
 
         playerVloger = new PlayerVlogerEntity(playerVlogerTexture, playerVlogerCameraTexture, this, world, 9f, 7f);
         playerProger = new PlayerProgerEntity(playerProgerTexture, phoneTexture, this, world, 6.5f, 3.5f);
