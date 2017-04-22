@@ -125,7 +125,7 @@ public class GameScreen extends BaseScreen {
 //            stage.addActor(botsIdle.get(i - 1));
 //        }
 
-        stage.addActor(playerVloger);
+      //  stage.addActor(playerVloger);
         stage.addActor(playerProger);
 
         world.setContactListener(new ContactListener() {
