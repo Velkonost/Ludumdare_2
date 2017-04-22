@@ -1,11 +1,9 @@
 package com.ltc.game.entities;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.ltc.game.GameScreen;
@@ -46,13 +44,7 @@ public class PlayerProgerEntity extends Actor implements InputProcessor {
 
     private Fixture fixture;
 
-    public static final float SPEED_PROGER = 1.5f;
-
-    //позиция в мире
-    Vector2 position = new Vector2();
-
-    //используется для вычисления движения
-    Vector2 velocity = new Vector2();
+    public static final float SPEED_PROGER = 2f;
 
     public PlayerProgerEntity(Texture texture, GameScreen game, World world, float x, float y) {
         this.texture = texture;
@@ -60,14 +52,14 @@ public class PlayerProgerEntity extends Actor implements InputProcessor {
         this.game = game;
 
         setPosition(x, y);
-        position = new Vector2(x, y);
 
+//        Gdx.input.setInputProcessor(this);
 
-        Gdx.input.setInputProcessor(this);
         BodyDef def = new BodyDef();
         def.position.set(x, y);
         def.type = BodyDef.BodyType.DynamicBody;
         body = world.createBody(def);
+
 
         final PolygonShape box = new PolygonShape();
         box.setAsBox(0.5f, 0.5f);
@@ -96,13 +88,10 @@ public class PlayerProgerEntity extends Actor implements InputProcessor {
         batch.draw(texture, getX(), getY(), getWidth(), getHeight());
     }
 
-    public void update(float delta) {
-        position.add(velocity.scl(delta));
-    }
-
     @Override
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.D) {
+            System.out.println(2);
             rightPressed();
         } else if (keycode == Input.Keys.A) {
             leftPressed();
@@ -159,39 +148,39 @@ public class PlayerProgerEntity extends Actor implements InputProcessor {
     }
 
     //флаг устанавливаем, что движемся влево
-    public void leftPressed() {
+    private void leftPressed() {
         keys.get(keys.put(KeysProger.LEFT, true));
     }
 
     //флаг устанавливаем, что движемся вправо
-    public void rightPressed() {
+    private void rightPressed() {
         keys.get(keys.put(KeysProger.RIGHT, true));
     }
 
     //флаг устанавливаем, что движемся вверх
-    public void upPressed() {
+    private void upPressed() {
         keys.get(keys.put(KeysProger.UP, true));
     }
 
     //флаг устанавливаем, что движемся вниз
-    public void downPressed() {
+    private void downPressed() {
         keys.get(keys.put(KeysProger.DOWN, true));
     }
 
     //освобождаем флаги
-    public void leftReleased() {
+    private void leftReleased() {
         keys.get(keys.put(KeysProger.LEFT, false));
     }
 
-    public void rightReleased() {
+    private void rightReleased() {
         keys.get(keys.put(KeysProger.RIGHT, false));
     }
 
-    public void upReleased() {
+    private void upReleased() {
         keys.get(keys.put(KeysProger.UP, false));
     }
 
-    public void downReleased() {
+    private void downReleased() {
         keys.get(keys.put(KeysProger.DOWN, false));
     }
 

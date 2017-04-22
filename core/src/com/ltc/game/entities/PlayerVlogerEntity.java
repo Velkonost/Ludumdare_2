@@ -63,6 +63,7 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
 
 
         Gdx.input.setInputProcessor(this);
+
         BodyDef def = new BodyDef();
         def.position.set(x, y);
         def.type = BodyDef.BodyType.DynamicBody;
@@ -103,6 +104,7 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
     @Override
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.D) {
+            System.out.println(1);
             rightPressed();
         } else if (keycode == Input.Keys.A) {
             leftPressed();
@@ -165,39 +167,39 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
     }
 
     //флаг устанавливаем, что движемся влево
-    public void leftPressed() {
+    private void leftPressed() {
         keys.get(keys.put(KeysVloger.LEFT, true));
     }
 
     //флаг устанавливаем, что движемся вправо
-    public void rightPressed() {
+    private void rightPressed() {
         keys.get(keys.put(KeysVloger.RIGHT, true));
     }
 
     //флаг устанавливаем, что движемся вверх
-    public void upPressed() {
+    private void upPressed() {
         keys.get(keys.put(KeysVloger.UP, true));
     }
 
     //флаг устанавливаем, что движемся вниз
-    public void downPressed() {
+    private void downPressed() {
         keys.get(keys.put(KeysVloger.DOWN, true));
     }
 
     //освобождаем флаги
-    public void leftReleased() {
+    private void leftReleased() {
         keys.get(keys.put(KeysVloger.LEFT, false));
     }
 
-    public void rightReleased() {
+    private void rightReleased() {
         keys.get(keys.put(KeysVloger.RIGHT, false));
     }
 
-    public void upReleased() {
+    private void upReleased() {
         keys.get(keys.put(KeysVloger.UP, false));
     }
 
-    public void downReleased() {
+    private void downReleased() {
         keys.get(keys.put(KeysVloger.DOWN, false));
     }
 
