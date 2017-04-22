@@ -13,6 +13,10 @@ public class BaseScreen implements Screen {
         this.game = game;
     }
 
+    public BaseScreen() {
+        
+    }
+
     @Override
     public void show() {
 
