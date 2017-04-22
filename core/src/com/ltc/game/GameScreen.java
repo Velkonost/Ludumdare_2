@@ -67,7 +67,6 @@ public class GameScreen extends BaseScreen {
     @Override
     public void hide() {
         player.detach();
-
         player.remove();
     }
 
