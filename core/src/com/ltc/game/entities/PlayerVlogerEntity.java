@@ -88,7 +88,7 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
         body.setFixedRotation(true);
 
         final PolygonShape box = new PolygonShape();
-        box.setAsBox(0.5f, 0.5f);
+        box.setAsBox(0.25f, 0.5f);
 
         fixture = body.createFixture(box, 3);
         fixture.setUserData("vloger");
