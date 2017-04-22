@@ -50,11 +50,12 @@ public class GameScreen extends BaseScreen {
         camera = new OrthographicCamera(16, 9);
         camera.translate(0, 1);
 
-        Texture playerVlogerTexture = game.getManager().get("myach.png");
-        Texture playerProgerTexture = game.getManager().get("player2.png");
+        Texture playerVlogerTexture = game.getManager().get("myachhero.png");
+        Texture playerVlogerCameraTexture = game.getManager().get("myachheroCamera.png");
+        Texture playerProgerTexture = game.getManager().get("player2hero.png");
         Texture phoneTexture = game.getManager().get("mobile.png");
 
-        playerVloger = new PlayerVlogerEntity(playerVlogerTexture, this, world, 1, 2);
+        playerVloger = new PlayerVlogerEntity(playerVlogerTexture, playerVlogerCameraTexture, this, world, 1, 2);
         playerProger = new PlayerProgerEntity(playerProgerTexture, phoneTexture, this, world, 6.5f, 3.5f);
 
         stage.addActor(playerVloger);

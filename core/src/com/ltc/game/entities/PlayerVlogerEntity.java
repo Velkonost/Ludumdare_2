@@ -39,10 +39,15 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
     }
 
     private int countCalls = 3;
+    private int countCameras = 5;
+
+    private boolean withCamera = false;
+    private int cameraTimer;
 
     private long time;
 
     private Texture texture;
+    private Texture textureCamera;
 
     private World world;
 
@@ -64,8 +69,9 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
     //используется для вычисления движения
     Vector2 velocity = new Vector2();
 
-    public PlayerVlogerEntity(Texture texture, GameScreen game, World world, float x, float y) {
+    public PlayerVlogerEntity(Texture texture, Texture textureCamera, GameScreen game, World world, float x, float y) {
         this.texture = texture;
+        this.textureCamera = textureCamera;
         this.world = world;
         this.game = game;
 
@@ -107,8 +113,22 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
     public void draw(final Batch batch, float parentAlpha) {
         setPosition((body.getPosition().x) * PIXELS_IN_METER,
                 (body.getPosition().y) * PIXELS_IN_METER);
-        batch.draw(texture, getX(), getY(), getWidth(), getHeight());
 
+
+
+        if (withCamera) {
+
+            batch.draw(textureCamera, getX(), getY(), getWidth(), getHeight());
+            Timer.schedule(new Timer.Task() {
+
+                @Override
+                public void run() {
+                    cameraTimer --;
+                    if(cameraTimer == 0) withCamera = false;
+                }
+            }, 10).run();
+
+        } else batch.draw(texture, getX(), getY(), getWidth(), getHeight());
 
         if (isCircleDraw) {
             if (circleGetCoords) {
@@ -140,7 +160,6 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
     @Override
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.D) {
-//            System.out.println(1);
             rightPressed();
         } else if (keycode == Input.Keys.A) {
             leftPressed();
@@ -168,8 +187,12 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
 
     @Override
     public boolean keyTyped(char character) {
-        System.out.println(countCalls);
-        if (character == ' ') {
+        if (character == ' ' && countCameras > 0) {
+
+            countCameras --;
+            cameraTimer = 100;
+            withCamera = true;
+
             if (game.collisionBtwPlayers) {
                 System.out.print("WIN!");
             }
