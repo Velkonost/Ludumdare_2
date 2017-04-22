@@ -23,7 +23,7 @@ public class MainGame extends Game {
 
 		manager.finishLoading();
 
-		setScreen(new GameScreen(this));
+		setScreen(new Menu(this));
 	}
 
 }
