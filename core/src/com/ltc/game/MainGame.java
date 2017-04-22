@@ -20,10 +20,18 @@ public class MainGame extends Game {
 		manager.load("player1.png", Texture.class);
 		manager.load("player2.png", Texture.class);
 		manager.load("myach.png", Texture.class);
+		manager.load("myach2.png", Texture.class);
+		manager.load("ramka.png", Texture.class);
+		manager.load("ramka2.png", Texture.class);
+		manager.load("btnPlay.png", Texture.class);
+		manager.load("chooseYourProger.png", Texture.class);
+		manager.load("chooseYourVloger.png", Texture.class);
+		manager.load("mobile.png", Texture.class);
+
 
 		manager.finishLoading();
 
-		setScreen(new Menu(this));
+		setScreen(new MenuScreen(this));
 	}
 
 }

@@ -52,9 +52,10 @@ public class GameScreen extends BaseScreen {
 
         Texture playerVlogerTexture = game.getManager().get("myach.png");
         Texture playerProgerTexture = game.getManager().get("player2.png");
+        Texture phoneTexture = game.getManager().get("mobile.png");
 
         playerVloger = new PlayerVlogerEntity(playerVlogerTexture, this, world, 1, 2);
-        playerProger = new PlayerProgerEntity(playerProgerTexture, playerProgerTexture, this, world, 6.5f, 3.5f);
+        playerProger = new PlayerProgerEntity(playerProgerTexture, phoneTexture, this, world, 6.5f, 3.5f);
 
         stage.addActor(playerVloger);
         stage.addActor(playerProger);

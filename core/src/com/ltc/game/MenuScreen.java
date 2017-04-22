@@ -1,18 +1,13 @@
 package com.ltc.game;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import javafx.stage.Screen;
 
-public class Menu extends BaseScreen {
+public class MenuScreen extends BaseScreen {
 
     public MainGame game;
     private SpriteBatch sp;
@@ -23,7 +18,7 @@ public class Menu extends BaseScreen {
     private Texture pl1, pl2, vl1, vl2, btnPlay, ramatext, ramatext2;
     private Texture chooseProg, chooseVlog;
     private String choosenProg = "", choosenVlog="";
-    public Menu(MainGame game) {
+    public MenuScreen(MainGame game) {
         super();
         this.game = game;
     }
@@ -31,18 +26,18 @@ public class Menu extends BaseScreen {
     @Override
     public void show() {
         sp = new SpriteBatch();
-        ramatext = new Texture("ramka.png");
-        ramatext2 = new Texture("ramka2.png");
-        btnPlay = new Texture("btnPlay.png");
+        ramatext = game.getManager().get("ramka.png");
+        ramatext2 = game.getManager().get("ramka2.png");
+        btnPlay = game.getManager().get("btnPlay.png");
 
-        vl1 = new Texture("myach.png");
-        vl2 = new Texture("myach2.png");
+        vl1 = game.getManager().get("myach.png");
+        vl2 = game.getManager().get("myach2.png");
 
-        pl1 = new Texture("player1.png");
-        pl2 = new Texture("player2.png");
+        pl1 = game.getManager().get("player1.png");
+        pl2 = game.getManager().get("player2.png");
 
-        chooseProg = new Texture("chooseYourProger.png");
-        chooseVlog = new Texture("chooseYourVloger.png");
+        chooseProg = game.getManager().get("chooseYourProger.png");
+        chooseVlog = game.getManager().get("chooseYourVloger.png");
 
         skin = new Sprite(btnPlay); // your image
         skin.setPosition(Gdx.graphics.getWidth()/2-350, Gdx.graphics.getHeight() / 2-200);
@@ -97,10 +92,8 @@ public class Menu extends BaseScreen {
         {
             if(Gdx.input.getX()>=skin.getX() && Gdx.input.getX()<=skin.getX()+700 &&
                     Gdx.input.getY()>=skin.getY()+200 && Gdx.input.getY()<=skin.getY()+400) {
-                    if(choosenVlog.length()>0 && choosenProg.length()>0) {
+                    if(choosenVlog.length() > 0 && choosenProg.length()>0) {
                         game.setScreen(new GameScreen(game, choosenProg, choosenVlog));
-                    }else{
-
                     }
 
             }
@@ -110,7 +103,7 @@ public class Menu extends BaseScreen {
                 xrama = skpl1.getX();
                 yrama = skpl1.getY();
                 rama.setPosition(xrama, yrama);
-                choosenProg = "Tyoma";
+                choosenProg = "player1";
             }
 
             if(Gdx.input.getX()>=skpl2.getX() && Gdx.input.getX()<=skpl2.getX()+150 &&
@@ -118,21 +111,21 @@ public class Menu extends BaseScreen {
                 xrama = skpl2.getX();
                 yrama = skpl2.getY();
                 rama.setPosition(xrama, yrama);
-                choosenProg = "Andrey";
+                choosenProg = "player2";
             }
             if(Gdx.input.getX()>=skvl1.getX() && Gdx.input.getX()<=skvl1.getX()+150 &&
                     Gdx.input.getY()>=skvl1.getY()-250 && Gdx.input.getY()<=skvl1.getY()-100){
                 xrama2 = skvl1.getX();
                 yrama2 = skvl1.getY();
                 rama2.setPosition(xrama2, yrama2);
-                choosenVlog = "Myach1";
+                choosenVlog = "myach1";
             }
             if(Gdx.input.getX()>=skvl2.getX() && Gdx.input.getX()<=skvl2.getX()+150 &&
                     Gdx.input.getY()>=skvl2.getY()-250 && Gdx.input.getY()<=skvl2.getY()-100){
                 xrama2 = skvl2.getX();
                 yrama2 = skvl2.getY();
                 rama2.setPosition(xrama2, yrama2);
-                choosenVlog = "Myach2";
+                choosenVlog = "myach2";
             }
 
         }
