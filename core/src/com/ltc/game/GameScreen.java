@@ -120,10 +120,10 @@ public class GameScreen extends BaseScreen {
         sp = new SpriteBatch();
 
 
-        for (int i = 1; i <= 3; i++) {
-            botsIdle.add(new BotIdleEntity(botsIdleTexture.get(i - 1), this, world, i * 5, i * 2));
-            stage.addActor(botsIdle.get(i - 1));
-        }
+//        for (int i = 1; i <= 3; i++) {
+//            botsIdle.add(new BotIdleEntity(botsIdleTexture.get(i - 1), this, world, i * 5, i * 2));
+//            stage.addActor(botsIdle.get(i - 1));
+//        }
 
         stage.addActor(playerVloger);
         stage.addActor(playerProger);
