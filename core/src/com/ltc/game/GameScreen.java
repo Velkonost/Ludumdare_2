@@ -1,6 +1,8 @@
 package com.ltc.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -17,9 +19,55 @@ import java.util.Map;
 /**
  * @author Velkonost
  */
-public class GameScreen extends BaseScreen {
+public class GameScreen extends BaseScreen implements InputProcessor {
 
     private final float UPDATE_TIME = 1 / 60f;
+
+    @Override
+    public boolean keyDown(int keycode) {
+        if (keycode == Input.Keys.D) {
+            System.out.println(keycode);
+
+//            body.getPosition().x += 200f;
+//            player.getBody().setLinearVelocity(player.SPEED, player.getBody().getLinearVelocity().y);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        return false;
+    }
 
     //направление движения
     enum Keys {
@@ -74,8 +122,10 @@ public class GameScreen extends BaseScreen {
 
         stage.act();
 
-        processInput();
-        player.update(delta);
+//        processInput();
+//        player.update(delta);
+
+//        player.getBody().setLinearVelocity(player.SPEED, player.getBody().getLinearVelocity().y);
 
         world.step(delta, 6, 2);
         camera.update();
@@ -96,20 +146,20 @@ public class GameScreen extends BaseScreen {
         renderer.dispose();
     }
 
-    private void processInput() {
-        if (keys.get(Keys.LEFT))
-            player.getBody().setLinearVelocity(-PlayerEntity.SPEED, player.getBody().getLinearVelocity().y);
-        if (keys.get(Keys.RIGHT))
-            player.getBody().setLinearVelocity(PlayerEntity.SPEED, player.getBody().getLinearVelocity().y);
-        if (keys.get(Keys.UP))
-            player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, PlayerEntity.SPEED);
-        if (keys.get(Keys.DOWN))
-            player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, -PlayerEntity.SPEED);
-//если не выбрано направление, то стоим на месте
-        if ((keys.get(Keys.LEFT) && keys.get(Keys.RIGHT)) || (!keys.get(Keys.LEFT) && (!keys.get(Keys.RIGHT))))
-            player.getBody().setLinearVelocity(0, player.getBody().getLinearVelocity().y);
-        if ((keys.get(Keys.UP) && keys.get(Keys.DOWN)) || (!keys.get(Keys.UP) && (!keys.get(Keys.DOWN))))
-            player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 0);
-
-    }
+//    private void processInput() {
+//        if (keys.get(Keys.LEFT))
+//            player.getBody().setLinearVelocity(-PlayerEntity.SPEED, player.getBody().getLinearVelocity().y);
+//        if (keys.get(Keys.RIGHT))
+//            player.getBody().setLinearVelocity(PlayerEntity.SPEED, player.getBody().getLinearVelocity().y);
+//        if (keys.get(Keys.UP))
+//            player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, PlayerEntity.SPEED);
+//        if (keys.get(Keys.DOWN))
+//            player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, -PlayerEntity.SPEED);
+////если не выбрано направление, то стоим на месте
+//        if ((keys.get(Keys.LEFT) && keys.get(Keys.RIGHT)) || (!keys.get(Keys.LEFT) && (!keys.get(Keys.RIGHT))))
+//            player.getBody().setLinearVelocity(0, player.getBody().getLinearVelocity().y);
+//        if ((keys.get(Keys.UP) && keys.get(Keys.DOWN)) || (!keys.get(Keys.UP) && (!keys.get(Keys.DOWN))))
+//            player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 0);
+//
+//    }
 }

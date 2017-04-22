@@ -93,17 +93,30 @@ public class PlayerEntity extends Actor implements InputProcessor {
     @Override
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.D) {
-            System.out.println(keycode);
-
-//            body.getPosition().x += 200f;
-                    body.setLinearVelocity(200f, body.getLinearVelocity().y);
+            body.setLinearVelocity(SPEED, body.getLinearVelocity().y);
+        } else if (keycode == Input.Keys.A) {
+            body.setLinearVelocity(-SPEED, body.getLinearVelocity().y);
+        } else if (keycode == Input.Keys.W) {
+            body.setLinearVelocity(body.getLinearVelocity().x, SPEED);
+        } else if (keycode == Input.Keys.S) {
+            body.setLinearVelocity(body.getLinearVelocity().x, -SPEED);
         }
         return true;
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        return false;
+        if (keycode == Input.Keys.D) {
+            body.setLinearVelocity(0, body.getLinearVelocity().y);
+        } else if (keycode == Input.Keys.A) {
+            body.setLinearVelocity(0, body.getLinearVelocity().y);
+        } else if (keycode == Input.Keys.W) {
+            body.setLinearVelocity(body.getLinearVelocity().x, 0);
+        } else if (keycode == Input.Keys.S) {
+            body.setLinearVelocity(body.getLinearVelocity().x, 0);
+        }
+
+        return true;
     }
 
     @Override
