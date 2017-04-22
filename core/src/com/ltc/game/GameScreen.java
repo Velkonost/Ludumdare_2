@@ -1,8 +1,6 @@
 package com.ltc.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -13,76 +11,12 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.ltc.game.entities.PlayerEntity;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * @author Velkonost
  */
-public class GameScreen extends BaseScreen implements InputProcessor {
+public class GameScreen extends BaseScreen {
 
     private final float UPDATE_TIME = 1 / 60f;
-
-    @Override
-    public boolean keyDown(int keycode) {
-        if (keycode == Input.Keys.D) {
-            System.out.println(keycode);
-
-//            body.getPosition().x += 200f;
-//            player.getBody().setLinearVelocity(player.SPEED, player.getBody().getLinearVelocity().y);
-        }
-        return true;
-    }
-
-    @Override
-    public boolean keyUp(int keycode) {
-        return false;
-    }
-
-    @Override
-    public boolean keyTyped(char character) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        return false;
-    }
-
-    @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        return false;
-    }
-
-    @Override
-    public boolean scrolled(int amount) {
-        return false;
-    }
-
-    //направление движения
-    enum Keys {
-        LEFT, RIGHT, UP, DOWN
-    }
-
-    static Map<Keys, Boolean> keys = new HashMap<Keys, Boolean>();
-
-    static {
-        keys.put(Keys.LEFT, false);
-        keys.put(Keys.RIGHT, false);
-        keys.put(Keys.UP, false);
-        keys.put(Keys.DOWN, false);
-
-    };
 
     private Stage stage;
 
@@ -110,7 +44,6 @@ public class GameScreen extends BaseScreen implements InputProcessor {
         Texture playerTexture = game.getManager().get("badlogic.jpg");
 
         player = new PlayerEntity(playerTexture, world, 1, 2);
-//        player.setPosition(1, 2);
 
         stage.addActor(player);
     }
@@ -122,11 +55,7 @@ public class GameScreen extends BaseScreen implements InputProcessor {
 
         stage.act();
 
-//        processInput();
-//        player.update(delta);
-
-//        player.getBody().setLinearVelocity(player.SPEED, player.getBody().getLinearVelocity().y);
-
+        player.processInput();
         world.step(delta, 6, 2);
         camera.update();
         renderer.render(world, camera.combined);
