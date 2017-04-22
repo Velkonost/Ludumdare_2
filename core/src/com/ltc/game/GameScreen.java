@@ -9,13 +9,17 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.ltc.game.entities.BotIdleEntity;
 import com.ltc.game.entities.PlayerProgerEntity;
 import com.ltc.game.entities.PlayerVlogerEntity;
 import com.ltc.game.entities.WallEntiy;
+import com.sun.javafx.tk.Toolkit;
 
 import java.util.ArrayList;
+
+import static java.lang.Math.floor;
 
 /**
  * @author Velkonost
@@ -27,6 +31,7 @@ public class GameScreen extends BaseScreen {
     private Stage stage;
 
     private World world;
+    public MainGame game;
 
     private Box2DDebugRenderer renderer;
 
@@ -48,6 +53,11 @@ public class GameScreen extends BaseScreen {
     private Texture phoneTexture;
     private Texture botIdleTexture;
 
+    private float deltatime, tmp = 0;
+
+    private int a = 5;
+    boolean kf = false;
+
     private GuiMenu guiMenu;
 
     private ArrayList<BotIdleEntity> botsIdle;
@@ -58,6 +68,7 @@ public class GameScreen extends BaseScreen {
 
     public GameScreen(MainGame game, String choosenProg, String choosenVlog) {
         super(game);
+        this.game = game;
         this.choosenProg = choosenProg;
         this.choosenVlog = choosenVlog;
         stage = new Stage(new FitViewport(1280, 720));
@@ -74,12 +85,25 @@ public class GameScreen extends BaseScreen {
 
         getTextures();
 
+
+        Timer.schedule(new Timer.Task() {
+
+            @Override
+            public void run() {
+                a--;
+                if(a==0)
+                {
+                    kf = true;
+                    cancel();
+                }
+            }
+
+        }, 1, 1);
         playerVloger = new PlayerVlogerEntity(playerVlogerTexture, playerVlogerCameraTexture, this, world, 1, 2);
         playerProger = new PlayerProgerEntity(playerProgerTexture, phoneTexture, this, world, 6.5f, 3.5f);
         //guiMenu = new GuiMenu()
         font = new BitmapFont();
         sp = new SpriteBatch();
-        str = "Tema lol";
 
 
         for (int i = 0; i < 5; i++) {
@@ -172,6 +196,16 @@ public class GameScreen extends BaseScreen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        if(kf)
+        {
+            game.setScreen(new GuiMenu(game, 'l', 0));
+        }
+        if(a%60>9){
+            str = ""+(int)floor(a/60)+":"+a%60;
+        }else{
+            str = ""+(int)floor(a/60)+":0"+a%60;
+        }
+
         sp.begin();
         font.getData().setScale(3, 3);
         font.draw(sp, str, Gdx.graphics.getWidth()-200,  Gdx.graphics.getHeight()-50);
