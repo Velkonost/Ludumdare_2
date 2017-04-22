@@ -14,7 +14,7 @@ public class BaseScreen implements Screen {
     }
 
     public BaseScreen() {
-        
+
     }
 
     @Override
