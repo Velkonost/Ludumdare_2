@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.ltc.game.GameScreen;
@@ -35,6 +36,7 @@ public class PlayerProgerEntity extends Actor implements InputProcessor {
 
     }
 
+    Vector2 previousPosition;
     private Texture texture;
     private Texture phoneTexture;
 
@@ -57,7 +59,7 @@ public class PlayerProgerEntity extends Actor implements InputProcessor {
         this.phoneTexture = phoneTexture;
         this.world = world;
         this.game = game;
-
+        previousPosition = new Vector2(getX(), getY());
         setPosition(x, y);
 
         Gdx.input.setInputProcessor(this);
@@ -107,6 +109,15 @@ public class PlayerProgerEntity extends Actor implements InputProcessor {
             batch.draw(phoneTexture, phoneX, phoneY, getWidth() / 2, getHeight() / 2);
 
         }
+    }
+
+    public boolean hasMoved(){
+        if(previousPosition.x != getX() || previousPosition.y != getY()){
+            previousPosition.x = getX();
+            previousPosition.y = getY();
+            return true;
+        }
+        return false;
     }
 
     @Override

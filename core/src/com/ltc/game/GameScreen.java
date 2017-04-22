@@ -34,7 +34,8 @@ public class GameScreen extends BaseScreen {
 
     private final float UPDATE_TIME = 1/60f;
     private float timer;
-    private HashMap<String, PlayerVlogerEntity> friendlyPlayers;
+    private HashMap<String, PlayerVlogerEntity> friendlyPlayers1;
+    private HashMap<String, PlayerProgerEntity> friendlyPlayers2;
     private Socket socket;
     private String id;
 
@@ -63,6 +64,7 @@ public class GameScreen extends BaseScreen {
     private Texture phoneTexture;
     private Texture botIdleTexture;
 
+    private boolean checkPlayer = false;
 
     private ArrayList<Texture> botsIdleTexture;
 
@@ -100,7 +102,8 @@ public class GameScreen extends BaseScreen {
         camera.translate(0, 1);
         botsIdleTexture = new ArrayList<Texture>();
         getTextures();
-        friendlyPlayers = new HashMap<String, PlayerVlogerEntity>();
+        friendlyPlayers1 = new HashMap<String, PlayerVlogerEntity>();
+        friendlyPlayers2 = new HashMap<String, PlayerProgerEntity>();
         Texture wallT = game.getManager().get("table8bit.jpg");
 
         Timer.schedule(new Timer.Task() {
@@ -133,7 +136,7 @@ public class GameScreen extends BaseScreen {
         wall[14] = new WallEntiy(wallT, world, 4.5f, 5.5f, 1f,9f);
         wall[15] = new WallEntiy(wallT, world, 11.5f, 9.5f, 1f,1f);
         wall[16] = new WallEntiy(wallT, world, 18.5f, 9.5f, 1f,1f);
-        playerVloger = new PlayerVlogerEntity(playerVlogerTexture, playerVlogerCameraTexture, this, world, 1, 2);
+        playerVloger = new PlayerVlogerEntity(playerVlogerTexture, playerVlogerCameraTexture, this, world, 9f, 7f);
         playerProger = new PlayerProgerEntity(playerProgerTexture, phoneTexture, this, world, 6.5f, 3.5f);
         //guiMenu = new GuiMenu()
         font = new BitmapFont();
@@ -148,8 +151,11 @@ public class GameScreen extends BaseScreen {
         for(int i = 0; i < 17; i++){
             stage.addActor(wall[i]);
         }
-        stage.addActor(playerVloger);
-        stage.addActor(playerProger);
+
+
+
+      /*  stage.addActor(playerVloger);
+        stage.addActor(playerProger);*/
 
         world.setContactListener(new ContactListener() {
             @Override
@@ -256,6 +262,13 @@ public class GameScreen extends BaseScreen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         updateServer(Gdx.graphics.getDeltaTime());
 
+        if(checkPlayer)
+        {
+            stage.addActor(playerVloger);
+        }else{
+            stage.addActor(playerProger);
+        }
+
         if(kf)
         {
             game.setScreen(new GuiMenu(game, 'l', 0));
@@ -273,15 +286,25 @@ public class GameScreen extends BaseScreen {
 
         stage.act();
 //
-        playerVloger.processInput();
-        playerProger.processInput();
-        for(HashMap.Entry<String, PlayerVlogerEntity> entry : friendlyPlayers.entrySet()){
+       /* playerVloger.processInput();
+        playerProger.processInput();*/
+        if(checkPlayer) {
+            playerVloger.processInput();
+            for (HashMap.Entry<String, PlayerProgerEntity> entry : friendlyPlayers2.entrySet()) {
 
-            stage.addActor(entry.getValue());
+                stage.addActor(entry.getValue());
+            }
+            stage.getCamera().position.set(playerVloger.getX(),playerVloger.getY(), 0);
+        }else{
+            for (HashMap.Entry<String, PlayerVlogerEntity> entry : friendlyPlayers1.entrySet()) {
+                stage.addActor(entry.getValue());
+            }
+            playerProger.processInput();
+            stage.getCamera().position.set(playerProger.getX(),playerProger.getY(), 0);
         }
         for (BotIdleEntity aBotsIdle : botsIdle) aBotsIdle.processInput();
 
-        stage.getCamera().position.set(playerProger.getX(),playerProger.getY(), 0);
+      //  stage.getCamera().position.set(playerProger.getX(),playerProger.getY(), 0);
 
         world.step(delta, 6, 2);
         camera.update();
@@ -323,10 +346,10 @@ public class GameScreen extends BaseScreen {
 
     public void updateServer(float dt)
     {
-        timer+=dt;
-        if(timer >= UPDATE_TIME && playerVloger!=null && playerVloger.hasMoved())
-        {
-            JSONObject data = new JSONObject();
+        if (checkPlayer) {
+            timer += dt;
+            if (timer >= UPDATE_TIME && playerVloger != null && playerVloger.hasMoved()) {
+                JSONObject data = new JSONObject();
                 try {
                     data.put("x", playerVloger.getBody().getPosition().x);
                 } catch (org.json.JSONException e) {
@@ -339,6 +362,24 @@ public class GameScreen extends BaseScreen {
                 }
                 socket.emit("playerMoved", data);
 
+            }
+        }else {
+            timer += dt;
+            if (timer >= UPDATE_TIME && playerProger != null && playerProger.hasMoved()) {
+                JSONObject data = new JSONObject();
+                try {
+                    data.put("x", playerProger.getBody().getPosition().x);
+                } catch (org.json.JSONException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    data.put("y", playerProger.getBody().getPosition().y);
+                } catch (org.json.JSONException e) {
+                    e.printStackTrace();
+                }
+                socket.emit("playerMoved", data);
+
+            }
         }
     }
 
@@ -382,10 +423,15 @@ public class GameScreen extends BaseScreen {
                 }
                 Gdx.app.log("SocketIO", "New Player Connect: " + id);
                 Texture floorTexture = game.getManager().get("badlogic.jpg");
-                PlayerVlogerEntity playerEntity = new PlayerVlogerEntity(playerVlogerTexture, playerVlogerCameraTexture, GameScreen.this, world, 1, 2);
+                if(checkPlayer) {
+                    PlayerVlogerEntity playerEntity = new PlayerVlogerEntity(playerVlogerTexture, playerVlogerCameraTexture, GameScreen.this, world, 1, 2);
+                    friendlyPlayers1.put(playerId, playerEntity);
+                }else{
+                    PlayerProgerEntity playerEntity = new PlayerProgerEntity(playerProgerTexture, playerProgerTexture, GameScreen.this, world, 1, 2);
+                    friendlyPlayers2.put(playerId, playerEntity);
+                }
                 // playerEntity.setPosition(1,2);
                 //  stage.addActor(playerEntity);
-                friendlyPlayers.put(playerId, playerEntity);
             }
         }).on("playerDisconnected", new Emitter.Listener() {
             @Override
@@ -393,8 +439,15 @@ public class GameScreen extends BaseScreen {
                 JSONObject data = (JSONObject) args[0];
                 try {
                     String playerId = data.getString("id");
-                    friendlyPlayers.get(playerId).remove();
-                    friendlyPlayers.remove(playerId);
+                    if(checkPlayer)
+                    {
+                        friendlyPlayers2.get(playerId).remove();
+                        friendlyPlayers2.remove(playerId);
+                    }else{
+                        friendlyPlayers1.get(playerId).remove();
+                        friendlyPlayers1.remove(playerId);
+                    }
+
 
                 }catch(JSONException e){
                     Gdx.app.log("SocketIO", "Error getting disconnected PlayerID");
@@ -415,9 +468,14 @@ public class GameScreen extends BaseScreen {
                     Double y = data.getDouble("y");
                     Vector2 vector2 = new Vector2();
                     vector2.add(x.floatValue(), y.floatValue());
-                    if(friendlyPlayers.get(playerId)!=null)
-                    {
-                        friendlyPlayers.get(playerId).getBody().setTransform(vector2.x, vector2.y, 0 );
+                    if(checkPlayer) {
+                        if (friendlyPlayers1.get(playerId) != null) {
+                            friendlyPlayers1.get(playerId).getBody().setTransform(vector2.x, vector2.y, 0);
+                        }
+                    }else{
+                        if (friendlyPlayers2.get(playerId) != null) {
+                            friendlyPlayers2.get(playerId).getBody().setTransform(vector2.x, vector2.y, 0);
+                        }
                     }
                 }catch(JSONException e){
                     Gdx.app.log("SocketIO", "Error getting disconnected PlayerID");
@@ -428,16 +486,22 @@ public class GameScreen extends BaseScreen {
             public void call(Object... args) {
                 JSONArray objects = (JSONArray) args[0];
                 try {
-                    for(int i = 0; i < objects.length(); i++){
-                        Texture floorTexture = game.getManager().get("badlogic.jpg");
-                        PlayerVlogerEntity coopPlayer = new PlayerVlogerEntity(playerVlogerTexture, playerVlogerCameraTexture, GameScreen.this, world, 1, 2);
-                        //coopPlayer.setPosition(1,2);
-                        Vector2 position = new Vector2();
-                        position.x = ((Double) objects.getJSONObject(i).getDouble("x")).floatValue();
-                        position.y = ((Double) objects.getJSONObject(i).getDouble("y")).floatValue();
-                        coopPlayer.setPosition(position.x, position.y);
-                        //  stage.addActor(coopPlayer);
-                        friendlyPlayers.put(objects.getJSONObject(i).getString("id"), coopPlayer);
+                    if(objects.length()>0) {
+                        checkPlayer = false;
+                        for (int i = 0; i < objects.length(); i++) {
+                            Texture floorTexture = game.getManager().get("badlogic.jpg");
+
+                            PlayerProgerEntity coopPlayer = new PlayerProgerEntity(playerProgerTexture, playerProgerTexture, GameScreen.this, world, 1, 2);
+                            //coopPlayer.setPosition(1,2);
+                            Vector2 position = new Vector2();
+                            position.x = ((Double) objects.getJSONObject(i).getDouble("x")).floatValue();
+                            position.y = ((Double) objects.getJSONObject(i).getDouble("y")).floatValue();
+                            coopPlayer.setPosition(position.x, position.y);
+                            //  stage.addActor(coopPlayer);
+                            friendlyPlayers2.put(objects.getJSONObject(i).getString("id"), coopPlayer);
+                        }
+                    }else{
+                        checkPlayer = true;
                     }
                 } catch(JSONException e){
 
