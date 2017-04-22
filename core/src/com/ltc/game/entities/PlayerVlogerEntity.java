@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.ltc.game.GameScreen;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,17 +21,17 @@ import static com.ltc.game.Constants.PIXELS_IN_METER;
 public class PlayerVlogerEntity extends Actor implements InputProcessor {
 
     //направление движения
-    enum Keys {
+    enum KeysVloger {
         LEFT, RIGHT, UP, DOWN
     }
 
-    static Map<Keys, Boolean> keys = new HashMap<Keys, Boolean>();
+    static Map<KeysVloger, Boolean> keys = new HashMap<KeysVloger, Boolean>();
 
     static {
-        keys.put(Keys.LEFT, false);
-        keys.put(Keys.RIGHT, false);
-        keys.put(Keys.UP, false);
-        keys.put(Keys.DOWN, false);
+        keys.put(KeysVloger.LEFT, false);
+        keys.put(KeysVloger.RIGHT, false);
+        keys.put(KeysVloger.UP, false);
+        keys.put(KeysVloger.DOWN, false);
 
     }
 
@@ -38,11 +39,13 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
 
     private World world;
 
+    private GameScreen game;
+
     private Body body;
 
     private Fixture fixture;
 
-    public static final float SPEED = 2f;
+    public static final float SPEED_VLOGER = 2f;
 
     //позиция в мире
     Vector2 position = new Vector2();
@@ -50,9 +53,11 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
     //используется для вычисления движения
     Vector2 velocity = new Vector2();
 
-    public PlayerVlogerEntity(Texture texture, World world, float x, float y) {
+    public PlayerVlogerEntity(Texture texture, GameScreen game, World world, float x, float y) {
         this.texture = texture;
         this.world = world;
+        this.game = game;
+
         setPosition(x, y);
         position = new Vector2(x, y);
 
@@ -67,7 +72,7 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
         box.setAsBox(0.5f, 0.5f);
 
         fixture = body.createFixture(box, 3);
-        fixture.setUserData("player");
+        fixture.setUserData("vloger");
         box.dispose();
 
         setSize(PIXELS_IN_METER, PIXELS_IN_METER);
@@ -125,7 +130,13 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
 
     @Override
     public boolean keyTyped(char character) {
-        return false;
+        System.out.println(character);
+        if (character == Input.Keys.SPACE) {
+            if (game.collisionBtwPlayers) {
+                System.out.print("WIN!");
+            }
+        }
+        return true;
     }
 
     @Override
@@ -155,39 +166,39 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
 
     //флаг устанавливаем, что движемся влево
     public void leftPressed() {
-        keys.get(keys.put(Keys.LEFT, true));
+        keys.get(keys.put(KeysVloger.LEFT, true));
     }
 
     //флаг устанавливаем, что движемся вправо
     public void rightPressed() {
-        keys.get(keys.put(Keys.RIGHT, true));
+        keys.get(keys.put(KeysVloger.RIGHT, true));
     }
 
     //флаг устанавливаем, что движемся вверх
     public void upPressed() {
-        keys.get(keys.put(Keys.UP, true));
+        keys.get(keys.put(KeysVloger.UP, true));
     }
 
     //флаг устанавливаем, что движемся вниз
     public void downPressed() {
-        keys.get(keys.put(Keys.DOWN, true));
+        keys.get(keys.put(KeysVloger.DOWN, true));
     }
 
     //освобождаем флаги
     public void leftReleased() {
-        keys.get(keys.put(Keys.LEFT, false));
+        keys.get(keys.put(KeysVloger.LEFT, false));
     }
 
     public void rightReleased() {
-        keys.get(keys.put(Keys.RIGHT, false));
+        keys.get(keys.put(KeysVloger.RIGHT, false));
     }
 
     public void upReleased() {
-        keys.get(keys.put(Keys.UP, false));
+        keys.get(keys.put(KeysVloger.UP, false));
     }
 
     public void downReleased() {
-        keys.get(keys.put(Keys.DOWN, false));
+        keys.get(keys.put(KeysVloger.DOWN, false));
     }
 
     public void resetWay(){
@@ -199,18 +210,18 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
 
     //в зависимости от выбранного направления движения выставляем новое направление движения для персонажа
     public void processInput() {
-        if (keys.get(Keys.LEFT))
-            body.setLinearVelocity(-SPEED, body.getLinearVelocity().y);
-        if (keys.get(Keys.RIGHT))
-            body.setLinearVelocity(SPEED, body.getLinearVelocity().y);
-        if (keys.get(Keys.UP))
-            body.setLinearVelocity(body.getLinearVelocity().x, SPEED);
-        if (keys.get(Keys.DOWN))
-            body.setLinearVelocity(body.getLinearVelocity().x, -SPEED);
+        if (keys.get(KeysVloger.LEFT))
+            body.setLinearVelocity(-SPEED_VLOGER, body.getLinearVelocity().y);
+        if (keys.get(KeysVloger.RIGHT))
+            body.setLinearVelocity(SPEED_VLOGER, body.getLinearVelocity().y);
+        if (keys.get(KeysVloger.UP))
+            body.setLinearVelocity(body.getLinearVelocity().x, SPEED_VLOGER);
+        if (keys.get(KeysVloger.DOWN))
+            body.setLinearVelocity(body.getLinearVelocity().x, -SPEED_VLOGER);
         //если не выбрано направление, то стоим на месте
-        if ((keys.get(Keys.LEFT) && keys.get(Keys.RIGHT)) || (!keys.get(Keys.LEFT) && (!keys.get(Keys.RIGHT))))
+        if ((keys.get(KeysVloger.LEFT) && keys.get(KeysVloger.RIGHT)) || (!keys.get(KeysVloger.LEFT) && (!keys.get(KeysVloger.RIGHT))))
             body.setLinearVelocity(0, body.getLinearVelocity().y);
-        if ((keys.get(Keys.UP) && keys.get(Keys.DOWN)) || (!keys.get(Keys.UP) && (!keys.get(Keys.DOWN))))
+        if ((keys.get(KeysVloger.UP) && keys.get(KeysVloger.DOWN)) || (!keys.get(KeysVloger.UP) && (!keys.get(KeysVloger.DOWN))))
             body.setLinearVelocity(body.getLinearVelocity().x, 0);
     }
 }

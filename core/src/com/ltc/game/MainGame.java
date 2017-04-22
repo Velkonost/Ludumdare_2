@@ -17,8 +17,9 @@ public class MainGame extends Game {
 	public void create () {
 		manager = new AssetManager();
 		manager.load("badlogic.jpg", Texture.class);
-//		manager.load("hero.png", Texture.class);
-//		manager.load("shaft.png", Texture.class);
+		manager.load("player1.png", Texture.class);
+		manager.load("player2.png", Texture.class);
+		manager.load("myach.png", Texture.class);
 
 		manager.finishLoading();
 
