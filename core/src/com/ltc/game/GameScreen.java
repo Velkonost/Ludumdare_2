@@ -83,7 +83,7 @@ public class GameScreen extends BaseScreen {
         renderer = new Box2DDebugRenderer();
         camera = new OrthographicCamera(4, 2.25f);
         camera.translate(0, 1);
-        botsIdleTexture = new ArrayList<>();
+        botsIdleTexture = new ArrayList<Texture>();
         getTextures();
 
 
