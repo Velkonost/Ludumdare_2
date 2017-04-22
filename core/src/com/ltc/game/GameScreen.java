@@ -33,6 +33,7 @@ public class GameScreen extends BaseScreen {
         keys.put(Keys.RIGHT, false);
         keys.put(Keys.UP, false);
         keys.put(Keys.DOWN, false);
+
     };
 
     private Stage stage;
