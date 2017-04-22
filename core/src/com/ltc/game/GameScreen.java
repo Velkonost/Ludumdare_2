@@ -96,12 +96,12 @@ public class GameScreen extends BaseScreen {
         connectSocket();
         configSocketEvents();
         renderer = new Box2DDebugRenderer();
-        camera = new OrthographicCamera(4, 2.25f);
+        camera = new OrthographicCamera(16, 9);
         camera.translate(0, 1);
         botsIdleTexture = new ArrayList<Texture>();
         getTextures();
         friendlyPlayers = new HashMap<String, PlayerVlogerEntity>();
-        Texture wallT = game.getManager().get("ramka.png");
+        Texture wallT = game.getManager().get("table8bit.jpg");
 
         Timer.schedule(new Timer.Task() {
 
@@ -148,7 +148,7 @@ public class GameScreen extends BaseScreen {
         for(int i = 0; i < 17; i++){
             stage.addActor(wall[i]);
         }
-//        stage.addActor(playerVloger);
+        stage.addActor(playerVloger);
         stage.addActor(playerProger);
 
         world.setContactListener(new ContactListener() {

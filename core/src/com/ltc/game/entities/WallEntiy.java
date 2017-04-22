@@ -1,13 +1,9 @@
 package com.ltc.game.entities;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.ltc.game.GameScreen;
 
 import static com.ltc.game.Constants.PIXELS_IN_METER;
 
@@ -21,9 +17,12 @@ public class WallEntiy extends Actor {
     private Fixture fixture;
     float width, higth, x, y;
 
-    public WallEntiy(Texture texture, World world, float x, float y, float widht, float higth){
+    public WallEntiy(Texture texture, World world,  float x, float y, float widht, float higth){
         this.texture = texture;
         this.world = world;
+
+        this.width = widht;
+        this.higth = higth;
 
         BodyDef def = new BodyDef();
         def.position.x = x;
@@ -51,4 +50,3 @@ public class WallEntiy extends Actor {
         world.destroyBody(body);
     }
 }
-

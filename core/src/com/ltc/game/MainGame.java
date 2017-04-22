@@ -34,6 +34,7 @@ public class MainGame extends Game {
 		manager.load("chooseYourVloger.png", Texture.class);
 		manager.load("mobile.png", Texture.class);
 		manager.load("player3hero.png", Texture.class);
+		manager.load("table8bit.jpg", Texture.class);
 
 
 		manager.finishLoading();
