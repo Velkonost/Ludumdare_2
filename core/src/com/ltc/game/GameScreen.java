@@ -100,7 +100,7 @@ public class GameScreen extends BaseScreen {
         stage.act();
 
         playerVloger.processInput();
-//        playerProger.processInput();
+        playerProger.processInput();
 
         world.step(delta, 6, 2);
         camera.update();

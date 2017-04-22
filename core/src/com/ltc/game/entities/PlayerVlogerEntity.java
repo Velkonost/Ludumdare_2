@@ -1,6 +1,5 @@
 package com.ltc.game.entities;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
@@ -62,21 +61,24 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
         position = new Vector2(x, y);
 
 
-        Gdx.input.setInputProcessor(this);
+//        Gdx.input.setInputProcessor(this);
 
         BodyDef def = new BodyDef();
         def.position.set(x, y);
         def.type = BodyDef.BodyType.DynamicBody;
         body = world.createBody(def);
+        body.setFixedRotation(true);
 
         final PolygonShape box = new PolygonShape();
         box.setAsBox(0.5f, 0.5f);
 
         fixture = body.createFixture(box, 3);
         fixture.setUserData("vloger");
+
         box.dispose();
 
         setSize(PIXELS_IN_METER, PIXELS_IN_METER);
+//        body.applyLinearImpulse(-100, -100, 0, 0, true);
     }
 
 

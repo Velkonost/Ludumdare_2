@@ -1,5 +1,6 @@
 package com.ltc.game.entities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
@@ -53,12 +54,13 @@ public class PlayerProgerEntity extends Actor implements InputProcessor {
 
         setPosition(x, y);
 
-//        Gdx.input.setInputProcessor(this);
-
+        Gdx.input.setInputProcessor(this);
         BodyDef def = new BodyDef();
         def.position.set(x, y);
         def.type = BodyDef.BodyType.DynamicBody;
+
         body = world.createBody(def);
+        body.setFixedRotation(true);
 
 
         final PolygonShape box = new PolygonShape();
@@ -66,9 +68,12 @@ public class PlayerProgerEntity extends Actor implements InputProcessor {
 
         fixture = body.createFixture(box, 3);
         fixture.setUserData("proger");
+
         box.dispose();
 
         setSize(PIXELS_IN_METER, PIXELS_IN_METER);
+//        body.applyLinearImpulse(0, 0, 0, 0, true);
+
     }
 
 
