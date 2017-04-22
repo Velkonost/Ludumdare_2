@@ -54,6 +54,7 @@ public class GameScreen extends BaseScreen {
     private PlayerVlogerEntity playerVloger;
     private PlayerProgerEntity playerProger;
     private ArrayList<WallEntiy> wall;
+
     private ArrayList<Texture> tableTextures;
     private ArrayList<TableEntity> table;
 
@@ -111,7 +112,9 @@ public class GameScreen extends BaseScreen {
         Texture wallT = game.getManager().get("table8bit.jpg");
         for (int i = 0; i < 7; i++)
             tableTextures.add((Texture) game.getManager().get("table" + (i + 1) + ".png"));
-        Texture t = tableTextures.get(0);
+
+
+
 
         Timer.schedule(new Timer.Task() {
 
@@ -183,7 +186,9 @@ public class GameScreen extends BaseScreen {
             stage.addActor(wall.get(i));
         }
 
-
+        for(int i = 0; i < table.size(); i++){
+            stage.addActor(table.get(i));
+        }
 
       /*  stage.addActor(playerVloger);
         stage.addActor(playerProger);*/
@@ -319,28 +324,30 @@ public class GameScreen extends BaseScreen {
 
         stage.act();
 //
+       /* playerVloger.processInput();
+        playerProger.processInput();*/
         if(checkPlayer) {
             playerVloger.processInput();
             playerProger.processInput();
             stage.getCamera().position.set(playerVloger.getX(),playerVloger.getY(), 0);
             for (HashMap.Entry<String, PlayerProgerEntity> entry : friendlyPlayers2.entrySet()) {
-                entry.getValue().processInput();
+
                 stage.addActor(entry.getValue());
             }
         }else{
-            // Gdx.app.log("SocketIO", "DCPteam");
+           // Gdx.app.log("SocketIO", "DCPteam");
             playerProger.processInput();
             playerVloger.processInput();
             stage.getCamera().position.set(playerProger.getX(),playerProger.getY(), 0);
             for (HashMap.Entry<String, PlayerVlogerEntity> entry : friendlyPlayers1.entrySet()) {
-                entry.getValue().processInput();
-                stage.addActor(entry.getValue());
+               stage.addActor(entry.getValue());
             }
-
+            playerProger.processInput();
+            stage.getCamera().position.set(playerProger.getX(),playerProger.getY(), 0);
         }
         for (BotIdleEntity aBotsIdle : botsIdle) aBotsIdle.processInput();
 
-        //  stage.getCamera().position.set(playerProger.getX(),playerProger.getY(), 0);
+      //  stage.getCamera().position.set(playerProger.getX(),playerProger.getY(), 0);
 
         world.step(delta, 6, 2);
         camera.update();
@@ -422,7 +429,7 @@ public class GameScreen extends BaseScreen {
     public void connectSocket(){
         try {
 //            socket = IO.socket("http://766ee2e4.ngrok.io");
-            socket = IO.socket("http://localhost:3000");
+            socket = IO.socket("http://localhost:8080");
             socket.connect();
         } catch(Exception e){
             System.out.println(e);
