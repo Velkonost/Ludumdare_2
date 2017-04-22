@@ -252,7 +252,10 @@ public class GameScreen extends BaseScreen {
 //
         playerVloger.processInput();
         playerProger.processInput();
+        for(HashMap.Entry<String, PlayerVlogerEntity> entry : friendlyPlayers.entrySet()){
 
+            stage.addActor(entry.getValue());
+        }
         for (BotIdleEntity aBotsIdle : botsIdle) aBotsIdle.processInput();
 
         stage.getCamera().position.set(playerProger.getX(),playerProger.getY(), 0);
