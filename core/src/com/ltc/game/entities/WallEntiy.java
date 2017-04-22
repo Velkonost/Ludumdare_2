@@ -21,12 +21,14 @@ public class WallEntiy extends Actor {
         this.texture = texture;
         this.world = world;
 
+//        x -= 1.5f;
+//        y -= 0.5f;
         this.width = widht;
         this.higth = higth;
+        setPosition(x, y);
 
         BodyDef def = new BodyDef();
-        def.position.x = x;
-        def.position.y = y;
+        def.position.set(x, y);
         def.type = BodyDef.BodyType.StaticBody;
         body = world.createBody(def);
 
@@ -42,7 +44,7 @@ public class WallEntiy extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         setPosition((body.getPosition().x - width / 2) * PIXELS_IN_METER, (body.getPosition().y - higth / 2) * PIXELS_IN_METER);
-        batch.draw(texture, getX(), getY(), getWidth(), getHeight());
+        batch.draw(texture, getX(), getY(), getWidth() + 20, getHeight() + 10);
     }
 
     public void detach() {

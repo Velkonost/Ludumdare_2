@@ -55,7 +55,7 @@ public class GameScreen extends BaseScreen {
     private String choosenProg, choosenVlog;
     private PlayerVlogerEntity playerVloger;
     private PlayerProgerEntity playerProger;
-    private WallEntiy wall[];
+    private ArrayList<WallEntiy> wall;
 
 
     private Texture playerVlogerTexture;
@@ -88,7 +88,7 @@ public class GameScreen extends BaseScreen {
         this.choosenVlog = choosenVlog;
         stage = new Stage(new FitViewport(1280, 720));
         world = new World(new Vector2(0, 0), true);
-        wall = new WallEntiy[19];
+        wall = new ArrayList<WallEntiy>();
 
         botsIdle = new ArrayList();
     }
@@ -98,7 +98,7 @@ public class GameScreen extends BaseScreen {
         connectSocket();
         configSocketEvents();
         renderer = new Box2DDebugRenderer();
-        camera = new OrthographicCamera(16, 9);
+        camera = new OrthographicCamera(32, 18);
         camera.translate(0, 1);
         botsIdleTexture = new ArrayList<Texture>();
         getTextures();
@@ -119,23 +119,25 @@ public class GameScreen extends BaseScreen {
             }
 
         }, 1, 1);
-        wall[0] = new WallEntiy(wallT, world,14.5f,0.5f, 21f, 1f);
-        wall[1] = new WallEntiy(wallT, world, 25.5f,6f, 1f, 12f);
-        wall[2] = new WallEntiy(wallT, world, 24f,12.5f, 4f, 1f);
-        wall[3] = new WallEntiy(wallT, world, 22.5f, 14f,1f, 2f);
-        wall[4] = new WallEntiy(wallT, world, 23.5f, 18.5f, 1f,9f);
-        wall[5] = new WallEntiy(wallT, world, 21f, 22.5f, 6f, 1f);
-        wall[6] = new WallEntiy(wallT, world, 18.5f, 20f, 1f, 4f);
-        wall[7] = new WallEntiy(wallT, world, 16f, 18.5f, 4f, 1f);
-        wall[8] = new WallEntiy(wallT, world, 14.5f, 20f, 1f,2f);
-        wall[9] = new WallEntiy(wallT, world, 12f, 20.5f, 4f,1f);
-        wall[10] = new WallEntiy(wallT, world, 10.5f, 19.5f, 1f,1f);
-        wall[11] = new WallEntiy(wallT, world, 5.5f, 18.5f, 11f,1f);
-        wall[12] = new WallEntiy(wallT, world, 0.5f, 14f, 1f,8f);
-        wall[13] = new WallEntiy(wallT, world, 2f, 9.5f, 4f,1f);
-        wall[14] = new WallEntiy(wallT, world, 4.5f, 5.5f, 1f,9f);
-        wall[15] = new WallEntiy(wallT, world, 11.5f, 9.5f, 1f,1f);
-        wall[16] = new WallEntiy(wallT, world, 18.5f, 9.5f, 1f,1f);
+//        wall[0] = new WallEntiy(wallT, world,14.5f,0.5f, 21f, 1f);
+//        wall[1] = new WallEntiy(wallT, world, 25.5f,6f, 1f, 12f);
+//        wall[2] = new WallEntiy(wallT, world, 24f,12.5f, 4f, 1f);
+//        wall[3] = new WallEntiy(wallT, world, 22.5f, 14f,1f, 2f);
+//        wall[4] = new WallEntiy(wallT, world, 23.5f, 18.5f, 1f,9f);
+//        wall[5] = new WallEntiy(wallT, world, 21f, 22.5f, 6f, 1f);
+//        wall[6] = new WallEntiy(wallT, world, 18.5f, 20f, 1f, 4f);
+//        wall[7] = new WallEntiy(wallT, world, 16f, 18.5f, 4f, 1f);
+//        wall[8] = new WallEntiy(wallT, world, 14.5f, 20f, 1f,2f);
+//        wall[9] = new WallEntiy(wallT, world, 12f, 20.5f, 4f,1f);
+//        wall[10] = new WallEntiy(wallT, world, 10.5f, 19.5f, 1f,1f);
+//        wall[11] = new WallEntiy(wallT, world, 5.5f, 18.5f, 11f,1f);
+//        wall[12] = new WallEntiy(wallT, world, 0.5f, 14f, 1f,8f);
+//        wall[13] = new WallEntiy(wallT, world, 2f, 9.5f, 4f,1f);
+//        wall[14] = new WallEntiy(wallT, world, 4.5f, 5.5f, 1f,9f);
+//        wall[15] = new WallEntiy(wallT, world, 11.5f, 9.5f, 1f,1f);
+//        wall[16] = new WallEntiy(wallT, world, 18.5f, 9.5f, 1f,1f);
+        wall.add(new WallEntiy(wallT, world, 4.0f, 3.5f, 10f, 1f));
+
         playerVloger = new PlayerVlogerEntity(playerVlogerTexture, playerVlogerCameraTexture, this, world, 9f, 7f);
         playerProger = new PlayerProgerEntity(playerProgerTexture, phoneTexture, this, world, 6.5f, 3.5f);
         //guiMenu = new GuiMenu()
@@ -148,8 +150,8 @@ public class GameScreen extends BaseScreen {
 //            stage.addActor(botsIdle.get(i - 1));
 //        }
 
-        for(int i = 0; i < 17; i++){
-            stage.addActor(wall[i]);
+        for(int i = 0; i < wall.size(); i++){
+            stage.addActor(wall.get(i));
         }
 
 
@@ -321,8 +323,8 @@ public class GameScreen extends BaseScreen {
         playerVloger.remove();
         playerProger.remove();
         for (BotIdleEntity aBotsIdle : botsIdle) aBotsIdle.remove();
-        for(int i = 0; i < 17; i++){wall[i].detach();}
-        for(int i = 0; i < 17; i++){wall[i].remove();}
+        for(int i = 0; i < wall.size(); i++){wall.get(i).detach();}
+        for(int i = 0; i < wall.size(); i++){wall.get(i).remove();}
     }
 
     @Override
@@ -385,7 +387,8 @@ public class GameScreen extends BaseScreen {
 
     public void connectSocket(){
         try {
-            socket = IO.socket("http://766ee2e4.ngrok.io");
+//            socket = IO.socket("http://766ee2e4.ngrok.io");
+            socket = IO.socket("http://localhost:8080");
             socket.connect();
         } catch(Exception e){
             System.out.println(e);
