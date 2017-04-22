@@ -33,7 +33,7 @@ import static java.lang.Math.floor;
  */
 public class GameScreen extends BaseScreen {
 
-    private final float UPDATE_TIME = 1/60f;
+    private final float UPDATE_TIME = 1/40f;
     private float timer;
     private HashMap<String, PlayerVlogerEntity> friendlyPlayers1;
     private HashMap<String, PlayerProgerEntity> friendlyPlayers2;
@@ -305,12 +305,15 @@ public class GameScreen extends BaseScreen {
 //
         if(checkPlayer) {
             playerVloger.processInput();
+            playerProger.processInput();
             stage.getCamera().position.set(playerVloger.getX(),playerVloger.getY(), 0);
             for (HashMap.Entry<String, PlayerProgerEntity> entry : friendlyPlayers2.entrySet()) {
                 stage.addActor(entry.getValue());
             }
         }else{
+           // Gdx.app.log("SocketIO", "DCPteam");
             playerProger.processInput();
+            playerVloger.processInput();
             stage.getCamera().position.set(playerProger.getX(),playerProger.getY(), 0);
             for (HashMap.Entry<String, PlayerVlogerEntity> entry : friendlyPlayers1.entrySet()) {
                stage.addActor(entry.getValue());
@@ -362,7 +365,9 @@ public class GameScreen extends BaseScreen {
     public void updateServer(float dt)
     {
         timer += dt;
-        if (timer >= UPDATE_TIME && playerVloger != null && playerVloger.hasMoved()) {
+        if(checkPlayer)
+        {
+            if (timer >= UPDATE_TIME && playerVloger != null && playerVloger.hasMoved()) {
                 JSONObject data = new JSONObject();
                 try {
                     data.put("x", playerVloger.getBody().getPosition().x);
@@ -376,7 +381,9 @@ public class GameScreen extends BaseScreen {
                 }
                 socket.emit("playerMoved", data);
 
-            }else if(timer >= UPDATE_TIME && playerProger != null && playerProger.hasMoved()) {
+            }
+        }else{
+            if(timer >= UPDATE_TIME && playerProger != null && playerProger.hasMoved()) {
                 JSONObject data = new JSONObject();
                 try {
                     data.put("x", playerProger.getBody().getPosition().x);
@@ -391,6 +398,7 @@ public class GameScreen extends BaseScreen {
                 socket.emit("playerMoved", data);
 
             }
+        }
     }
 
     public void connectSocket(){
@@ -421,32 +429,6 @@ public class GameScreen extends BaseScreen {
                     Gdx.app.log("SocketIO", "Error getting ID");
                 }
             }
-        }).on("getPlayers", new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                JSONArray objects = (JSONArray) args[0];
-                try {
-                    if(objects.length()>0) {
-                        checkPlayer = false;
-                        for (int i = 0; i < objects.length(); i++) {
-                            PlayerProgerEntity coopPlayer = new PlayerProgerEntity(playerProgerTexture, playerProgerTexture, GameScreen.this, world, 1, 2);
-                            //coopPlayer.setPosition(1,2);
-                            Vector2 position = new Vector2();
-                            position.x = ((Double) objects.getJSONObject(i).getDouble("x")).floatValue();
-                            position.y = ((Double) objects.getJSONObject(i).getDouble("y")).floatValue();
-                            coopPlayer.setPosition(position.x, position.y);
-                            //  stage.addActor(coopPlayer);
-                            friendlyPlayers2.put(objects.getJSONObject(i).getString("id"), coopPlayer);
-                        }
-                    }else{
-                        // stage.addActor(playerVloger);
-                        checkPlayer = true;
-                        Gdx.app.log("SocketIO", "TRUE GAVNO");
-                    }
-                } catch(JSONException e){
-
-                }
-            }
         }).on("newPlayer", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
@@ -454,13 +436,10 @@ public class GameScreen extends BaseScreen {
                 try {
                     String playerId = data.getString("id");
                     Gdx.app.log("SocketIO", "New Player Connect: " + playerId);
-                    if(!checkPlayer) {
-                        PlayerVlogerEntity playerEntity = new PlayerVlogerEntity(playerVlogerTexture, playerVlogerTexture, GameScreen.this, world, 1, 2);
-                        friendlyPlayers1.put(playerId, playerEntity);
-                    }else{
-                        PlayerProgerEntity playerEntity = new PlayerProgerEntity(playerProgerTexture, playerProgerTexture, GameScreen.this, world, 1, 2);
-                        friendlyPlayers2.put(playerId, playerEntity);
-                    }
+
+                    PlayerProgerEntity playerEntity = new PlayerProgerEntity(playerProgerTexture, playerProgerTexture, GameScreen.this, world, 1, 2);
+                    friendlyPlayers2.put(playerId, playerEntity);
+
                 }catch (JSONException e)
                 {
 
@@ -476,7 +455,7 @@ public class GameScreen extends BaseScreen {
                 JSONObject data = (JSONObject) args[0];
                 try {
                     String playerId = data.getString("id");
-                    if(checkPlayer)
+                    if(!checkPlayer)
                     {
                         friendlyPlayers1.get(playerId).remove();
                         friendlyPlayers1.remove(playerId);
@@ -490,6 +469,44 @@ public class GameScreen extends BaseScreen {
                     Gdx.app.log("SocketIO", "Error getting disconnected PlayerID");
                 }
             }
+        }).on("getPlayers", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONArray objects = (JSONArray) args[0];
+                try {
+                    if(objects.length()>0) {
+                        checkPlayer = false;
+                        for (int i = 0; i < objects.length(); i++) {
+                            PlayerVlogerEntity coopPlayer = new PlayerVlogerEntity(playerVlogerTexture, playerVlogerTexture, GameScreen.this, world, 1, 2);
+                            //coopPlayer.setPosition(1,2);
+                            Vector2 position = new Vector2();
+                            position.x = ((Double) objects.getJSONObject(i).getDouble("x")).floatValue();
+                            position.y = ((Double) objects.getJSONObject(i).getDouble("y")).floatValue();
+                            coopPlayer.setPosition(position.x, position.y);
+                            //  stage.addActor(coopPlayer);
+                            friendlyPlayers1.put(objects.getJSONObject(i).getString("id"), coopPlayer);
+
+                        }
+                        Gdx.app.log("SocketIO", "TRUE NE GAVNO");
+                    }else{
+                        // stage.addActor(playerVloger);
+                        checkPlayer = true;
+                        /*for (int i = 0; i < objects.length(); i++) {
+                            PlayerVlogerEntity coopPlayer = new PlayerVlogerEntity(playerVlogerTexture, playerVlogerTexture, GameScreen.this, world, 1, 2);
+                            //coopPlayer.setPosition(1,2);
+                            Vector2 position = new Vector2();
+                            position.x = ((Double) objects.getJSONObject(i).getDouble("x")).floatValue();
+                            position.y = ((Double) objects.getJSONObject(i).getDouble("y")).floatValue();
+                            coopPlayer.setPosition(position.x, position.y);
+                            //  stage.addActor(coopPlayer);
+                            friendlyPlayers1.put(objects.getJSONObject(i).getString("id"), coopPlayer);
+                        }*/
+                        Gdx.app.log("SocketIO", "TRUE GAVNO");
+                    }
+                } catch(JSONException e){
+
+                }
+            }
         }).on("playerMoved", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
@@ -501,12 +518,12 @@ public class GameScreen extends BaseScreen {
                         Vector2 vector2 = new Vector2();
                         vector2.add(x.floatValue(), y.floatValue());
                         if(checkPlayer) {
-                            if (friendlyPlayers1.get(playerId) != null) {
-                                friendlyPlayers1.get(playerId).getBody().setTransform(vector2.x, vector2.y, 0);
-                            }
-                        }else{
                             if (friendlyPlayers2.get(playerId) != null) {
                                 friendlyPlayers2.get(playerId).getBody().setTransform(vector2.x, vector2.y, 0);
+                            }
+                        }else{
+                            if (friendlyPlayers1.get(playerId) != null) {
+                                friendlyPlayers1.get(playerId).getBody().setTransform(vector2.x, vector2.y, 0);
                             }
                         }
                     } catch (org.json.JSONException e) {
