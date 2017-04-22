@@ -15,26 +15,23 @@ import static com.ltc.game.Constants.PIXELS_IN_METER;
  * @author Velkonost
  */
 public class BotIdleEntity extends Actor {
+
     //направление движения
-    public enum KeysProger {
+    public enum KeysBot {
         LEFT, RIGHT, UP, DOWN
     }
 
-    public static Map<KeysProger, Boolean> keys = new HashMap<KeysProger, Boolean>();
+    public static Map<KeysBot, Boolean> keys = new HashMap<KeysBot, Boolean>();
 
     static {
-        keys.put(KeysProger.LEFT, false);
-        keys.put(KeysProger.RIGHT, false);
-        keys.put(KeysProger.UP, false);
-        keys.put(KeysProger.DOWN, false);
+        keys.put(KeysBot.LEFT, false);
+        keys.put(KeysBot.RIGHT, false);
+        keys.put(KeysBot.UP, false);
+        keys.put(KeysBot.DOWN, false);
 
     }
 
     private Texture texture;
-    private Texture phoneTexture;
-
-    private boolean hasPhone = true, isPhoneCoords = false;
-    private float phoneX, phoneY;
 
     private World world;
 
@@ -45,7 +42,7 @@ public class BotIdleEntity extends Actor {
     private Fixture fixture;
 
 
-    public static final float SPEED_PROGER = 2f;
+    public static final float SPEED = 2f;
 
     public BotIdleEntity(Texture texture, GameScreen game, World world, float x, float y) {
         this.texture = texture;
@@ -62,7 +59,7 @@ public class BotIdleEntity extends Actor {
         body.setFixedRotation(true);
 
         final PolygonShape box = new PolygonShape();
-        box.setAsBox(0.5f, 0.5f);
+        box.setAsBox(0.25f, 0.5f);
 
         fixture = body.createFixture(box, 3);
         fixture.setUserData("botidle");
@@ -72,7 +69,6 @@ public class BotIdleEntity extends Actor {
         setSize(PIXELS_IN_METER, PIXELS_IN_METER);
 
     }
-
 
     public void detach() {
         body.destroyFixture(fixture);
@@ -88,18 +84,21 @@ public class BotIdleEntity extends Actor {
         setPosition((body.getPosition().x) * PIXELS_IN_METER,
                 (body.getPosition().y) * PIXELS_IN_METER);
         batch.draw(texture, getX(), getY(), getWidth(), getHeight());
-
-        if (!hasPhone) {
-            if (!isPhoneCoords) {
-                phoneX = this.getX();
-                phoneY = this.getY();
-                isPhoneCoords = true;
-            }
-
-            batch.draw(phoneTexture, phoneX, phoneY, getWidth() / 2, getHeight() / 2);
-
-        }
     }
 
-
+    public void processInput() {
+        if (keys.get(KeysBot.LEFT))
+            body.setLinearVelocity(-SPEED, body.getLinearVelocity().y);
+        if (keys.get(KeysBot.RIGHT))
+            body.setLinearVelocity(SPEED, body.getLinearVelocity().y);
+        if (keys.get(KeysBot.UP))
+            body.setLinearVelocity(body.getLinearVelocity().x, SPEED);
+        if (keys.get(KeysBot.DOWN))
+            body.setLinearVelocity(body.getLinearVelocity().x, -SPEED);
+        //если не выбрано направление, то стоим на месте
+        if ((keys.get(KeysBot.LEFT) && keys.get(KeysBot.RIGHT)) || (!keys.get(KeysBot.LEFT) && (!keys.get(KeysBot.RIGHT))))
+            body.setLinearVelocity(0, body.getLinearVelocity().y);
+        if ((keys.get(KeysBot.UP) && keys.get(KeysBot.DOWN)) || (!keys.get(KeysBot.UP) && (!keys.get(KeysBot.DOWN))))
+            body.setLinearVelocity(body.getLinearVelocity().x, 0);
+    }
 }

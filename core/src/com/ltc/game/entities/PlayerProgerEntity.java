@@ -1,5 +1,6 @@
 package com.ltc.game.entities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
@@ -59,7 +60,7 @@ public class PlayerProgerEntity extends Actor implements InputProcessor {
 
         setPosition(x, y);
 
-//        Gdx.input.setInputProcessor(this);
+        Gdx.input.setInputProcessor(this);
 
         BodyDef def = new BodyDef();
         def.position.set(x, y);

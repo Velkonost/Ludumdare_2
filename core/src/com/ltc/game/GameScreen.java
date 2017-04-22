@@ -8,9 +8,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.ltc.game.entities.BotIdleEntity;
 import com.ltc.game.entities.PlayerProgerEntity;
 import com.ltc.game.entities.PlayerVlogerEntity;
 import com.ltc.game.entities.WallEntiy;
+
+import java.util.ArrayList;
 
 /**
  * @author Velkonost
@@ -32,9 +35,17 @@ public class GameScreen extends BaseScreen {
     private PlayerProgerEntity playerProger;
     private WallEntiy wall;
 
-    public boolean collisionBtwPlayers = false;
-    float xdo = 0, ydo = 0, xpo = 0, ypo = 0, speed = 2f, x = 0, y = 0;
 
+    private Texture playerVlogerTexture;
+    private Texture playerVlogerCameraTexture;
+    private Texture playerProgerTexture;
+    private Texture phoneTexture;
+    private Texture botIdleTexture;
+
+    private ArrayList<BotIdleEntity> botsIdle;
+
+    public boolean collisionBtwPlayers = false;
+    public boolean collisionVlogerWithBot = false;
 
     public GameScreen(MainGame game, String choosenProg, String choosenVlog) {
         super(game);
@@ -42,6 +53,8 @@ public class GameScreen extends BaseScreen {
         this.choosenVlog = choosenVlog;
         stage = new Stage(new FitViewport(1280, 720));
         world = new World(new Vector2(0, 0), true);
+
+        botsIdle = new ArrayList();
     }
 
     @Override
@@ -50,17 +63,18 @@ public class GameScreen extends BaseScreen {
         camera = new OrthographicCamera(16, 9);
         camera.translate(0, 1);
 
-        Texture playerVlogerTexture = game.getManager().get("myachhero.png");
-        Texture playerVlogerCameraTexture = game.getManager().get("myachheroCamera.png");
-        Texture playerProgerTexture = game.getManager().get("player2hero.png");
-        Texture phoneTexture = game.getManager().get("mobile.png");
+        getTextures();
 
         playerVloger = new PlayerVlogerEntity(playerVlogerTexture, playerVlogerCameraTexture, this, world, 1, 2);
         playerProger = new PlayerProgerEntity(playerProgerTexture, phoneTexture, this, world, 6.5f, 3.5f);
 
+        for (int i = 0; i < 5; i++) {
+            botsIdle.add(new BotIdleEntity(botIdleTexture, this, world, i * 5, i * 2));
+            stage.addActor(botsIdle.get(i));
+        }
+
         stage.addActor(playerVloger);
         stage.addActor(playerProger);
-
 
         world.setContactListener(new ContactListener() {
             @Override
@@ -73,6 +87,8 @@ public class GameScreen extends BaseScreen {
                     collisionBtwPlayers = true;
                 }
             }
+
+
 
             @Override
             public void endContact(Contact contact) {
@@ -98,6 +114,14 @@ public class GameScreen extends BaseScreen {
         });
     }
 
+    private void getTextures() {
+        playerVlogerTexture = game.getManager().get("myachhero.png");
+        playerVlogerCameraTexture = game.getManager().get("myachheroCamera.png");
+        playerProgerTexture = game.getManager().get("player2hero.png");
+        phoneTexture = game.getManager().get("mobile.png");
+        botIdleTexture = game.getManager().get("myach2hero.png");
+    }
+
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 1, 1);
@@ -108,6 +132,7 @@ public class GameScreen extends BaseScreen {
         playerVloger.processInput();
         playerProger.processInput();
 
+        for (BotIdleEntity aBotsIdle : botsIdle) aBotsIdle.processInput();
 
         stage.getCamera().position.set(playerProger.getX(),playerProger.getY(), 0);
 
@@ -121,9 +146,11 @@ public class GameScreen extends BaseScreen {
     public void hide() {
         playerVloger.detach();
         playerProger.detach();
+        for (BotIdleEntity aBotsIdle1 : botsIdle) aBotsIdle1.detach();
 
         playerVloger.remove();
         playerProger.remove();
+        for (BotIdleEntity aBotsIdle : botsIdle) aBotsIdle.remove();
     }
 
     @Override
