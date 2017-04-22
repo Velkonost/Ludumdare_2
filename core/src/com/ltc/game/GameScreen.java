@@ -21,6 +21,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 import static java.lang.Math.floor;
 
@@ -29,7 +30,7 @@ import static java.lang.Math.floor;
  */
 public class GameScreen extends BaseScreen {
 
-    private final float UPDATE_TIME = 1/60f;
+    private final float UPDATE_TIME = 1/40f;
     private float timer;
     private HashMap<String, PlayerVlogerEntity> friendlyPlayers1;
     private HashMap<String, PlayerProgerEntity> friendlyPlayers2;
@@ -80,6 +81,7 @@ public class GameScreen extends BaseScreen {
     public boolean collisionBtwPlayers = false;
     public boolean collisionVlogerWithBot = false;
     public boolean hasPhone;
+    private boolean hasChecked = false;
 
     public GameScreen(MainGame game, String choosenProg, String choosenVlog) {
         super(game);
@@ -161,7 +163,18 @@ public class GameScreen extends BaseScreen {
         //guiMenu = new GuiMenu()
         font = new BitmapFont();
         sp = new SpriteBatch();
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
+       /* if(checkPlayer)
+        {
+            stage.addActor(playerVloger);
+        }else{
+            stage.addActor(playerProger);
+        }*/
 
 //        for (int i = 1; i <= 3; i++) {
 //            botsIdle.add(new BotIdleEntity(botsIdleTexture.get(i - 1), this, world, i * 5, i * 2));
@@ -284,11 +297,13 @@ public class GameScreen extends BaseScreen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         updateServer(Gdx.graphics.getDeltaTime());
 
-        if(checkPlayer)
+        if(checkPlayer && !hasChecked)
         {
             stage.addActor(playerVloger);
-        }else{
+            playerVloger.boom(true);
+        }else if(!checkPlayer && !hasChecked){
             stage.addActor(playerProger);
+            playerProger.boom(true);
         }
 
         if(kf)
@@ -313,17 +328,20 @@ public class GameScreen extends BaseScreen {
 
         if(checkPlayer) {
             playerVloger.processInput();
-            for (HashMap.Entry<String, PlayerProgerEntity> entry : friendlyPlayers2.entrySet()) {
-
-                stage.addActor(entry.getValue());
-            }
-            stage.getCamera().position.set(playerVloger.getX(),playerVloger.getY(), 0);
-        }else{
-            for (HashMap.Entry<String, PlayerVlogerEntity> entry : friendlyPlayers1.entrySet()) {
-                stage.addActor(entry.getValue());
-            }
             playerProger.processInput();
+            stage.getCamera().position.set(playerVloger.getX(),playerVloger.getY(), 0);
+            for (HashMap.Entry<String, PlayerProgerEntity> entry : friendlyPlayers2.entrySet()) {
+                stage.addActor(entry.getValue());
+            }
+        }else{
+           // Gdx.app.log("SocketIO", "DCPteam");
+            playerProger.processInput();
+            playerVloger.processInput();
             stage.getCamera().position.set(playerProger.getX(),playerProger.getY(), 0);
+            for (HashMap.Entry<String, PlayerVlogerEntity> entry : friendlyPlayers1.entrySet()) {
+               stage.addActor(entry.getValue());
+            }
+
         }
         for (BotIdleEntity aBotsIdle : botsIdle) aBotsIdle.processInput();
 
@@ -369,8 +387,9 @@ public class GameScreen extends BaseScreen {
 
     public void updateServer(float dt)
     {
-        if (checkPlayer) {
-            timer += dt;
+        timer += dt;
+        if(checkPlayer)
+        {
             if (timer >= UPDATE_TIME && playerVloger != null && playerVloger.hasMoved()) {
                 JSONObject data = new JSONObject();
                 try {
@@ -386,9 +405,8 @@ public class GameScreen extends BaseScreen {
                 socket.emit("playerMoved", data);
 
             }
-        }else {
-            timer += dt;
-            if (timer >= UPDATE_TIME && playerProger != null && playerProger.hasMoved()) {
+        }else{
+            if(timer >= UPDATE_TIME && playerProger != null && playerProger.hasMoved()) {
                 JSONObject data = new JSONObject();
                 try {
                     data.put("x", playerProger.getBody().getPosition().x);
@@ -409,7 +427,7 @@ public class GameScreen extends BaseScreen {
     public void connectSocket(){
         try {
 //            socket = IO.socket("http://766ee2e4.ngrok.io");
-            socket = IO.socket("http://localhost:8080");
+            socket = IO.socket("http://localhost:3000");
             socket.connect();
         } catch(Exception e){
             System.out.println(e);
@@ -441,13 +459,10 @@ public class GameScreen extends BaseScreen {
                 try {
                     String playerId = data.getString("id");
                     Gdx.app.log("SocketIO", "New Player Connect: " + playerId);
-                    if(checkPlayer) {
-                        PlayerVlogerEntity playerEntity = new PlayerVlogerEntity(playerVlogerTexture, playerVlogerCameraTexture, GameScreen.this, world, 1, 2);
-                        friendlyPlayers1.put(playerId, playerEntity);
-                    }else{
-                        PlayerProgerEntity playerEntity = new PlayerProgerEntity(playerProgerTexture, playerProgerTexture, GameScreen.this, world, 1, 2);
-                        friendlyPlayers2.put(playerId, playerEntity);
-                    }
+
+                    PlayerProgerEntity playerEntity = new PlayerProgerEntity(playerProgerTexture, playerProgerTexture, GameScreen.this, world, 1, 2);
+                    friendlyPlayers2.put(playerId, playerEntity);
+
                 }catch (JSONException e)
                 {
 
@@ -463,11 +478,11 @@ public class GameScreen extends BaseScreen {
                 JSONObject data = (JSONObject) args[0];
                 try {
                     String playerId = data.getString("id");
-                    if(checkPlayer && friendlyPlayers1.get(playerId)!=null)
+                    if(!checkPlayer)
                     {
                         friendlyPlayers1.get(playerId).remove();
                         friendlyPlayers1.remove(playerId);
-                    }else if(!checkPlayer && friendlyPlayers2.get(playerId)!=null){
+                    }else{
                         friendlyPlayers2.get(playerId).remove();
                         friendlyPlayers2.remove(playerId);
                     }
@@ -477,30 +492,6 @@ public class GameScreen extends BaseScreen {
                     Gdx.app.log("SocketIO", "Error getting disconnected PlayerID");
                 }
             }
-        }).on("playerMoved", new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                JSONObject data = (JSONObject) args[0];
-                    try {
-                        String  playerId = data.getString("id");
-                        Double x = data.getDouble("x");
-                        Double y = data.getDouble("y");
-                        Vector2 vector2 = new Vector2();
-                        vector2.add(x.floatValue(), y.floatValue());
-                        if(checkPlayer) {
-                            if (friendlyPlayers1.get(playerId) != null) {
-                                friendlyPlayers1.get(playerId).getBody().setTransform(vector2.x, vector2.y, 0);
-                            }
-                        }else{
-                            if (friendlyPlayers2.get(playerId) != null) {
-                                friendlyPlayers2.get(playerId).getBody().setTransform(vector2.x, vector2.y, 0);
-                            }
-                        }
-                    } catch (org.json.JSONException e) {
-                        Gdx.app.log("SocketIO", "Error getting disconnected PlayerID");
-                    }
-
-            }
         }).on("getPlayers", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
@@ -509,17 +500,31 @@ public class GameScreen extends BaseScreen {
                     if(objects.length()>0) {
                         checkPlayer = false;
                         for (int i = 0; i < objects.length(); i++) {
-                            PlayerProgerEntity coopPlayer = new PlayerProgerEntity(playerProgerTexture, playerProgerTexture, GameScreen.this, world, 1, 2);
+                            PlayerVlogerEntity coopPlayer = new PlayerVlogerEntity(playerVlogerTexture, playerVlogerTexture, GameScreen.this, world, 1, 2);
                             //coopPlayer.setPosition(1,2);
                             Vector2 position = new Vector2();
                             position.x = ((Double) objects.getJSONObject(i).getDouble("x")).floatValue();
                             position.y = ((Double) objects.getJSONObject(i).getDouble("y")).floatValue();
                             coopPlayer.setPosition(position.x, position.y);
                             //  stage.addActor(coopPlayer);
-                            friendlyPlayers2.put(objects.getJSONObject(i).getString("id"), coopPlayer);
+                            friendlyPlayers1.put(objects.getJSONObject(i).getString("id"), coopPlayer);
+
                         }
+                        Gdx.app.log("SocketIO", "TRUE NE GAVNO");
                     }else{
+                        // stage.addActor(playerVloger);
                         checkPlayer = true;
+                        /*for (int i = 0; i < objects.length(); i++) {
+                            PlayerVlogerEntity coopPlayer = new PlayerVlogerEntity(playerVlogerTexture, playerVlogerTexture, GameScreen.this, world, 1, 2);
+                            //coopPlayer.setPosition(1,2);
+                            Vector2 position = new Vector2();
+                            position.x = ((Double) objects.getJSONObject(i).getDouble("x")).floatValue();
+                            position.y = ((Double) objects.getJSONObject(i).getDouble("y")).floatValue();
+                            coopPlayer.setPosition(position.x, position.y);
+                            //  stage.addActor(coopPlayer);
+                            friendlyPlayers1.put(objects.getJSONObject(i).getString("id"), coopPlayer);
+                        }*/
+                        Gdx.app.log("SocketIO", "TRUE GAVNO");
                     }
                 } catch(JSONException e){
 
