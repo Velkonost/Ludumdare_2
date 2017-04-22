@@ -37,6 +37,8 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
 
     }
 
+    private boolean hasEnemyPhone;
+
     private int countCalls = 3;
     private int countCameras = 5;
 
@@ -200,6 +202,8 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
             circleGetCoords = true;
             countCalls --;
             time = 300;
+        } else if (character == 'q'  || character == 'й') {
+            hasEnemyPhone = game.isHasPhone();
         }
         return true;
     }

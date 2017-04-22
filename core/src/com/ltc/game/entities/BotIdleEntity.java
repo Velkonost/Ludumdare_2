@@ -41,6 +41,7 @@ public class BotIdleEntity extends Actor {
 
     private Fixture fixture;
 
+    public boolean hasPhone = true;
 
     public static final float SPEED = 2f;
 
@@ -100,5 +101,9 @@ public class BotIdleEntity extends Actor {
             body.setLinearVelocity(0, body.getLinearVelocity().y);
         if ((keys.get(KeysBot.UP) && keys.get(KeysBot.DOWN)) || (!keys.get(KeysBot.UP) && (!keys.get(KeysBot.DOWN))))
             body.setLinearVelocity(body.getLinearVelocity().x, 0);
+    }
+
+    public boolean isHasPhone() {
+        return hasPhone;
     }
 }

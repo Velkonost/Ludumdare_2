@@ -41,6 +41,7 @@ public class BotMoveEntity extends Actor {
 
     private Fixture fixture;
 
+    public boolean hasPhone = true;
 
     public static final float SPEED = 2f;
 
@@ -102,4 +103,7 @@ public class BotMoveEntity extends Actor {
             body.setLinearVelocity(body.getLinearVelocity().x, 0);
     }
 
+    public boolean isHasPhone() {
+        return hasPhone;
+    }
 }

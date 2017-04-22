@@ -231,4 +231,8 @@ public class PlayerProgerEntity extends Actor implements InputProcessor {
         if ((keys.get(KeysProger.UP) && keys.get(KeysProger.DOWN)) || (!keys.get(KeysProger.UP) && (!keys.get(KeysProger.DOWN))))
             body.setLinearVelocity(body.getLinearVelocity().x, 0);
     }
+
+    public boolean isHasPhone() {
+        return hasPhone;
+    }
 }

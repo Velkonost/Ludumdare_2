@@ -46,6 +46,7 @@ public class GameScreen extends BaseScreen {
 
     public boolean collisionBtwPlayers = false;
     public boolean collisionVlogerWithBot = false;
+    public boolean hasPhone;
 
     public GameScreen(MainGame game, String choosenProg, String choosenVlog) {
         super(game);
@@ -85,6 +86,27 @@ public class GameScreen extends BaseScreen {
                 if ((fixtureA.getUserData().equals("vloger") && fixtureB.getUserData().equals("proger"))
                         || (fixtureA.getUserData().equals("proger") && fixtureB.getUserData().equals("vloger"))) {
                     collisionBtwPlayers = true;
+                    hasPhone = playerProger.isHasPhone();
+                }
+
+                if (
+                        (fixtureA.getUserData().equals("vloger") && fixtureB.getUserData().equals("proger"))
+                        || (fixtureA.getUserData().equals("proger") && fixtureB.getUserData().equals("vloger"))
+                        || (fixtureA.getUserData().equals("vloger") && fixtureB.getUserData().equals("botidle"))
+                        || (fixtureA.getUserData().equals("botidle") && fixtureB.getUserData().equals("vloger"))
+                        || (fixtureA.getUserData().equals("vloger") && fixtureB.getUserData().equals("botmove"))
+                        || (fixtureA.getUserData().equals("botmove") && fixtureB.getUserData().equals("vloger"))
+                        ) {
+                    collisionVlogerWithBot = true;
+
+                    if (
+                            (fixtureA.getUserData().equals("vloger") && fixtureB.getUserData().equals("botidle"))
+                            || (fixtureA.getUserData().equals("botidle") && fixtureB.getUserData().equals("vloger"))
+                            || (fixtureA.getUserData().equals("vloger") && fixtureB.getUserData().equals("botmove"))
+                            || (fixtureA.getUserData().equals("botmove") && fixtureB.getUserData().equals("vloger"))
+                            ) {
+                        hasPhone = true;
+                    }
                 }
             }
 
@@ -99,6 +121,17 @@ public class GameScreen extends BaseScreen {
                 if ((fixtureA.getUserData().equals("vloger") && fixtureB.getUserData().equals("proger"))
                         || (fixtureA.getUserData().equals("proger") && fixtureB.getUserData().equals("vloger"))) {
                     collisionBtwPlayers = false;
+                }
+
+                if (
+                        (fixtureA.getUserData().equals("vloger") && fixtureB.getUserData().equals("proger"))
+                                || (fixtureA.getUserData().equals("proger") && fixtureB.getUserData().equals("vloger"))
+                                || (fixtureA.getUserData().equals("vloger") && fixtureB.getUserData().equals("botidle"))
+                                || (fixtureA.getUserData().equals("botidle") && fixtureB.getUserData().equals("vloger"))
+                                || (fixtureA.getUserData().equals("vloger") && fixtureB.getUserData().equals("botmove"))
+                                || (fixtureA.getUserData().equals("botmove") && fixtureB.getUserData().equals("vloger"))
+                        ) {
+                    collisionVlogerWithBot = false;
                 }
             }
 
@@ -166,5 +199,9 @@ public class GameScreen extends BaseScreen {
 
     public PlayerProgerEntity getPlayerProger() {
         return playerProger;
+    }
+
+    public boolean isHasPhone() {
+        return hasPhone;
     }
 }
