@@ -1,5 +1,6 @@
 package com.ltc.game.entities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.utils.Timer;
 import com.ltc.game.GameScreen;
 
 import java.util.HashMap;
@@ -35,6 +37,10 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
         keys.put(KeysVloger.DOWN, false);
 
     }
+
+    private int countCalls = 3;
+
+    private long time;
 
     private Texture texture;
 
@@ -67,7 +73,7 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
         position = new Vector2(x, y);
 
 
-//        Gdx.input.setInputProcessor(this);
+        Gdx.input.setInputProcessor(this);
 
         BodyDef def = new BodyDef();
         def.position.set(x, y);
@@ -98,7 +104,7 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
     }
 
     @Override
-    public void draw(Batch batch, float parentAlpha) {
+    public void draw(final Batch batch, float parentAlpha) {
         setPosition((body.getPosition().x) * PIXELS_IN_METER,
                 (body.getPosition().y) * PIXELS_IN_METER);
         batch.draw(texture, getX(), getY(), getWidth(), getHeight());
@@ -112,12 +118,24 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
                 circleGetCoords = false;
             }
 
+            Timer.schedule(new Timer.Task() {
+
+                @Override
+                public void run() {
+                    time --;
+                    System.out.println(time);
+
+                    if(time == 0) isCircleDraw = false;
+                }
+            }, 10).run();
+
             Pixmap pixmap = new Pixmap(1000, 500, Pixmap.Format.RGBA8888);
             pixmap.setColor(new Color(1, 0, 0, 0.3f));
             pixmap.fillCircle((int) 400, (int) 300, 150);
             Texture textureCircle = new Texture(pixmap);
 
             batch.draw(textureCircle, 0, 0);
+
         }
     }
 
@@ -152,13 +170,17 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
 
     @Override
     public boolean keyTyped(char character) {
+        System.out.println(countCalls);
         if (character == ' ') {
             if (game.collisionBtwPlayers) {
                 System.out.print("WIN!");
             }
-        } else if (character == 'e') {
+        } else if ( (character == 'e' || character == 'е' || character == 'у') && countCalls > 0) {
+
             isCircleDraw = true;
             circleGetCoords = true;
+            countCalls --;
+            time = 300;
         }
         return true;
     }
