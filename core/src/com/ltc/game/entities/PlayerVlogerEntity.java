@@ -1,6 +1,5 @@
 package com.ltc.game.entities;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
@@ -47,7 +46,7 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
 
     private Fixture fixture;
 
-    private boolean isCircleDraw = false;
+    private boolean isCircleDraw = false, circleGetCoords = false;
 
     private int xCircle, yCircle;
 
@@ -68,7 +67,7 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
         position = new Vector2(x, y);
 
 
-        Gdx.input.setInputProcessor(this);
+//        Gdx.input.setInputProcessor(this);
 
         BodyDef def = new BodyDef();
         def.position.set(x, y);
@@ -106,18 +105,19 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
 
 
         if (isCircleDraw) {
-            xCircle = (int) game.getPlayerProger().getX() + 10;
-            yCircle = (int) game.getPlayerProger().getY() + 10;
-//            System.out.println(yCircle);
+            if (circleGetCoords) {
+                xCircle = (int) game.getPlayerProger().getX() + 10;
+                yCircle = (int) game.getPlayerProger().getY() + 10;
 
-//            System.out.println(xCircle);
+                circleGetCoords = false;
+            }
 
-            Pixmap pixmap = new Pixmap(500, 500, Pixmap.Format.RGBA8888);
-            pixmap.setColor(Color.RED);
-            pixmap.fillCircle((int) (PIXELS_IN_METER), (int) (PIXELS_IN_METER), 75);
+            Pixmap pixmap = new Pixmap(1000, 500, Pixmap.Format.RGBA8888);
+            pixmap.setColor(new Color(1, 0, 0, 0.3f));
+            pixmap.fillCircle((int) 400, (int) 300, 150);
             Texture textureCircle = new Texture(pixmap);
 
-            batch.draw(textureCircle, xCircle ,  - yCircle );
+            batch.draw(textureCircle, 0, 0);
         }
     }
 
@@ -158,6 +158,7 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
             }
         } else if (character == 'e') {
             isCircleDraw = true;
+            circleGetCoords = true;
         }
         return true;
     }

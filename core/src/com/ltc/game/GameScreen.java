@@ -1,18 +1,16 @@
 package com.ltc.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.ltc.game.entities.PlayerProgerEntity;
 import com.ltc.game.entities.PlayerVlogerEntity;
 import com.ltc.game.entities.WallEntiy;
-
-import static com.ltc.game.entities.PlayerProgerEntity.keys;
 
 /**
  * @author Velkonost
@@ -44,7 +42,7 @@ public class GameScreen extends BaseScreen {
         super(game);
         this.choosenProg = choosenProg;
         this.choosenVlog = choosenVlog;
-        stage = new Stage();
+        stage = new Stage(new FitViewport(1280, 720));
         world = new World(new Vector2(0, 0), true);
     }
 
@@ -88,7 +86,6 @@ public class GameScreen extends BaseScreen {
                         || (fixtureA.getUserData().equals("proger") && fixtureB.getUserData().equals("vloger"))) {
                     collisionBtwPlayers = false;
                 }
-
             }
 
             @Override
@@ -127,11 +124,11 @@ public class GameScreen extends BaseScreen {
         if(keys.get(PlayerProgerEntity.KeysProger.UP)){
             stage.getCamera().translate(0,1.517f,0);
         }*/
-       stage.getCamera().position.set(playerProger.getX(),playerProger.getY(), 0);
+        stage.getCamera().position.set(playerProger.getX(),playerProger.getY(), 0);
 
         world.step(delta, 6, 2);
-        stage.getCamera().position.set(playerProger.getX(), playerProger.getY(), 0);
-        camera.lookAt(playerProger.getX(), playerProger.getY(), 0);
+//        stage.getCamera().position.set(playerProger.getX(), playerProger.getY(), 0);
+//        camera.lookAt(playerProger.getX(), playerProger.getY(), 0);
         camera.update();
         renderer.render(world, camera.combined);
         stage.draw();
