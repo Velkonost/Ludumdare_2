@@ -18,7 +18,7 @@ public class MyGame extends ApplicationAdapter {
 
 	@Override
 	public void render () {
-		//зеленый лучше
+		//зеленый лучшеш8нщнщш
 		Gdx.gl.glClearColor(0, 1, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
