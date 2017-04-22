@@ -1,6 +1,7 @@
 package com.ltc.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -10,6 +11,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.ltc.game.entities.PlayerProgerEntity;
 import com.ltc.game.entities.PlayerVlogerEntity;
+import com.ltc.game.entities.WallEntiy;
+
+import static com.ltc.game.entities.PlayerProgerEntity.keys;
 
 /**
  * @author Velkonost
@@ -28,8 +32,12 @@ public class GameScreen extends BaseScreen {
 
     private PlayerVlogerEntity playerVloger;
     private PlayerProgerEntity playerProger;
+    private WallEntiy wall;
+
+    Vector2 vector2;
 
     public boolean collisionBtwPlayers = false;
+    float xdo = 0, ydo = 0, xpo = 0, ypo = 0, speed = 2f, x = 0, y = 0;
 
 
     public GameScreen(MainGame game) {
@@ -47,9 +55,11 @@ public class GameScreen extends BaseScreen {
 
         Texture playerVlogerTexture = game.getManager().get("myach.png");
         Texture playerProgerTexture = game.getManager().get("player2.png");
+        //Texture wall = game.getManager().get();
 
         playerVloger = new PlayerVlogerEntity(playerVlogerTexture, this, world, 1, 2);
-        playerProger = new PlayerProgerEntity(playerProgerTexture, this, world, 6, 2);
+        playerProger = new PlayerProgerEntity(playerProgerTexture, this, world, 6.5f, 3.5f);
+        //wall = new WallEntiy();
 
         stage.addActor(playerVloger);
         stage.addActor(playerProger);
@@ -102,7 +112,25 @@ public class GameScreen extends BaseScreen {
         playerVloger.processInput();
         playerProger.processInput();
 
+       /* if(keys.get(PlayerProgerEntity.KeysProger.LEFT)){
+           // stage.getCamera().translate(-1.517f, 0, 0);
+            stage.getCamera().position.set(playerProger.getX(),playerProger.getY(),0);
+        }
+        if(keys.get(PlayerProgerEntity.KeysProger.RIGHT)){
+            stage.getCamera().translate(1.517f,0,0);
+            stage.getCamera().position.set(playerProger.getX(),playerProger.getY(),0);
+        }
+        if(keys.get(PlayerProgerEntity.KeysProger.DOWN)){
+            stage.getCamera().translate(0,-1.517f,0);
+        }
+        if(keys.get(PlayerProgerEntity.KeysProger.UP)){
+            stage.getCamera().translate(0,1.517f,0);
+        }*/
+       stage.getCamera().position.set(playerProger.getX(),playerProger.getY(), 0);
+
         world.step(delta, 6, 2);
+        stage.getCamera().position.set(playerProger.getX(), playerProger.getY(), 0);
+        camera.lookAt(playerProger.getX(), playerProger.getY(), 0);
         camera.update();
         renderer.render(world, camera.combined);
         stage.draw();

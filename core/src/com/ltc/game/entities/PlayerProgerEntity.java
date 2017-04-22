@@ -21,11 +21,11 @@ public class PlayerProgerEntity extends Actor implements InputProcessor {
 
 
     //направление движения
-    enum KeysProger {
+    public enum KeysProger {
         LEFT, RIGHT, UP, DOWN
     }
 
-    static Map<KeysProger, Boolean> keys = new HashMap<KeysProger, Boolean>();
+    public static Map<KeysProger, Boolean> keys = new HashMap<KeysProger, Boolean>();
 
     static {
         keys.put(KeysProger.LEFT, false);
