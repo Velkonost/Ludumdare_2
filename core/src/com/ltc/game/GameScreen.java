@@ -319,7 +319,7 @@ public class GameScreen extends BaseScreen {
 
     public void connectSocket(){
         try {
-            socket = IO.socket("http://localhost:3000");
+            socket = IO.socket("http://766ee2e4.ngrok.io");
             socket.connect();
         } catch(Exception e){
             System.out.println(e);
