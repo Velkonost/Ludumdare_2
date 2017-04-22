@@ -35,13 +35,6 @@ public class MainGame extends Game {
 		manager.load("mobile.png", Texture.class);
 		manager.load("player3hero.png", Texture.class);
 		manager.load("table8bit.jpg", Texture.class);
-		manager.load("table1.png", Texture.class);
-		manager.load("table2.png", Texture.class);
-		manager.load("table3.png", Texture.class);
-		manager.load("table4.png", Texture.class);
-		manager.load("table5.png", Texture.class);
-		manager.load("table6.png", Texture.class);
-		manager.load("table7.png", Texture.class);
 
 
 		manager.finishLoading();
