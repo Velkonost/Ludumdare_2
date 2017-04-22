@@ -20,13 +20,14 @@ public class PlayerEntity extends Actor {
 
     private Fixture fixture;
 
-    public PlayerEntity(Texture texture, World world) {
+    public PlayerEntity(Texture texture, World world, float x, float y) {
         this.texture = texture;
         this.world = world;
+        setPosition(x, y);
 
 //        previousPosition = new Vector2(getX(), getY());
         BodyDef def = new BodyDef();
-        //  def.position.set(position);
+          def.position.set(x, y);
         def.type = BodyDef.BodyType.DynamicBody;
         body = world.createBody(def);
 
@@ -52,6 +53,7 @@ public class PlayerEntity extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
+        System.out.println(body.getPosition().x);
         setPosition((body.getPosition().x) * PIXELS_IN_METER,
                 (body.getPosition().y) * PIXELS_IN_METER);
         batch.draw(texture, getX(), getY(), getWidth(), getHeight());

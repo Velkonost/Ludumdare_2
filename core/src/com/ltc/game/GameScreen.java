@@ -32,8 +32,8 @@ public class GameScreen extends BaseScreen {
     public GameScreen(MainGame game) {
         super(game);
 
-        stage = new Stage(new FitViewport(1280, 720));
-        world = new World(new Vector2(0, 0), true);
+        stage = new Stage(new FitViewport(640, 360));
+        world = new World(new Vector2(0, -10), true);
     }
 
     @Override
@@ -44,8 +44,8 @@ public class GameScreen extends BaseScreen {
 
         Texture playerTexture = game.getManager().get("badlogic.jpg");
 
-        player = new PlayerEntity(playerTexture, world);
-        player.setPosition(1,2);
+        player = new PlayerEntity(playerTexture, world, 1, 2);
+//        player.setPosition(1, 2);
 
         stage.addActor(player);
     }
@@ -55,8 +55,12 @@ public class GameScreen extends BaseScreen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        stage.act();
+        stage.addActor(player);
+
         world.step(delta, 6, 2);
         camera.update();
+        renderer.render(world, camera.combined);
         stage.draw();
     }
 
