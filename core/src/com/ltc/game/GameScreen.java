@@ -150,7 +150,7 @@ public class GameScreen extends BaseScreen {
             stage.addActor(wall[i]);
         }
         stage.addActor(playerVloger);
-        stage.addActor(playerProger);
+        //stage.addActor(playerProger);
 
         world.setContactListener(new ContactListener() {
             @Override
