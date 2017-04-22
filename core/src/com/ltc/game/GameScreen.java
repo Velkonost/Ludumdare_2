@@ -25,15 +25,17 @@ public class GameScreen extends BaseScreen {
 
     private OrthographicCamera camera;
 
+    private String choosenProg, choosenVlog;
     private PlayerVlogerEntity playerVloger;
     private PlayerProgerEntity playerProger;
 
     public boolean collisionBtwPlayers = false;
 
 
-    public GameScreen(MainGame game) {
+    public GameScreen(MainGame game, String choosenProg, String choosenVlog) {
         super(game);
-
+        this.choosenProg = choosenProg;
+        this.choosenVlog = choosenVlog;
         stage = new Stage();
         world = new World(new Vector2(0, 0), true);
     }
