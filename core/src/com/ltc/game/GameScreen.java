@@ -42,6 +42,8 @@ public class GameScreen extends BaseScreen {
     private Texture phoneTexture;
     private Texture botIdleTexture;
 
+    private ArrayList<Texture> botsIdleTexture;
+
     private ArrayList<BotIdleEntity> botsIdle;
 
     public boolean collisionBtwPlayers = false;
@@ -61,17 +63,17 @@ public class GameScreen extends BaseScreen {
     @Override
     public void show() {
         renderer = new Box2DDebugRenderer();
-        camera = new OrthographicCamera(16, 9);
+        camera = new OrthographicCamera(4, 2.25f);
         camera.translate(0, 1);
-
+        botsIdleTexture = new ArrayList<>();
         getTextures();
 
         playerVloger = new PlayerVlogerEntity(playerVlogerTexture, playerVlogerCameraTexture, this, world, 1, 2);
         playerProger = new PlayerProgerEntity(playerProgerTexture, phoneTexture, this, world, 6.5f, 3.5f);
 
-        for (int i = 0; i < 5; i++) {
-            botsIdle.add(new BotIdleEntity(botIdleTexture, this, world, i * 5, i * 2));
-            stage.addActor(botsIdle.get(i));
+        for (int i = 1; i <= 3; i++) {
+            botsIdle.add(new BotIdleEntity(botsIdleTexture.get(i - 1), this, world, i * 5, i * 2));
+            stage.addActor(botsIdle.get(i - 1));
         }
 
         stage.addActor(playerVloger);
@@ -148,9 +150,30 @@ public class GameScreen extends BaseScreen {
     }
 
     private void getTextures() {
-        playerVlogerTexture = game.getManager().get("myachhero.png");
-        playerVlogerCameraTexture = game.getManager().get("myachheroCamera.png");
-        playerProgerTexture = game.getManager().get("player2hero.png");
+
+        if (choosenVlog.equals("myach1")) {
+            playerVlogerTexture = game.getManager().get("myachhero.png");
+            playerVlogerCameraTexture = game.getManager().get("myachheroCamera.png");
+        }
+        else {
+            playerVlogerTexture = game.getManager().get("myach2hero.png");
+            playerVlogerCameraTexture = game.getManager().get("myach2heroCamera.png");
+        }
+
+
+        if(choosenProg.equals("player1")) {
+            playerProgerTexture = game.getManager().get("player1hero.png");
+        } else if (choosenProg.equals("player2")) {
+            playerProgerTexture = game.getManager().get("player2hero.png");
+        }
+
+        for (int i = 1; i <= 3; i++) {
+
+            botsIdleTexture.add(
+                    (Texture) game.getManager().get("player" + i + "hero.png")
+            );
+        }
+
         phoneTexture = game.getManager().get("mobile.png");
         botIdleTexture = game.getManager().get("myach2hero.png");
     }

@@ -1,5 +1,6 @@
 package com.ltc.game.entities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
@@ -79,7 +80,7 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
         setPosition(x, y);
         position = new Vector2(x, y);
 
-//        Gdx.input.setInputProcessor(this);
+        Gdx.input.setInputProcessor(this);
 
         BodyDef def = new BodyDef();
         def.position.set(x, y);
@@ -132,8 +133,8 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
 
         if (isCircleDraw) {
             if (circleGetCoords) {
-                xCircle = (int) game.getPlayerProger().getX() + 10;
-                yCircle = (int) game.getPlayerProger().getY() + 10;
+                xCircle = (int) game.getPlayerProger().getX();
+                yCircle = (int) game.getPlayerProger().getY();
 
                 circleGetCoords = false;
             }
@@ -147,9 +148,9 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
                 }
             }, 10).run();
 
-            Pixmap pixmap = new Pixmap(1000, 500, Pixmap.Format.RGBA8888);
+            Pixmap pixmap = new Pixmap(1680, 800, Pixmap.Format.RGBA8888);
             pixmap.setColor(new Color(1, 0, 0, 0.3f));
-            pixmap.fillCircle((int) 400, (int) 300, 150);
+            pixmap.fillCircle((int) game.getPlayerProger().getX() - 10, (int) game.getPlayerProger().getY() - 20, 150);
             Texture textureCircle = new Texture(pixmap);
 
             batch.draw(textureCircle, 0, 0);

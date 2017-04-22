@@ -33,6 +33,7 @@ public class MainGame extends Game {
 		manager.load("chooseYourProger.png", Texture.class);
 		manager.load("chooseYourVloger.png", Texture.class);
 		manager.load("mobile.png", Texture.class);
+		manager.load("player3hero.png", Texture.class);
 
 
 		manager.finishLoading();
