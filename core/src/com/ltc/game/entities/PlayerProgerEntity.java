@@ -90,7 +90,6 @@ public class PlayerProgerEntity extends Actor implements InputProcessor {
         setPosition((body.getPosition().x) * PIXELS_IN_METER,
                 (body.getPosition().y) * PIXELS_IN_METER);
         batch.draw(texture, getX(), getY(), getWidth(), getHeight());
-//        System.out.println(getY());
     }
 
     @Override
