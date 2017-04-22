@@ -407,7 +407,6 @@ public class GameScreen extends BaseScreen {
             public void call(Object... args) {
                 JSONObject data = (JSONObject) args[0];
                 try {
-
                     String playerId = data.getString("id");
                     Gdx.app.log("SocketIO", "My ID: " + playerId);
                 } catch (JSONException e) {
@@ -418,21 +417,22 @@ public class GameScreen extends BaseScreen {
             @Override
             public void call(Object... args) {
                 JSONObject data = (JSONObject) args[0];
-                String playerId = null;
                 try {
-                    playerId = data.getString("id");
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    String playerId = data.getString("id");
+                    Gdx.app.log("SocketIO", "New Player Connect: " + playerId);
+                    if(checkPlayer) {
+                        PlayerVlogerEntity playerEntity = new PlayerVlogerEntity(playerVlogerTexture, playerVlogerCameraTexture, GameScreen.this, world, 1, 2);
+                        friendlyPlayers1.put(playerId, playerEntity);
+                    }else{
+                        PlayerProgerEntity playerEntity = new PlayerProgerEntity(playerProgerTexture, playerProgerTexture, GameScreen.this, world, 1, 2);
+                        friendlyPlayers2.put(playerId, playerEntity);
+                    }
+                }catch (JSONException e)
+                {
+
                 }
-                Gdx.app.log("SocketIO", "New Player Connect: " + id);
-                Texture floorTexture = game.getManager().get("badlogic.jpg");
-                if(checkPlayer) {
-                    PlayerVlogerEntity playerEntity = new PlayerVlogerEntity(playerVlogerTexture, playerVlogerCameraTexture, GameScreen.this, world, 1, 2);
-                    friendlyPlayers1.put(playerId, playerEntity);
-                }else{
-                    PlayerProgerEntity playerEntity = new PlayerProgerEntity(playerProgerTexture, playerProgerTexture, GameScreen.this, world, 1, 2);
-                    friendlyPlayers2.put(playerId, playerEntity);
-                }
+
+
                 // playerEntity.setPosition(1,2);
                 //  stage.addActor(playerEntity);
             }
@@ -442,13 +442,13 @@ public class GameScreen extends BaseScreen {
                 JSONObject data = (JSONObject) args[0];
                 try {
                     String playerId = data.getString("id");
-                    if(checkPlayer)
+                    if(checkPlayer && friendlyPlayers1.get(playerId)!=null)
                     {
-                        friendlyPlayers2.get(playerId).remove();
-                        friendlyPlayers2.remove(playerId);
-                    }else{
                         friendlyPlayers1.get(playerId).remove();
                         friendlyPlayers1.remove(playerId);
+                    }else if(!checkPlayer && friendlyPlayers2.get(playerId)!=null){
+                        friendlyPlayers2.get(playerId).remove();
+                        friendlyPlayers2.remove(playerId);
                     }
 
 
@@ -460,29 +460,25 @@ public class GameScreen extends BaseScreen {
             @Override
             public void call(Object... args) {
                 JSONObject data = (JSONObject) args[0];
-                try {
-                    String playerId = null;
                     try {
-                        playerId = data.getString("id");
+                        String  playerId = data.getString("id");
+                        Double x = data.getDouble("x");
+                        Double y = data.getDouble("y");
+                        Vector2 vector2 = new Vector2();
+                        vector2.add(x.floatValue(), y.floatValue());
+                        if(checkPlayer) {
+                            if (friendlyPlayers1.get(playerId) != null) {
+                                friendlyPlayers1.get(playerId).getBody().setTransform(vector2.x, vector2.y, 0);
+                            }
+                        }else{
+                            if (friendlyPlayers2.get(playerId) != null) {
+                                friendlyPlayers2.get(playerId).getBody().setTransform(vector2.x, vector2.y, 0);
+                            }
+                        }
                     } catch (org.json.JSONException e) {
-                        e.printStackTrace();
+                        Gdx.app.log("SocketIO", "Error getting disconnected PlayerID");
                     }
-                    Double x = data.getDouble("x");
-                    Double y = data.getDouble("y");
-                    Vector2 vector2 = new Vector2();
-                    vector2.add(x.floatValue(), y.floatValue());
-                    if(checkPlayer) {
-                        if (friendlyPlayers1.get(playerId) != null) {
-                            friendlyPlayers1.get(playerId).getBody().setTransform(vector2.x, vector2.y, 0);
-                        }
-                    }else{
-                        if (friendlyPlayers2.get(playerId) != null) {
-                            friendlyPlayers2.get(playerId).getBody().setTransform(vector2.x, vector2.y, 0);
-                        }
-                    }
-                }catch(JSONException e){
-                    Gdx.app.log("SocketIO", "Error getting disconnected PlayerID");
-                }
+
             }
         }).on("getPlayers", new Emitter.Listener() {
             @Override
@@ -492,8 +488,6 @@ public class GameScreen extends BaseScreen {
                     if(objects.length()>0) {
                         checkPlayer = false;
                         for (int i = 0; i < objects.length(); i++) {
-                            Texture floorTexture = game.getManager().get("badlogic.jpg");
-
                             PlayerProgerEntity coopPlayer = new PlayerProgerEntity(playerProgerTexture, playerProgerTexture, GameScreen.this, world, 1, 2);
                             //coopPlayer.setPosition(1,2);
                             Vector2 position = new Vector2();
