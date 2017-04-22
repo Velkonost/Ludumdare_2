@@ -186,19 +186,19 @@ public class GameScreen extends BaseScreen {
 
                 if (
                         (fixtureA.getUserData().equals("vloger") && fixtureB.getUserData().equals("proger"))
-                        || (fixtureA.getUserData().equals("proger") && fixtureB.getUserData().equals("vloger"))
-                        || (fixtureA.getUserData().equals("vloger") && fixtureB.getUserData().equals("botidle"))
-                        || (fixtureA.getUserData().equals("botidle") && fixtureB.getUserData().equals("vloger"))
-                        || (fixtureA.getUserData().equals("vloger") && fixtureB.getUserData().equals("botmove"))
-                        || (fixtureA.getUserData().equals("botmove") && fixtureB.getUserData().equals("vloger"))
+                                || (fixtureA.getUserData().equals("proger") && fixtureB.getUserData().equals("vloger"))
+                                || (fixtureA.getUserData().equals("vloger") && fixtureB.getUserData().equals("botidle"))
+                                || (fixtureA.getUserData().equals("botidle") && fixtureB.getUserData().equals("vloger"))
+                                || (fixtureA.getUserData().equals("vloger") && fixtureB.getUserData().equals("botmove"))
+                                || (fixtureA.getUserData().equals("botmove") && fixtureB.getUserData().equals("vloger"))
                         ) {
                     collisionVlogerWithBot = true;
 
                     if (
                             (fixtureA.getUserData().equals("vloger") && fixtureB.getUserData().equals("botidle"))
-                            || (fixtureA.getUserData().equals("botidle") && fixtureB.getUserData().equals("vloger"))
-                            || (fixtureA.getUserData().equals("vloger") && fixtureB.getUserData().equals("botmove"))
-                            || (fixtureA.getUserData().equals("botmove") && fixtureB.getUserData().equals("vloger"))
+                                    || (fixtureA.getUserData().equals("botidle") && fixtureB.getUserData().equals("vloger"))
+                                    || (fixtureA.getUserData().equals("vloger") && fixtureB.getUserData().equals("botmove"))
+                                    || (fixtureA.getUserData().equals("botmove") && fixtureB.getUserData().equals("vloger"))
                             ) {
                         hasPhone = true;
                     }
@@ -303,8 +303,6 @@ public class GameScreen extends BaseScreen {
 
         stage.act();
 //
-       /* playerVloger.processInput();
-        playerProger.processInput();*/
         if(checkPlayer) {
             playerVloger.processInput();
             playerProger.processInput();
@@ -313,18 +311,18 @@ public class GameScreen extends BaseScreen {
                 stage.addActor(entry.getValue());
             }
         }else{
-           // Gdx.app.log("SocketIO", "DCPteam");
+            // Gdx.app.log("SocketIO", "DCPteam");
             playerProger.processInput();
             playerVloger.processInput();
             stage.getCamera().position.set(playerProger.getX(),playerProger.getY(), 0);
             for (HashMap.Entry<String, PlayerVlogerEntity> entry : friendlyPlayers1.entrySet()) {
-               stage.addActor(entry.getValue());
+                stage.addActor(entry.getValue());
             }
 
         }
         for (BotIdleEntity aBotsIdle : botsIdle) aBotsIdle.processInput();
 
-      //  stage.getCamera().position.set(playerProger.getX(),playerProger.getY(), 0);
+        //  stage.getCamera().position.set(playerProger.getX(),playerProger.getY(), 0);
 
         world.step(delta, 6, 2);
         camera.update();
@@ -405,8 +403,8 @@ public class GameScreen extends BaseScreen {
 
     public void connectSocket(){
         try {
-            socket = IO.socket("http://766ee2e4.ngrok.io");
-//            socket = IO.socket("http://localhost:3000");
+//            socket = IO.socket("http://766ee2e4.ngrok.io");
+            socket = IO.socket("http://localhost:3000");
             socket.connect();
         } catch(Exception e){
             System.out.println(e);
@@ -508,6 +506,30 @@ public class GameScreen extends BaseScreen {
                 } catch(JSONException e){
 
                 }
+            }
+        }).on("playerMoved", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject data = (JSONObject) args[0];
+                try {
+                    String  playerId = data.getString("id");
+                    Double x = data.getDouble("x");
+                    Double y = data.getDouble("y");
+                    Vector2 vector2 = new Vector2();
+                    vector2.add(x.floatValue(), y.floatValue());
+                    if(checkPlayer) {
+                        if (friendlyPlayers2.get(playerId) != null) {
+                            friendlyPlayers2.get(playerId).getBody().setTransform(vector2.x, vector2.y, 0);
+                        }
+                    }else{
+                        if (friendlyPlayers1.get(playerId) != null) {
+                            friendlyPlayers1.get(playerId).getBody().setTransform(vector2.x, vector2.y, 0);
+                        }
+                    }
+                } catch (org.json.JSONException e) {
+                    Gdx.app.log("SocketIO", "Error getting disconnected PlayerID");
+                }
+
             }
         });
     }
