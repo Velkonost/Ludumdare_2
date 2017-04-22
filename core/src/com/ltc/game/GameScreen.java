@@ -25,8 +25,13 @@ public class GameScreen extends BaseScreen {
     private Stage stage;
 
     private World world;
+    public MainGame game;
 
     private Box2DDebugRenderer renderer;
+
+    BitmapFont font;
+    SpriteBatch sp;
+    CharSequence str;
 
     private OrthographicCamera camera;
 
@@ -44,6 +49,13 @@ public class GameScreen extends BaseScreen {
 
     private ArrayList<Texture> botsIdleTexture;
 
+    private float deltatime, tmp = 0;
+
+    private int a = 5;
+    boolean kf = false;
+
+    private GuiMenu guiMenu;
+
     private ArrayList<BotIdleEntity> botsIdle;
 
     public boolean collisionBtwPlayers = false;
@@ -52,6 +64,7 @@ public class GameScreen extends BaseScreen {
 
     public GameScreen(MainGame game, String choosenProg, String choosenVlog) {
         super(game);
+        this.game = game;
         this.choosenProg = choosenProg;
         this.choosenVlog = choosenVlog;
         stage = new Stage(new FitViewport(1280, 720));
@@ -68,8 +81,26 @@ public class GameScreen extends BaseScreen {
         botsIdleTexture = new ArrayList<>();
         getTextures();
 
+
+        Timer.schedule(new Timer.Task() {
+
+            @Override
+            public void run() {
+                a--;
+                if(a==0)
+                {
+                    kf = true;
+                    cancel();
+                }
+            }
+
+        }, 1, 1);
         playerVloger = new PlayerVlogerEntity(playerVlogerTexture, playerVlogerCameraTexture, this, world, 1, 2);
         playerProger = new PlayerProgerEntity(playerProgerTexture, phoneTexture, this, world, 6.5f, 3.5f);
+        //guiMenu = new GuiMenu()
+        font = new BitmapFont();
+        sp = new SpriteBatch();
+
 
         for (int i = 1; i <= 3; i++) {
             botsIdle.add(new BotIdleEntity(botsIdleTexture.get(i - 1), this, world, i * 5, i * 2));
@@ -182,6 +213,20 @@ public class GameScreen extends BaseScreen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        if(kf)
+        {
+            game.setScreen(new GuiMenu(game, 'l', 0));
+        }
+        if(a%60>9){
+            str = ""+(int)floor(a/60)+":"+a%60;
+        }else{
+            str = ""+(int)floor(a/60)+":0"+a%60;
+        }
+
+        sp.begin();
+        font.getData().setScale(3, 3);
+        font.draw(sp, str, Gdx.graphics.getWidth()-200,  Gdx.graphics.getHeight()-50);
+        sp.end();
 
         stage.act();
 //
