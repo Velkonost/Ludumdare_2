@@ -1,0 +1,22 @@
+{
+  "name": "ludumedare",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Velkonost/ludume.git"
+  },
+  "author": "LTC",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Velkonost/ludume/issues"
+  },
+  "homepage": "https://github.com/Velkonost/ludume#readme",
+  "dependencies": {
+    "socket.io": "^1.7.3"
+  }
+}
