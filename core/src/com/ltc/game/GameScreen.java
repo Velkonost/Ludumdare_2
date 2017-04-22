@@ -9,7 +9,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.ltc.game.entities.PlayerEntity;
+import com.ltc.game.entities.PlayerVlogerEntity;
 
 /**
  * @author Velkonost
@@ -26,7 +26,7 @@ public class GameScreen extends BaseScreen {
 
     private OrthographicCamera camera;
 
-    private PlayerEntity player;
+    private PlayerVlogerEntity player;
 
 
     public GameScreen(MainGame game) {
@@ -43,7 +43,7 @@ public class GameScreen extends BaseScreen {
         camera.translate(0, 1);
         Texture playerTexture = game.getManager().get("badlogic.jpg");
 
-        player = new PlayerEntity(playerTexture, world, 1, 2);
+        player = new PlayerVlogerEntity(playerTexture, world, 1, 2);
 
         stage.addActor(player);
     }

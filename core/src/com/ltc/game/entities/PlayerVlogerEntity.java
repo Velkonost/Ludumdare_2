@@ -17,7 +17,7 @@ import static com.ltc.game.Constants.PIXELS_IN_METER;
 /**
  * @author Velkonost
  */
-public class PlayerEntity extends Actor implements InputProcessor {
+public class PlayerVlogerEntity extends Actor implements InputProcessor {
 
     //направление движения
     enum Keys {
@@ -50,7 +50,7 @@ public class PlayerEntity extends Actor implements InputProcessor {
     //используется для вычисления движения
     Vector2 velocity = new Vector2();
 
-    public PlayerEntity(Texture texture, World world, float x, float y) {
+    public PlayerVlogerEntity(Texture texture, World world, float x, float y) {
         this.texture = texture;
         this.world = world;
         setPosition(x, y);
