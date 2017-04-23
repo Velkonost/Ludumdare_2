@@ -43,8 +43,6 @@ public class GameScreen extends BaseScreen {
     private World world;
     public MainGame game;
 
-    private boolean f = false;
-    private int getWay;
     private Box2DDebugRenderer renderer;
 
     BitmapFont font;
@@ -68,6 +66,7 @@ public class GameScreen extends BaseScreen {
     private Texture playerProgerTexture;
     private Texture phoneTexture;
     private Texture botIdleTexture;
+    private Texture botTexture;
 
     public WinScreen win;
     public LoseScreen lose;
@@ -205,13 +204,14 @@ public class GameScreen extends BaseScreen {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-///////////////////////////////////////////////////////////////////////
+
 //        for (int i = 1; i <= 3; i++) {
 //            botsIdle.add(new BotIdleEntity(botsIdleTexture.get(i - 1), this, world, i * 5, i * 2));
 //            stage.addActor(botsIdle.get(i - 1));
 //        }
 
         stage.addActor(telephone);
+        stage.addActor(bot);
 
         for (WallEntiy aWall : wall) {
             stage.addActor(aWall);
@@ -315,7 +315,6 @@ public class GameScreen extends BaseScreen {
 
     private void getTextures() {
 
-
         telephoneTexture = game.getManager().get("telephone.png");
 
         if (choosenVlog.equals("myach1")) {
@@ -368,7 +367,9 @@ public class GameScreen extends BaseScreen {
         }
 
 
-      /*if(kf)
+        if (bot != null) bot.processInput();
+
+        /*if(kf)
         {
             game.setScreen(new GuiMenu(game, 'l', 0));
         }*/
@@ -404,11 +405,10 @@ public class GameScreen extends BaseScreen {
             }
             if(Gdx.input.isKeyJustPressed(Input.Keys.E))
             {
-                hasDrop = true;
                 JSONObject data = new JSONObject();
                 try {
-                    data.put("x", playerProger.getX());
-                    data.put("y", playerProger.getY());
+                    data.put("x", playerProger.phoneX);
+                    data.put("y", playerProger.phoneY);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -561,22 +561,6 @@ public class GameScreen extends BaseScreen {
                 // playerEntity.setPosition(1,2);
                 //  stage.addActor(playerEntity);
             }
-        }).on("getNum", new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                JSONObject data = (JSONObject) args[0];
-                if(!f)
-                {
-                    f = true;
-                    try {
-
-                        getWay = data.getInt("id");
-                        Gdx.app.log("ss", ""+getWay);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
         }).on("playerDisconnected", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
@@ -664,30 +648,21 @@ public class GameScreen extends BaseScreen {
                 }
 
             }
-        })/*.on("getPhone", new Emitter.Listener() {
+        }).on("getPhone", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
 
                 JSONArray objects = (JSONArray) args[0];
                 if(objects.length()>0) {
                     try {
-                        Gdx.app.log("SOCK", "VERC");
                         String playerId = objects.getJSONObject(0).getString("id");
-                        stage.addActor(new TelephoneEntity(telephoneTexture, world, (float) objects.getJSONObject(0).getDouble("x"), (float) objects.getJSONObject(0).getDouble("y"), friendlyPlayers1.get(playerId).getWidth() / 2, friendlyPlayers1.get(playerId).getHeight() / 2, 0, 0));
                         Gdx.app.log( objects.getJSONObject(0).getDouble("x")+"", playerId);
-                        Gdx.app.log( objects.getJSONObject(0).getDouble("y")+"", playerId);
-                        if(checkPlayer) {
-                            if(tel.size()<1)
-                                tel.add(new TelephoneEntity(telephoneTexture, world, playerVloger.getX(), playerVloger.getY(), 1, 1, 0, 0));
-                        }else{
-                            if(tel.size()<1)
-                                tel.add(new TelephoneEntity(telephoneTexture, world, playerProger.getX(),  playerProger.getY(), 1, 1, 0, 0));
-                        }
+                        stage.addActor(new TelephoneEntity(telephoneTexture, world, (float) objects.getJSONObject(0).getDouble("x"), (float) objects.getJSONObject(0).getDouble("y"), friendlyPlayers2.get(playerId).getWidth() / 2, friendlyPlayers1.get(playerId).getHeight() / 2, 0, 0));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
             }
-        })*/;
+        });
     }
 }
