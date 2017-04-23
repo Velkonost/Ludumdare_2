@@ -33,7 +33,7 @@ io.on('connection', function(socket){
 		socket.broadcast.emit('phodeDropped', data);
 		if (phone.empty()) {
 			phone.push(data.x, data.y);
-			players.push(3, phone);
+			players.push(3, phone.x, phone.y);
 		}
 
 
@@ -61,8 +61,10 @@ io.on('connection', function(socket){
 	players.push(new player(socket.id, 0, 0));
 });
 
-function player(id, x, y){
+function player(id, x, y, vloger){
 	this.id = id;
+    // this.vloger = vloger;
+    // this.camera = camera
 	this.x = x;
 	this.y = y;
 }

@@ -42,6 +42,7 @@ public class MainGame extends Game {
 		manager.load("table5.png", Texture.class);
 		manager.load("table6.png", Texture.class);
 		manager.load("table7.png", Texture.class);
+		manager.load("telephone.png", Texture.class);
 
 
 		manager.finishLoading();

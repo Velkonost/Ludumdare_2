@@ -70,11 +70,13 @@ public class GameScreen extends BaseScreen {
 
     private boolean checkPlayer = false;
 
+    private boolean isTelephoneCollision = false;
+
     private ArrayList<Texture> botsIdleTexture;
 
     private float deltatime, tmp = 0;
 
-    private int a = 10;
+    private int a = 180;
     boolean kf = false;
 
     private GuiMenu guiMenu;
@@ -87,6 +89,9 @@ public class GameScreen extends BaseScreen {
     public boolean collisionVlogerWithBot = false;
     public boolean hasPhone;
     private boolean hasChecked = false;
+
+    private TelephoneEntity telephone;
+    private Texture telephoneTexture;
 
     public GameScreen(MainGame game, String choosenProg, String choosenVlog) {
         super(game);
@@ -117,11 +122,7 @@ public class GameScreen extends BaseScreen {
         friendlyPlayers1 = new HashMap<String, PlayerVlogerEntity>();
         friendlyPlayers2 = new HashMap<String, PlayerProgerEntity>();
         Texture wallT = game.getManager().get("table8bit.jpg");
-        for (int i = 0; i < 7; i++)
-            tableTextures.add((Texture) game.getManager().get("table" + (i + 1) + ".png"));
-
-
-
+        for (int i = 0; i < 7; i++) tableTextures.add((Texture) game.getManager().get("table" + (i + 1) + ".png"));
 
         Timer.schedule(new Timer.Task() {
 
@@ -167,6 +168,7 @@ public class GameScreen extends BaseScreen {
 
         playerVloger = new PlayerVlogerEntity(playerVlogerTexture, playerVlogerCameraTexture, this, world, 9f, 7f);
         playerProger = new PlayerProgerEntity(playerProgerTexture, phoneTexture, this, world, 6.5f, 3.5f);
+        telephone = new TelephoneEntity(telephoneTexture, world, 1, 1, 1, 1, 0, 0);
         //guiMenu = new GuiMenu()
         font = new BitmapFont();
         sp = new SpriteBatch();
@@ -176,20 +178,20 @@ public class GameScreen extends BaseScreen {
             e.printStackTrace();
         }
 
-
 //        for (int i = 1; i <= 3; i++) {
 //            botsIdle.add(new BotIdleEntity(botsIdleTexture.get(i - 1), this, world, i * 5, i * 2));
 //            stage.addActor(botsIdle.get(i - 1));
 //        }
 
-        for(int i = 0; i < wall.size(); i++){
-            stage.addActor(wall.get(i));
+        stage.addActor(telephone);
+
+        for (WallEntiy aWall : wall) {
+            stage.addActor(aWall);
         }
 
-        for(int i = 0; i < table.size(); i++){
-            stage.addActor(table.get(i));
+        for (TableEntity aTable : table) {
+            stage.addActor(aTable);
         }
-
 
         world.setContactListener(new ContactListener() {
             @Override
@@ -199,6 +201,11 @@ public class GameScreen extends BaseScreen {
 
                 if (playerProger != null) playerProger.processInput();
                 if (playerVloger != null) playerVloger.processInput();
+
+                if ((fixtureA.getUserData().equals("vloger") && fixtureB.getUserData().equals("telephone"))
+                        || (fixtureA.getUserData().equals("telephone") && fixtureB.getUserData().equals("vloger"))) {
+                    isTelephoneCollision = true;
+                }
 
                 if ((fixtureA.getUserData().equals("vloger") && fixtureB.getUserData().equals("proger"))
                         || (fixtureA.getUserData().equals("proger") && fixtureB.getUserData().equals("vloger"))) {
@@ -235,6 +242,12 @@ public class GameScreen extends BaseScreen {
                 Fixture fixtureA = contact.getFixtureA();
                 Fixture fixtureB = contact.getFixtureB();
 
+
+                if ((fixtureA.getUserData().equals("vloger") && fixtureB.getUserData().equals("telephone"))
+                        || (fixtureA.getUserData().equals("telephone") && fixtureB.getUserData().equals("vloger"))) {
+                    isTelephoneCollision = false;
+                }
+
                 if ((fixtureA.getUserData().equals("vloger") && fixtureB.getUserData().equals("proger"))
                         || (fixtureA.getUserData().equals("proger") && fixtureB.getUserData().equals("vloger"))) {
                     collisionBtwPlayers = false;
@@ -265,6 +278,8 @@ public class GameScreen extends BaseScreen {
     }
 
     private void getTextures() {
+
+        telephoneTexture = game.getManager().get("telephone.png");
 
         if (choosenVlog.equals("myach1")) {
             playerVlogerTexture = game.getManager().get("myachhero.png");
@@ -329,24 +344,21 @@ public class GameScreen extends BaseScreen {
         sp.end();
 
         stage.act();
-//
+
         if (playerVloger != null) playerVloger.processInput();
         if (playerProger != null) playerProger.processInput();
         if(checkPlayer) {
-//            playerVloger.processInput();
-//            playerProger.processInput();
             stage.getCamera().position.set(playerVloger.getX(),playerVloger.getY(), 0);
             for (HashMap.Entry<String, PlayerProgerEntity> entry : friendlyPlayers2.entrySet()) {
 
                 stage.addActor(entry.getValue());
+                entry.getValue().processInput();
             }
         }else{
-           // Gdx.app.log("SocketIO", "DCPteam");
-//            playerProger.processInput();
-//            playerVloger.processInput();
             stage.getCamera().position.set(playerProger.getX(),playerProger.getY(), 0);
             for (HashMap.Entry<String, PlayerVlogerEntity> entry : friendlyPlayers1.entrySet()) {
                stage.addActor(entry.getValue());
+                entry.getValue().processInput();
             }
             playerProger.processInput();
             stage.getCamera().position.set(playerProger.getX(),playerProger.getY(), 0);
