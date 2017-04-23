@@ -30,7 +30,7 @@ import static java.lang.Math.floor;
  */
 public class GameScreen extends BaseScreen {
 
-    private final float UPDATE_TIME = 1/40f;
+    private final float UPDATE_TIME = 1/60f;
     private float timer;
     private HashMap<String, PlayerVlogerEntity> friendlyPlayers1;
     private HashMap<String, PlayerProgerEntity> friendlyPlayers2;
@@ -466,7 +466,7 @@ public class GameScreen extends BaseScreen {
 
     public void connectSocket(){
         try {
-            socket  = IO.socket("http://25.36.216.1:5665");
+            socket  = IO.socket("http://25.36.204.209:5665");
 //            socket = IO.socket("http://766ee2e4.ngrok.io");
 //            socket = IO.socket("http://94.251.109.165:80");
             socket.connect();
@@ -600,7 +600,7 @@ public class GameScreen extends BaseScreen {
                 }
 
             }
-        }).on("getPhones", new Emitter.Listener() {
+        }).on("getPhone", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
 
