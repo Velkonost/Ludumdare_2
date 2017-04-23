@@ -54,7 +54,7 @@ public class GameScreen extends BaseScreen {
     private PlayerVlogerEntity playerVloger;
     private PlayerProgerEntity playerProger;
     private ArrayList<WallEntiy> wall;
-
+    private BotEntity bot;
     private ArrayList<Texture> tableTextures;
     private ArrayList<TableEntity> table;
 
@@ -64,6 +64,7 @@ public class GameScreen extends BaseScreen {
     private Texture playerProgerTexture;
     private Texture phoneTexture;
     private Texture botIdleTexture;
+    private Texture botTexture;
 
     public WinScreen win;
     public LoseScreen lose;
@@ -104,7 +105,6 @@ public class GameScreen extends BaseScreen {
         wall = new ArrayList<WallEntiy>();
         table = new ArrayList<TableEntity>();
         tableTextures = new ArrayList<Texture>();
-
         botsIdle = new ArrayList();
     }
 
@@ -123,8 +123,9 @@ public class GameScreen extends BaseScreen {
         friendlyPlayers2 = new HashMap<String, PlayerProgerEntity>();
         batch = new SpriteBatch();
         Texture wallT = game.getManager().get("table8bit.jpg");
+        Texture botTexture = game.getManager().get("player1hero.png");
+        //for (int i = 0; i < 3; i++) bot.add((Texture) game.getManager().get("player" + (i + 1) + "hero.png"));
         for (int i = 0; i < 7; i++) tableTextures.add((Texture) game.getManager().get("table" + (i + 1) + ".png"));
-
         Timer.schedule(new Timer.Task() {
 
             @Override
@@ -165,6 +166,7 @@ public class GameScreen extends BaseScreen {
         table.add(new TableEntity(tableTextures.get(4), world, 10.5f, 4.f, 2f, 6f, 0.5f, 2.5f));
         table.add(new TableEntity(tableTextures.get(5), world, 15.f, 4.f, 2f, 6f, 0.5f, 2.5f));
 
+        bot = new BotEntity(botTexture, world, 7.5f, 4.5f, 1f, 1f);
 
         playerVloger = new PlayerVlogerEntity(playerVlogerTexture, playerVlogerCameraTexture, this, world, 9f, 7f);
         playerProger = new PlayerProgerEntity(playerProgerTexture, phoneTexture, this, world, 6.5f, 3.5f);
@@ -308,6 +310,7 @@ public class GameScreen extends BaseScreen {
     }
     @Override
     public void render(float delta) {
+
         Gdx.gl.glClearColor(0, 0, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         updateServer(Gdx.graphics.getDeltaTime());
@@ -328,6 +331,9 @@ public class GameScreen extends BaseScreen {
             stage.addActor(playerProger);
             playerProger.boom(true);
         }
+
+
+        if (bot != null) bot.processInput();
 
         /*if(kf)
         {

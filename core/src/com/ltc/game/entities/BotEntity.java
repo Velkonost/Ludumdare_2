@@ -1,0 +1,81 @@
+package com.ltc.game.entities;
+
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.ltc.game.Constants.PIXELS_IN_METER;
+
+/**
+ * Created by Danila on 23.04.2017.
+ */
+public class BotEntity extends Actor{
+    private Texture texture;
+    private World world;
+    private Body body;
+    private Fixture fixture;
+    float width, higth, x, y;
+    Vector2 previousPosition = new Vector2(1, 1);
+
+    public enum KeysBot {
+        LEFT, RIGHT, UP, DOWN
+    }
+
+    private Map<BotEntity.KeysBot, Boolean> keys = new HashMap<BotEntity.KeysBot, Boolean>();
+
+    {
+        keys.put(BotEntity.KeysBot.LEFT, false);
+        keys.put(BotEntity.KeysBot.RIGHT, false);
+        keys.put(BotEntity.KeysBot.UP, false);
+        keys.put(BotEntity.KeysBot.DOWN, false);
+
+    }
+
+
+    public BotEntity(Texture texture, World world,  float x, float y, float widht, float higth){
+
+        this.texture = texture;
+        this.world = world;
+
+        this.width = widht;
+        this.higth = higth;
+        setPosition(x, y);
+
+        BodyDef def = new BodyDef();
+        def.position.set(x, y);
+        def.type = BodyDef.BodyType.DynamicBody;
+        body = world.createBody(def);
+
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(widht / 2, higth / 2);
+        fixture = body.createFixture(shape, 1);
+        fixture.setUserData("Bot");
+        shape.dispose();
+        setSize(width * PIXELS_IN_METER, higth * PIXELS_IN_METER);
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        setPosition((body.getPosition().x - (width - 1) / 2) * PIXELS_IN_METER , (body.getPosition().y - (higth - 1) / 2) * PIXELS_IN_METER);
+        batch.draw(texture, getX(), getY(), getWidth(), getHeight());
+    }
+
+    public void detach() {
+        body.destroyFixture(fixture);
+        world.destroyBody(body);
+    }
+
+    public void processInput () {
+        if ((keys.get(BotEntity.KeysBot.LEFT) && keys.get(BotEntity.KeysBot.RIGHT)) || (!keys.get(BotEntity.KeysBot.LEFT) && (!keys.get(BotEntity.KeysBot.RIGHT))))
+            body.setLinearVelocity(0, body.getLinearVelocity().y);
+        if ((keys.get(BotEntity.KeysBot.UP) && keys.get(BotEntity.KeysBot.DOWN)) || (!keys.get(BotEntity.KeysBot.UP) && (!keys.get(BotEntity.KeysBot.DOWN))))
+            body.setLinearVelocity(body.getLinearVelocity().x, 0);
+    }
+
+}
