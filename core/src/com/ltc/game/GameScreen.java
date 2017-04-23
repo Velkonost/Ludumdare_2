@@ -70,6 +70,7 @@ public class GameScreen extends BaseScreen {
     public WinScreen win;
     public LoseScreen lose;
 
+    private ArrayList<TelephoneEntity> tel;
     private boolean checkPlayer = false;
 
     public boolean isTelephoneCollision = false;
@@ -91,6 +92,7 @@ public class GameScreen extends BaseScreen {
     public boolean collisionVlogerWithBot = false;
     public boolean hasPhone;
     private boolean hasChecked = false;
+    private boolean hasDrop = false;
 
     private TelephoneEntity telephone;
     private Texture telephoneTexture;
@@ -107,6 +109,7 @@ public class GameScreen extends BaseScreen {
         table = new ArrayList<TableEntity>();
         tableTextures = new ArrayList<Texture>();
         botsIdle = new ArrayList();
+        tel = new ArrayList<TelephoneEntity>();
     }
 
     @Override
@@ -324,7 +327,7 @@ public class GameScreen extends BaseScreen {
         ///////////////////////////////для блогера
         /*if(checkPlayer) game.setScreen(win);
         else if (kf) game.setScreen(lose);*/
-
+        if(hasDrop) stage.addActor(tel.get(0));
         if(checkPlayer && !hasChecked)
         {
             stage.addActor(playerVloger);
@@ -372,6 +375,7 @@ public class GameScreen extends BaseScreen {
             }
             if(Gdx.input.isKeyJustPressed(Input.Keys.E))
             {
+                hasDrop = true;
                 JSONObject data = new JSONObject();
                 try {
                     data.put("x", playerProger.getX());
@@ -612,9 +616,11 @@ public class GameScreen extends BaseScreen {
                         Gdx.app.log( objects.getJSONObject(0).getDouble("x")+"", playerId);
                         Gdx.app.log( objects.getJSONObject(0).getDouble("y")+"", playerId);
                         if(checkPlayer) {
-                            stage.addActor(new TelephoneEntity(telephoneTexture, world, (float) objects.getJSONObject(0).getDouble("x"), (float) objects.getJSONObject(0).getDouble("y"), playerVloger.getWidth() / 2, playerVloger.getHeight() / 2, 0, 0));
+                            if(tel.size()<1)
+                                tel.add(new TelephoneEntity(telephoneTexture, world, (float) objects.getJSONObject(0).getDouble("x"), (float) objects.getJSONObject(0).getDouble("y"), playerVloger.getWidth() / 2, playerVloger.getHeight() / 2, 0, 0));
                         }else{
-                            stage.addActor(new TelephoneEntity(telephoneTexture, world, (float) objects.getJSONObject(0).getDouble("x"), (float) objects.getJSONObject(0).getDouble("y"), playerProger.getWidth() / 2, playerProger.getHeight() / 2, 0, 0));
+                            if(tel.size()<1)
+                                tel.add(new TelephoneEntity(telephoneTexture, world, (float) objects.getJSONObject(0).getDouble("x"), (float) objects.getJSONObject(0).getDouble("y"), playerProger.getWidth() / 2, playerProger.getHeight() / 2, 0, 0));
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
