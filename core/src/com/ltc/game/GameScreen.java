@@ -211,7 +211,7 @@ public class GameScreen extends BaseScreen {
 //        }
 
         stage.addActor(telephone);
-        stage.addActor(bot);
+//        stage.addActor(bot);
 
         for (WallEntiy aWall : wall) {
             stage.addActor(aWall);
@@ -367,7 +367,7 @@ public class GameScreen extends BaseScreen {
         }
 
 
-        if (bot != null) bot.processInput();
+//        if (bot != null) bot.processInput();
 
         /*if(kf)
         {
