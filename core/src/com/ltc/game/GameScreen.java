@@ -608,9 +608,9 @@ public class GameScreen extends BaseScreen {
                 JSONArray objects = (JSONArray) args[0];
                 if(objects.length()>0) {
                     try {
-                        Gdx.app.log("SOCK", "VERC");
                         String playerId = objects.getJSONObject(0).getString("id");
-                        stage.addActor(new TelephoneEntity(telephoneTexture, world, (float) objects.getJSONObject(0).getDouble("x"), (float) objects.getJSONObject(0).getDouble("y"), friendlyPlayers1.get(playerId).getWidth() / 2, friendlyPlayers1.get(playerId).getHeight() / 2, 0, 0));
+                        Gdx.app.log( objects.getJSONObject(0).getDouble("x")+"", playerId);
+                        stage.addActor(new TelephoneEntity(telephoneTexture, world, (float) objects.getJSONObject(0).getDouble("x"), (float) objects.getJSONObject(0).getDouble("y"), friendlyPlayers2.get(playerId).getWidth() / 2, friendlyPlayers1.get(playerId).getHeight() / 2, 0, 0));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

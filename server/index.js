@@ -10,7 +10,7 @@ io.on('connection', function(socket){
 	console.log("Player Connected!");
 	socket.emit('socketID', { id: socket.id });
 	socket.emit('getPlayers', players);
-	//socket.emit('getPhone', phones);
+	socket.emit('getPhone', phones);
 	socket.broadcast.emit('newPlayer', { id: socket.id });
 
 	socket.on('playerMoved', function (data) {
@@ -34,7 +34,7 @@ io.on('connection', function(socket){
 		phones.push(new phone(socket.id,data.x, data.y));
         for(var i = 0; i<phones.length; i++)
 		{
-			if(phones[i].id==phones.id)
+			if(phones[i].id==data.id)
 			{
 				phones[i].x = data.x;
 				phones[i].y = data.y;
