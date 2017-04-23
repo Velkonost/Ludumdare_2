@@ -1,6 +1,7 @@
 package com.ltc.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -360,7 +361,7 @@ public class GameScreen extends BaseScreen {
 
                 stage.addActor(entry.getValue());
                 entry.getValue().processInput();
-                if(entry.getValue().isHasPhone())
+                if(Gdx.input.isKeyJustPressed(Input.Keys.E))
                 {
                     JSONObject data = new JSONObject();
                     try {
