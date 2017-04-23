@@ -1,6 +1,5 @@
 package com.ltc.game.entities;
 
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
@@ -41,28 +40,33 @@ public class BotEntity extends Actor{
     public BotEntity(Texture texture, World world,  float x, float y, float widht, float higth){
 
         this.texture = texture;
+//        this.phoneTexture = phoneTexture;
         this.world = world;
-
-        this.width = widht;
-        this.higth = higth;
+//        this.game = game;
+        previousPosition = new Vector2(getX(), getY());
         setPosition(x, y);
 
         BodyDef def = new BodyDef();
         def.position.set(x, y);
         def.type = BodyDef.BodyType.DynamicBody;
-        body = world.createBody(def);
 
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(widht / 2, higth / 2);
-        fixture = body.createFixture(shape, 1);
-        fixture.setUserData("Bot");
-        shape.dispose();
-        setSize(width * PIXELS_IN_METER, higth * PIXELS_IN_METER);
+        body = world.createBody(def);
+        body.setFixedRotation(true);
+
+        final PolygonShape box = new PolygonShape();
+        box.setAsBox(0.25f, 0.5f);
+
+        fixture = body.createFixture(box, 1000);
+        fixture.setUserData("proger");
+
+        box.dispose();
+
+        setSize(PIXELS_IN_METER, PIXELS_IN_METER);
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        setPosition((body.getPosition().x - (width - 1) / 2) * PIXELS_IN_METER , (body.getPosition().y - (higth - 1) / 2) * PIXELS_IN_METER);
+        setPosition((body.getPosition().x - width / 2) * PIXELS_IN_METER , (body.getPosition().y - higth / 2) * PIXELS_IN_METER);
         batch.draw(texture, getX(), getY(), getWidth(), getHeight());
     }
 

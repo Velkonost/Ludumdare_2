@@ -187,6 +187,7 @@ public class GameScreen extends BaseScreen {
 //        }
 
         stage.addActor(telephone);
+        stage.addActor(bot);
 
         for (WallEntiy aWall : wall) {
             stage.addActor(aWall);
