@@ -10,7 +10,7 @@ io.on('connection', function(socket){
 	console.log("Player Connected!");
 	socket.emit('socketID', { id: socket.id });
 	socket.emit('getPlayers', players);
-	socket.emit('getPhone', phones);
+	//socket.emit('getPhone', phones);
 	socket.broadcast.emit('newPlayer', { id: socket.id });
 
 	socket.on('playerMoved', function (data) {
@@ -30,8 +30,18 @@ io.on('connection', function(socket){
 	socket.on('phoneDropped', function (data) {
 		data.id = socket.id;
 		console.log("Telephone ypal");
-		socket.broadcast.emit('phoneDropped', data);
-	    phones.push(new phone(socket.id,data.x, data.y));
+		//socket.broadcast.emit('phoneDropped', data);
+		phones.push(new phone(socket.id,data.x, data.y));
+        for(var i = 0; i<phones.length; i++)
+		{
+			if(phones[i].id==phones.id)
+			{
+				phones[i].x = data.x;
+				phones[i].y = data.y;
+			}
+		}
+
+	  //  socket.emit('getPhone', phones);
 
 
 
