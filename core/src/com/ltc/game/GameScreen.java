@@ -87,6 +87,9 @@ public class GameScreen extends BaseScreen {
 
     private ArrayList<BotIdleEntity> botsIdle;
 
+    private ArrayList<BotMoveEntity> botsMove;
+    private ArrayList<Texture> botsMoveTexture;
+
     public boolean collisionBtwPlayers = false;
     public boolean collisionVlogerWithBot = false;
     public boolean hasPhone;
@@ -107,6 +110,12 @@ public class GameScreen extends BaseScreen {
         table = new ArrayList<TableEntity>();
         tableTextures = new ArrayList<Texture>();
         botsIdle = new ArrayList();
+<<<<<<< HEAD
+=======
+        tel = new ArrayList<TelephoneEntity>();
+        botsMove = new ArrayList<BotMoveEntity>();
+        botsMoveTexture = new ArrayList<Texture>();
+>>>>>>> origin/master
     }
 
     @Override
@@ -141,6 +150,18 @@ public class GameScreen extends BaseScreen {
             }
 
         }, 1, 1);
+
+
+        botsMoveTexture.add((Texture) game.getManager().get("myachhero.png"));
+        botsMoveTexture.add((Texture) game.getManager().get("player1hero.png"));
+        botsMoveTexture.add((Texture) game.getManager().get("player2hero.png"));
+        botsMoveTexture.add((Texture) game.getManager().get("player3hero.png"));
+        botsMoveTexture.add((Texture) game.getManager().get("player1hero.png"));
+        botsMoveTexture.add((Texture) game.getManager().get("player2hero.png"));
+
+        for (int i = 0; i < botsMoveTexture.size(); i++ ) {
+            botsMove.add(new BotMoveEntity(botsMoveTexture.get(i), world, i * 5 + 10, i * 5 + 10));
+        }
 
         wall.add(new WallEntiy(wallT, world, 14.5f, 0.5f, 21f, 1f, 10f, 0));
         wall.add(new WallEntiy(wallT, world, 25.5f, 6f, 1f, 12f, 0, 6.0f));
@@ -197,6 +218,17 @@ public class GameScreen extends BaseScreen {
             stage.addActor(aTable);
         }
 
+<<<<<<< HEAD
+=======
+        for(BotEntity aBot : bot){
+            stage.addActor(aBot);
+        }
+
+        for (int i = 0; i < botsMove.size(); i++) {
+            stage.addActor(botsMove.get(i));
+        }
+
+>>>>>>> origin/master
         world.setContactListener(new ContactListener() {
             @Override
             public void beginContact(Contact contact) {
@@ -366,6 +398,10 @@ public class GameScreen extends BaseScreen {
         }else{
             stage.getCamera().position.set(playerProger.getX(),playerProger.getY(), 0);
             for (HashMap.Entry<String, PlayerVlogerEntity> entry : friendlyPlayers1.entrySet()) {
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
                 stage.addActor(entry.getValue());
                 entry.getValue().processInput();
 
@@ -380,10 +416,18 @@ public class GameScreen extends BaseScreen {
                     e.printStackTrace();
                 }
                 socket.emit("phoneDropped", data);
+<<<<<<< HEAD
+=======
+            } else {
+                stage.getCamera().position.set(playerProger.getX(),playerProger.getY(), 0);
+                for (HashMap.Entry<String, PlayerVlogerEntity> entry : friendlyPlayers1.entrySet()) {
+                    stage.addActor(entry.getValue());
+                    entry.getValue().processInput();
+                }
+                playerProger.processInput();
+                stage.getCamera().position.set(playerProger.getX(), playerProger.getY(), 0);
+>>>>>>> origin/master
             }
-            playerProger.processInput();
-            stage.getCamera().position.set(playerProger.getX(),playerProger.getY(), 0);
-        }
         for (BotIdleEntity aBotsIdle : botsIdle) aBotsIdle.processInput();
 
         //  stage.getCamera().position.set(playerProger.getX(),playerProger.getY(), 0);
@@ -392,8 +436,10 @@ public class GameScreen extends BaseScreen {
         camera.update();
         renderer.render(world, camera.combined);
         stage.draw();
+        }
     }
 
+<<<<<<< HEAD
     @Override
     public void hide() {
         playerVloger.detach();
@@ -407,6 +453,27 @@ public class GameScreen extends BaseScreen {
         for(int i = 0; i < wall.size(); i++){wall.get(i).detach();}
         for(int i = 0; i < wall.size(); i++){wall.get(i).remove();}
     }
+=======
+        public void hide() {
+            playerVloger.detach();
+            playerProger.detach();
+            telephone.detach();
+
+            for (BotMoveEntity aBotsMove : botsMove) aBotsMove.detach();
+            for (BotMoveEntity aBotsMove : botsMove) aBotsMove.remove();
+            for (BotIdleEntity aBotsIdle1 : botsIdle) aBotsIdle1.detach();
+
+            playerVloger.remove();
+            playerProger.remove();
+            for (BotIdleEntity aBotsIdle : botsIdle) aBotsIdle.remove();
+            for (WallEntiy aWall : wall) {
+                aWall.detach();
+            }
+            for (WallEntiy aWall : wall) {
+                aWall.remove();
+            }
+        }
+>>>>>>> origin/master
 
     @Override
     public void dispose() {
