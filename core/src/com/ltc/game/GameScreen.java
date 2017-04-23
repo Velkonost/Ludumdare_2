@@ -615,7 +615,7 @@ public class GameScreen extends BaseScreen {
                 }
 
             }
-        }).on("getPhone", new Emitter.Listener() {
+        })/*.on("getPhone", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
 
@@ -639,6 +639,6 @@ public class GameScreen extends BaseScreen {
                     }
                 }
             }
-        });
+        })*/;
     }
 }
