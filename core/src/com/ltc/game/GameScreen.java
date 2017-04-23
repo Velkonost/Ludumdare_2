@@ -617,10 +617,10 @@ public class GameScreen extends BaseScreen {
                         Gdx.app.log( objects.getJSONObject(0).getDouble("y")+"", playerId);
                         if(checkPlayer) {
                             if(tel.size()<1)
-                                tel.add(new TelephoneEntity(telephoneTexture, world, (float) objects.getJSONObject(0).getDouble("x"), (float) objects.getJSONObject(0).getDouble("y"), 1, 1, 0, 0));
+                                tel.add(new TelephoneEntity(telephoneTexture, world, playerVloger.getX(), playerVloger.getY(), 1, 1, 0, 0));
                         }else{
                             if(tel.size()<1)
-                                tel.add(new TelephoneEntity(telephoneTexture, world, (float) objects.getJSONObject(0).getDouble("x"), (float) objects.getJSONObject(0).getDouble("y"), 1, 1, 0, 0));
+                                tel.add(new TelephoneEntity(telephoneTexture, world, playerProger.getX(),  playerProger.getY(), 1, 1, 0, 0));
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
