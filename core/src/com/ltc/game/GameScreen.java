@@ -361,23 +361,24 @@ public class GameScreen extends BaseScreen {
 
                 stage.addActor(entry.getValue());
                 entry.getValue().processInput();
-                if(Gdx.input.isKeyJustPressed(Input.Keys.E))
-                {
-                    JSONObject data = new JSONObject();
-                    try {
-                        data.put("x", entry.getValue().phoneX);
-                        data.put("y", entry.getValue().phoneY);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    socket.emit("phoneDropped", data);
-                }
             }
         }else{
             stage.getCamera().position.set(playerProger.getX(),playerProger.getY(), 0);
             for (HashMap.Entry<String, PlayerVlogerEntity> entry : friendlyPlayers1.entrySet()) {
                stage.addActor(entry.getValue());
                 entry.getValue().processInput();
+
+            }
+            if(Gdx.input.isKeyJustPressed(Input.Keys.E))
+            {
+                JSONObject data = new JSONObject();
+                try {
+                    data.put("x", playerProger.phoneX);
+                    data.put("y", playerProger.phoneY);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                socket.emit("phoneDropped", data);
             }
             playerProger.processInput();
             stage.getCamera().position.set(playerProger.getX(),playerProger.getY(), 0);
