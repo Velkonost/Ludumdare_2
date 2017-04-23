@@ -30,7 +30,7 @@ import static java.lang.Math.floor;
  */
 public class GameScreen extends BaseScreen {
 
-    private final float UPDATE_TIME = 1/40f;
+    private final float UPDATE_TIME = 1/60f;
     private float timer;
     private HashMap<String, PlayerVlogerEntity> friendlyPlayers1;
     private HashMap<String, PlayerProgerEntity> friendlyPlayers2;
@@ -598,7 +598,7 @@ public class GameScreen extends BaseScreen {
                 }
 
             }
-        }).on("getPhones", new Emitter.Listener() {
+        }).on("getPhone", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
 
