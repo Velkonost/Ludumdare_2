@@ -2,7 +2,7 @@ var app = require('express')();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var players = [];
-var phone = [];
+var phones = [];
 
 server.listen(3000, function(){
 	console.log("Server is now running...");
@@ -27,14 +27,13 @@ io.on('connection', function(socket){
 			}
 		}
     });
-
-	socket.on('phoneDroopped', function (data) {
+    socket.emit('getPhone', phones);
+	socket.on('phoneDropped', function (data) {
 		data.id = socket.id;
-		socket.broadcast.emit('phodeDropped', data);
-		if (phone.empty()) {
-			phone.push(data.x, data.y);
-			players.push(3, phone.x, phone.y);
-		}
+		socket.broadcast.emit('phoneDropped', data);
+	       phones.push(new phone(socket.id,data.x, data.y));
+
+
 
 
 
@@ -69,7 +68,8 @@ function player(id, x, y, vloger){
 	this.y = y;
 }
 
-function phone(x, y) {
+function phone(id, x, y) {
+    this.id = id;
 	this.xPhone = x;
 	this.yPhone = y;
 }

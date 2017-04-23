@@ -80,7 +80,7 @@ public class GameScreen extends BaseScreen {
     boolean kf = false;
 
     private GuiMenu guiMenu;
-
+    SpriteBatch batch;
     public boolean myachinWin = false;
 
     private ArrayList<BotIdleEntity> botsIdle;
@@ -121,6 +121,7 @@ public class GameScreen extends BaseScreen {
         getTextures();
         friendlyPlayers1 = new HashMap<String, PlayerVlogerEntity>();
         friendlyPlayers2 = new HashMap<String, PlayerProgerEntity>();
+        batch = new SpriteBatch();
         Texture wallT = game.getManager().get("table8bit.jpg");
         for (int i = 0; i < 7; i++) tableTextures.add((Texture) game.getManager().get("table" + (i + 1) + ".png"));
 
@@ -310,6 +311,8 @@ public class GameScreen extends BaseScreen {
         Gdx.gl.glClearColor(0, 0, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         updateServer(Gdx.graphics.getDeltaTime());
+
+
         //////////////////////////////////////для прогера
 //        if(checkPlayer) game.setScreen(lose);
 //        else if (kf) game.setScreen(win);
@@ -351,6 +354,17 @@ public class GameScreen extends BaseScreen {
 
                 stage.addActor(entry.getValue());
                 entry.getValue().processInput();
+                if(entry.getValue().isHasPhone())
+                {
+                    JSONObject data = new JSONObject();
+                    try {
+                        data.put("x", entry.getValue().phoneX);
+                        data.put("y", entry.getValue().phoneY);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    socket.emit("phoneDropped", data);
+                }
             }
         }else{
             stage.getCamera().position.set(playerProger.getX(),playerProger.getY(), 0);
@@ -442,22 +456,6 @@ public class GameScreen extends BaseScreen {
             }
         }
         ;
-        if (playerProger != null && !playerProger.isHasPhone()) {
-            System.out.println(playerProger.phoneX);
-            JSONObject data = new JSONObject();
-
-            try {
-                data.put("x", playerProger.phoneX);
-            } catch (org.json.JSONException e) {
-                e.printStackTrace();
-            }
-            try {
-                data.put("y", playerProger.phoneY);
-            } catch (org.json.JSONException e) {
-                e.printStackTrace();
-            }
-            socket.emit("phoneDropped", data);
-        }
     }
 
     public void connectSocket(){
@@ -595,6 +593,19 @@ public class GameScreen extends BaseScreen {
                     Gdx.app.log("SocketIO", "Error getting disconnected PlayerID");
                 }
 
+            }
+        }).on("getPhones", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+
+                JSONObject data = (JSONObject) args[0];
+
+                try {
+                    String  playerId = data.getString("id");
+                    stage.addActor(new TelephoneEntity(telephoneTexture,world, (float) data.getDouble("x"), (float) data.getDouble("y"), friendlyPlayers2.get(playerId).getWidth()/2, friendlyPlayers2.get(playerId).getHeight() / 2, 0 ,0));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
