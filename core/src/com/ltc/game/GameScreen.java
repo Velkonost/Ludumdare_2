@@ -70,7 +70,7 @@ public class GameScreen extends BaseScreen {
 
     private boolean checkPlayer = false;
 
-    private boolean isTelephoneCollision = false;
+    public boolean isTelephoneCollision = false;
 
     private ArrayList<Texture> botsIdleTexture;
 
@@ -115,7 +115,7 @@ public class GameScreen extends BaseScreen {
         connectSocket();
         configSocketEvents();
         renderer = new Box2DDebugRenderer();
-        camera = new OrthographicCamera(32, 18);
+        camera = new OrthographicCamera(16, 9);
         camera.translate(0, 1);
         botsIdleTexture = new ArrayList<Texture>();
         getTextures();
@@ -139,7 +139,6 @@ public class GameScreen extends BaseScreen {
 
         }, 1, 1);
 
-
         wall.add(new WallEntiy(wallT, world, 14.5f, 0.5f, 21f, 1f, 10f, 0));
         wall.add(new WallEntiy(wallT, world, 25.5f, 6f, 1f, 12f, 0, 6.0f));
         wall.add(new WallEntiy(wallT, world, 24f, 12.0f, 4f, 1f, 1.5f, 0));
@@ -153,7 +152,7 @@ public class GameScreen extends BaseScreen {
         wall.add(new WallEntiy(wallT, world, 12f, 20.5f, 4f, 1f, 1.5f, 0));
         wall.add(new WallEntiy(wallT, world, 10.5f, 19.5f, 1f, 1f, 0, 0));
         wall.add(new WallEntiy(wallT, world, 5.5f, 18.5f, 11f,1f, 5f, 0));
-        wall.add(new WallEntiy(wallT, world, 0.5f, 14f, 1f,8f, 0, 3.5f));
+        wall.add(new WallEntiy(wallT, world, 0.5f, 14f, 1f, 8f, 0, 3.5f));
         wall.add(new WallEntiy(wallT, world, 2f, 9.5f, 4f,1f, 1f, 0));
         wall.add(new WallEntiy(wallT, world, 11.5f, 9.5f, 1f,1f, 0, 0));
         wall.add(new WallEntiy(wallT, world, 18.5f, 9.5f, 1f,1f, 0, 0));
@@ -168,7 +167,7 @@ public class GameScreen extends BaseScreen {
 
         playerVloger = new PlayerVlogerEntity(playerVlogerTexture, playerVlogerCameraTexture, this, world, 9f, 7f);
         playerProger = new PlayerProgerEntity(playerProgerTexture, phoneTexture, this, world, 6.5f, 3.5f);
-        telephone = new TelephoneEntity(telephoneTexture, world, 1, 1, 1, 1, 0, 0);
+        telephone = new TelephoneEntity(telephoneTexture, world, 19.5f, 21.5f, 1, 1, 0, 0);
         //guiMenu = new GuiMenu()
         font = new BitmapFont();
         sp = new SpriteBatch();
@@ -298,7 +297,6 @@ public class GameScreen extends BaseScreen {
         }
 
         for (int i = 1; i <= 3; i++) {
-
             botsIdleTexture.add(
                     (Texture) game.getManager().get("player" + i + "hero.png")
             );

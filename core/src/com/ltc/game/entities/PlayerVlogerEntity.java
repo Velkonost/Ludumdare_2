@@ -63,7 +63,7 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
 
     private int xCircle, yCircle;
 
-    public static final float SPEED_VLOGER = 2f;
+    public static final float SPEED_VLOGER = 10f;
 
     //позиция в мире
     Vector2 position = new Vector2();
@@ -151,7 +151,9 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
                 @Override
                 public void run() {
                     time --;
-                    if(time == 0) isCircleDraw = false;
+                    if(time == 0) {
+                        isCircleDraw = false;
+                    }
                 }
             }, 10).run();
 
@@ -214,8 +216,7 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
                 game.game.setScreen(game.win);
                 game.socket.disconnect();
             }
-        } else if ( (character == 'e' || character == 'е' || character == 'у') && countCalls > 0) {
-
+        } else if ( (character == 'e' || character == 'е' || character == 'у') && countCalls > 0 && game.isTelephoneCollision) {
             isCircleDraw = true;
             circleGetCoords = true;
             countCalls --;
