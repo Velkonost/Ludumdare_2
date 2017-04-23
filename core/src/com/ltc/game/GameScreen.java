@@ -69,6 +69,7 @@ public class GameScreen extends BaseScreen {
     public WinScreen win;
     public LoseScreen lose;
 
+    private ArrayList<TelephoneEntity> tel;
     private boolean checkPlayer = false;
 
     public boolean isTelephoneCollision = false;
@@ -90,6 +91,7 @@ public class GameScreen extends BaseScreen {
     public boolean collisionVlogerWithBot = false;
     public boolean hasPhone;
     private boolean hasChecked = false;
+    private boolean hasDrop = false;
 
     private TelephoneEntity telephone;
     private Texture telephoneTexture;
@@ -108,6 +110,7 @@ public class GameScreen extends BaseScreen {
         tableTextures = new ArrayList<Texture>();
         botTextures = new ArrayList<Texture>();
         botsIdle = new ArrayList();
+        tel = new ArrayList<TelephoneEntity>();
     }
 
     @Override
@@ -330,7 +333,7 @@ public class GameScreen extends BaseScreen {
         ///////////////////////////////для блогера
         /*if(checkPlayer) game.setScreen(win);
         else if (kf) game.setScreen(lose);*/
-
+        if(hasDrop && tel.size()>0) stage.addActor(tel.get(0));
         if(checkPlayer && !hasChecked)
         {
             stage.addActor(playerVloger);
@@ -366,17 +369,25 @@ public class GameScreen extends BaseScreen {
 
                 stage.addActor(entry.getValue());
                 entry.getValue().processInput();
-                if(entry.getValue().isHasPhone())
-                {
-                    JSONObject data = new JSONObject();
-                    try {
-                        data.put("x", entry.getValue().phoneX);
-                        data.put("y", entry.getValue().phoneY);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    socket.emit("phoneDropped", data);
+            }
+        }else{
+            stage.getCamera().position.set(playerProger.getX(),playerProger.getY(), 0);
+            for (HashMap.Entry<String, PlayerVlogerEntity> entry : friendlyPlayers1.entrySet()) {
+               stage.addActor(entry.getValue());
+                entry.getValue().processInput();
+
+            }
+            if(Gdx.input.isKeyJustPressed(Input.Keys.E))
+            {
+                hasDrop = true;
+                JSONObject data = new JSONObject();
+                try {
+                    data.put("x", playerProger.getX());
+                    data.put("y", playerProger.getY());
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
+                socket.emit("phoneDropped", data);
             }
         }else{
             stage.getCamera().position.set(playerProger.getX(),playerProger.getY(), 0);
@@ -616,6 +627,15 @@ public class GameScreen extends BaseScreen {
                         Gdx.app.log("SOCK", "VERC");
                         String playerId = objects.getJSONObject(0).getString("id");
                         stage.addActor(new TelephoneEntity(telephoneTexture, world, (float) objects.getJSONObject(0).getDouble("x"), (float) objects.getJSONObject(0).getDouble("y"), friendlyPlayers1.get(playerId).getWidth() / 2, friendlyPlayers1.get(playerId).getHeight() / 2, 0, 0));
+                        Gdx.app.log( objects.getJSONObject(0).getDouble("x")+"", playerId);
+                        Gdx.app.log( objects.getJSONObject(0).getDouble("y")+"", playerId);
+                        if(checkPlayer) {
+                            if(tel.size()<1)
+                                tel.add(new TelephoneEntity(telephoneTexture, world, playerVloger.getX(), playerVloger.getY(), 1, 1, 0, 0));
+                        }else{
+                            if(tel.size()<1)
+                                tel.add(new TelephoneEntity(telephoneTexture, world, playerProger.getX(),  playerProger.getY(), 1, 1, 0, 0));
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
