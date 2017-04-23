@@ -327,7 +327,7 @@ public class GameScreen extends BaseScreen {
         ///////////////////////////////для блогера
         /*if(checkPlayer) game.setScreen(win);
         else if (kf) game.setScreen(lose);*/
-        if(hasDrop) stage.addActor(tel.get(0));
+        if(hasDrop && tel.size()>0) stage.addActor(tel.get(0));
         if(checkPlayer && !hasChecked)
         {
             stage.addActor(playerVloger);
