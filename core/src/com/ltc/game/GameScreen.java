@@ -515,7 +515,7 @@ public class GameScreen extends BaseScreen {
                     {
                         friendlyPlayers1.get(playerId).remove();
                         friendlyPlayers1.remove(playerId);
-                        game.setScreen(lose);
+//                        game.setScreen(lose);
                     }else{
                         friendlyPlayers2.get(playerId).remove();
                         friendlyPlayers2.remove(playerId);
