@@ -34,7 +34,7 @@ public class GameScreen extends BaseScreen {
     private float timer;
     private HashMap<String, PlayerVlogerEntity> friendlyPlayers1;
     private HashMap<String, PlayerProgerEntity> friendlyPlayers2;
-    private Socket socket;
+    public Socket socket;
     private String id;
 
     private Stage stage;
@@ -78,6 +78,8 @@ public class GameScreen extends BaseScreen {
     boolean kf = false;
 
     private GuiMenu guiMenu;
+
+    public boolean myachinWin = false;
 
     private ArrayList<BotIdleEntity> botsIdle;
 
@@ -129,6 +131,7 @@ public class GameScreen extends BaseScreen {
                 if(a==0)
                 {
                     kf = true;
+                    game.setScreen(win);
                     cancel();
                 }
             }
@@ -136,31 +139,30 @@ public class GameScreen extends BaseScreen {
         }, 1, 1);
 
 
-                wall.add(new WallEntiy(wallT, world, 14.5f, 0.5f, 21f, 1f, 10f, 0));
-                wall.add(new WallEntiy(wallT, world, 25.5f, 6f, 1f, 12f, 0, 6.0f));
-                wall.add(new WallEntiy(wallT, world, 24f, 12.0f, 4f, 1f, 1.5f, 0));
-                wall.add(new WallEntiy(wallT, world, 4.0f, 5.0f, 1f, 9f, 0, 4.0f));
-                wall.add(new WallEntiy(wallT, world, 22.5f, 14f, 1f, 2f, 0, 1f));
-                wall.add(new WallEntiy(wallT, world, 22.5f, 18.5f, 1f, 9f, 0, 4f));
-                wall.add(new WallEntiy(wallT, world, 21f, 22.5f, 6f, 1f, 2.5f, 0));
-                wall.add(new WallEntiy(wallT, world, 18.5f, 20f, 1f, 4f, 0, 1.5f));
-                wall.add(new WallEntiy(wallT, world, 16f, 18.5f, 4f, 1f, 1.5f, 0));
-                wall.add(new WallEntiy(wallT, world, 14.5f, 20f, 1f, 2f, 0, 0.5f));
-                wall.add(new WallEntiy(wallT, world, 12f, 20.5f, 4f, 1f, 1.5f, 0));
-                wall.add(new WallEntiy(wallT, world, 10.5f, 19.5f, 1f, 1f, 0, 0));
-                wall.add(new WallEntiy(wallT, world, 5.5f, 18.5f, 11f,1f, 5f, 0));
-                wall.add(new WallEntiy(wallT, world, 0.5f, 14f, 1f,8f, 0, 3.5f));
-                wall.add(new WallEntiy(wallT, world, 2f, 9.5f, 4f,1f, 1f, 0));
-                wall.add(new WallEntiy(wallT, world, 11.5f, 9.5f, 1f,1f, 0, 0));
-                wall.add(new WallEntiy(wallT, world, 18.5f, 9.5f, 1f,1f, 0, 0));
+        wall.add(new WallEntiy(wallT, world, 14.5f, 0.5f, 21f, 1f, 10f, 0));
+        wall.add(new WallEntiy(wallT, world, 25.5f, 6f, 1f, 12f, 0, 6.0f));
+        wall.add(new WallEntiy(wallT, world, 24f, 12.0f, 4f, 1f, 1.5f, 0));
+        wall.add(new WallEntiy(wallT, world, 4.0f, 5.0f, 1f, 9f, 0, 4.0f));
+        wall.add(new WallEntiy(wallT, world, 22.5f, 14f, 1f, 2f, 0, 1f));
+        wall.add(new WallEntiy(wallT, world, 22.5f, 18.5f, 1f, 9f, 0, 4f));
+        wall.add(new WallEntiy(wallT, world, 21f, 22.5f, 6f, 1f, 2.5f, 0));
+        wall.add(new WallEntiy(wallT, world, 18.5f, 20f, 1f, 4f, 0, 1.5f));
+        wall.add(new WallEntiy(wallT, world, 16f, 18.5f, 4f, 1f, 1.5f, 0));
+        wall.add(new WallEntiy(wallT, world, 14.5f, 20f, 1f, 2f, 0, 0.5f));
+        wall.add(new WallEntiy(wallT, world, 12f, 20.5f, 4f, 1f, 1.5f, 0));
+        wall.add(new WallEntiy(wallT, world, 10.5f, 19.5f, 1f, 1f, 0, 0));
+        wall.add(new WallEntiy(wallT, world, 5.5f, 18.5f, 11f,1f, 5f, 0));
+        wall.add(new WallEntiy(wallT, world, 0.5f, 14f, 1f,8f, 0, 3.5f));
+        wall.add(new WallEntiy(wallT, world, 2f, 9.5f, 4f,1f, 1f, 0));
+        wall.add(new WallEntiy(wallT, world, 11.5f, 9.5f, 1f,1f, 0, 0));
+        wall.add(new WallEntiy(wallT, world, 18.5f, 9.5f, 1f,1f, 0, 0));
 
-                table.add(new TableEntity(tableTextures.get(6), world, 7f, 17f, 6f, 2f, 2.5f, 0.5f));
-                table.add(new TableEntity(tableTextures.get(1), world, 20.f, 4.f, 2f, 6f, 0.5f, 2.5f));
-                table.add(new TableEntity(tableTextures.get(2), world, 5.5f, 4.f, 2f, 6f, 0.5f, 2.5f));
-                table.add(new TableEntity(tableTextures.get(3), world, 24.f, 4.f, 2f, 6f, 0.5f, 2.5f));
-                table.add(new TableEntity(tableTextures.get(4), world, 10.5f, 4.f, 2f, 6f, 0.5f, 2.5f));
-                table.add(new TableEntity(tableTextures.get(5), world, 15.f, 4.f, 2f, 6f, 0.5f, 2.5f));
-
+        table.add(new TableEntity(tableTextures.get(6), world, 7f, 17f, 6f, 2f, 2.5f, 0.5f));
+        table.add(new TableEntity(tableTextures.get(1), world, 20.f, 4.f, 2f, 6f, 0.5f, 2.5f));
+        table.add(new TableEntity(tableTextures.get(2), world, 5.5f, 4.f, 2f, 6f, 0.5f, 2.5f));
+        table.add(new TableEntity(tableTextures.get(3), world, 24.f, 4.f, 2f, 6f, 0.5f, 2.5f));
+        table.add(new TableEntity(tableTextures.get(4), world, 10.5f, 4.f, 2f, 6f, 0.5f, 2.5f));
+        table.add(new TableEntity(tableTextures.get(5), world, 15.f, 4.f, 2f, 6f, 0.5f, 2.5f));
 
 
         playerVloger = new PlayerVlogerEntity(playerVlogerTexture, playerVlogerCameraTexture, this, world, 9f, 7f);
@@ -174,12 +176,6 @@ public class GameScreen extends BaseScreen {
             e.printStackTrace();
         }
 
-       /* if(checkPlayer)
-        {
-            stage.addActor(playerVloger);
-        }else{
-            stage.addActor(playerProger);
-        }*/
 
 //        for (int i = 1; i <= 3; i++) {
 //            botsIdle.add(new BotIdleEntity(botsIdleTexture.get(i - 1), this, world, i * 5, i * 2));
@@ -194,14 +190,15 @@ public class GameScreen extends BaseScreen {
             stage.addActor(table.get(i));
         }
 
-      /*  stage.addActor(playerVloger);
-        stage.addActor(playerProger);*/
 
         world.setContactListener(new ContactListener() {
             @Override
             public void beginContact(Contact contact) {
                 Fixture fixtureA = contact.getFixtureA();
                 Fixture fixtureB = contact.getFixtureB();
+
+                if (playerProger != null) playerProger.processInput();
+                if (playerVloger != null) playerVloger.processInput();
 
                 if ((fixtureA.getUserData().equals("vloger") && fixtureB.getUserData().equals("proger"))
                         || (fixtureA.getUserData().equals("proger") && fixtureB.getUserData().equals("vloger"))) {
@@ -301,8 +298,8 @@ public class GameScreen extends BaseScreen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         updateServer(Gdx.graphics.getDeltaTime());
         //////////////////////////////////////для прогера
-        if(checkPlayer) game.setScreen(lose);
-        else if (kf) game.setScreen(win);
+//        if(checkPlayer) game.setScreen(lose);
+//        else if (kf) game.setScreen(win);
         ///////////////////////////////для блогера
         /*if(checkPlayer) game.setScreen(win);
         else if (kf) game.setScreen(lose);*/
@@ -333,11 +330,11 @@ public class GameScreen extends BaseScreen {
 
         stage.act();
 //
-       /* playerVloger.processInput();
-        playerProger.processInput();*/
+        if (playerVloger != null) playerVloger.processInput();
+        if (playerProger != null) playerProger.processInput();
         if(checkPlayer) {
-            playerVloger.processInput();
-            playerProger.processInput();
+//            playerVloger.processInput();
+//            playerProger.processInput();
             stage.getCamera().position.set(playerVloger.getX(),playerVloger.getY(), 0);
             for (HashMap.Entry<String, PlayerProgerEntity> entry : friendlyPlayers2.entrySet()) {
 
@@ -345,8 +342,8 @@ public class GameScreen extends BaseScreen {
             }
         }else{
            // Gdx.app.log("SocketIO", "DCPteam");
-            playerProger.processInput();
-            playerVloger.processInput();
+//            playerProger.processInput();
+//            playerVloger.processInput();
             stage.getCamera().position.set(playerProger.getX(),playerProger.getY(), 0);
             for (HashMap.Entry<String, PlayerVlogerEntity> entry : friendlyPlayers1.entrySet()) {
                stage.addActor(entry.getValue());
@@ -433,12 +430,30 @@ public class GameScreen extends BaseScreen {
 
             }
         }
+        ;
+        if (playerProger != null && !playerProger.isHasPhone()) {
+            System.out.println(playerProger.phoneX);
+            JSONObject data = new JSONObject();
+
+            try {
+                data.put("x", playerProger.phoneX);
+            } catch (org.json.JSONException e) {
+                e.printStackTrace();
+            }
+            try {
+                data.put("y", playerProger.phoneY);
+            } catch (org.json.JSONException e) {
+                e.printStackTrace();
+            }
+            socket.emit("phoneDropped", data);
+        }
     }
 
     public void connectSocket(){
         try {
+            socket  = IO.socket("http://localhost:3000");
 //            socket = IO.socket("http://766ee2e4.ngrok.io");
-            socket = IO.socket("http://localhost:8080");
+//            socket = IO.socket("http://94.251.109.165:80");
             socket.connect();
         } catch(Exception e){
             System.out.println(e);
@@ -493,12 +508,15 @@ public class GameScreen extends BaseScreen {
                     {
                         friendlyPlayers1.get(playerId).remove();
                         friendlyPlayers1.remove(playerId);
+                        game.setScreen(lose);
                     }else{
                         friendlyPlayers2.get(playerId).remove();
                         friendlyPlayers2.remove(playerId);
+
                     }
 
 
+//                    game.setScreen(new GuiMenu(game, 'l', 0));
                 }catch(JSONException e){
                     Gdx.app.log("SocketIO", "Error getting disconnected PlayerID");
                 }
@@ -554,10 +572,12 @@ public class GameScreen extends BaseScreen {
                     if(checkPlayer) {
                         if (friendlyPlayers2.get(playerId) != null) {
                             friendlyPlayers2.get(playerId).getBody().setTransform(vector2.x, vector2.y, 0);
+                            playerProger.setPosition(vector2.x, vector2.y);
                         }
                     }else{
                         if (friendlyPlayers1.get(playerId) != null) {
                             friendlyPlayers1.get(playerId).getBody().setTransform(vector2.x, vector2.y, 0);
+                            playerVloger.setPosition(vector2.x, vector2.y);
                         }
                     }
                 } catch (org.json.JSONException e) {

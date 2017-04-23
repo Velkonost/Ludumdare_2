@@ -26,9 +26,9 @@ public class PlayerProgerEntity extends Actor implements InputProcessor {
         LEFT, RIGHT, UP, DOWN
     }
 
-    public static Map<KeysProger, Boolean> keys = new HashMap<KeysProger, Boolean>();
+    private Map<KeysProger, Boolean> keys = new HashMap<KeysProger, Boolean>();
 
-    static {
+     {
         keys.put(KeysProger.LEFT, false);
         keys.put(KeysProger.RIGHT, false);
         keys.put(KeysProger.UP, false);
@@ -41,7 +41,7 @@ public class PlayerProgerEntity extends Actor implements InputProcessor {
     private Texture phoneTexture;
 
     private boolean hasPhone = true, isPhoneCoords = false;
-    private float phoneX, phoneY;
+    public float phoneX, phoneY;
 
     private World world;
 
@@ -72,7 +72,7 @@ public class PlayerProgerEntity extends Actor implements InputProcessor {
         final PolygonShape box = new PolygonShape();
         box.setAsBox(0.25f, 0.5f);
 
-        fixture = body.createFixture(box, 3);
+        fixture = body.createFixture(box, 1000);
         fixture.setUserData("proger");
 
         box.dispose();
@@ -127,7 +127,7 @@ public class PlayerProgerEntity extends Actor implements InputProcessor {
     @Override
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.D) {
-            System.out.println(2);
+//            System.out.println(2);
             rightPressed();
         } else if (keycode == Input.Keys.A) {
             leftPressed();
@@ -232,6 +232,7 @@ public class PlayerProgerEntity extends Actor implements InputProcessor {
 
     //в зависимости от выбранного направления движения выставляем новое направление движения для персонажа
     public void processInput() {
+
         if (keys.get(KeysProger.LEFT))
             body.setLinearVelocity(-SPEED_PROGER, body.getLinearVelocity().y);
         if (keys.get(KeysProger.RIGHT))

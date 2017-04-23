@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.compression.lzma.Base;
 
 /**
  * Created by Danila on 23.04.2017.
@@ -25,7 +24,7 @@ public class LoseScreen extends BaseScreen{
 
     public void show() {
         LS = new SpriteBatch();
-        losePik = game.getManager().get("lose.png");
+        losePik = game.getManager().get("table1.png");
     }
 
     public void render(float delta) {

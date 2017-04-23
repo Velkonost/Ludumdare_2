@@ -28,9 +28,9 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
         LEFT, RIGHT, UP, DOWN
     }
 
-    static Map<KeysVloger, Boolean> keys = new HashMap<KeysVloger, Boolean>();
+    private Map<KeysVloger, Boolean> keys = new HashMap<KeysVloger, Boolean>();
 
-    static {
+    {
         keys.put(KeysVloger.LEFT, false);
         keys.put(KeysVloger.RIGHT, false);
         keys.put(KeysVloger.UP, false);
@@ -84,13 +84,14 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
         BodyDef def = new BodyDef();
         def.position.set(x, y);
         def.type = BodyDef.BodyType.DynamicBody;
+
         body = world.createBody(def);
         body.setFixedRotation(true);
 
         final PolygonShape box = new PolygonShape();
         box.setAsBox(0.25f, 0.5f);
 
-        fixture = body.createFixture(box, 3);
+        fixture = body.createFixture(box, 1000);
         fixture.setUserData("vloger");
 
         box.dispose();
@@ -209,6 +210,9 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
 
             if (game.collisionBtwPlayers) {
                 System.out.print("WIN!");
+                game.myachinWin = true;
+                game.game.setScreen(game.win);
+                game.socket.disconnect();
             }
         } else if ( (character == 'e' || character == 'е' || character == 'у') && countCalls > 0) {
 
@@ -307,6 +311,4 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
         if ((keys.get(KeysVloger.UP) && keys.get(KeysVloger.DOWN)) || (!keys.get(KeysVloger.UP) && (!keys.get(KeysVloger.DOWN))))
             body.setLinearVelocity(body.getLinearVelocity().x, 0);
     }
-
-
 }
