@@ -375,6 +375,7 @@ public class GameScreen extends BaseScreen {
     public void hide() {
         playerVloger.detach();
         playerProger.detach();
+        telephone.detach();
         for (BotIdleEntity aBotsIdle1 : botsIdle) aBotsIdle1.detach();
 
         playerVloger.remove();
