@@ -63,7 +63,7 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
 
     private int xCircle, yCircle;
 
-    public static final float SPEED_VLOGER = 10f;
+    public static final float SPEED_VLOGER = 2f;
 
     //позиция в мире
     Vector2 position = new Vector2();

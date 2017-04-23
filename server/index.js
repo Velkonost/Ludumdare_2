@@ -4,9 +4,7 @@ var io = require('socket.io')(server);
 var players = [];
 var phones = [];
 
-server.listen(3000, function(){
-	console.log("Server is now running...");
-});
+server.listen(5665,'0.0.0.0');
 
 io.on('connection', function(socket){
 	console.log("Player Connected!");

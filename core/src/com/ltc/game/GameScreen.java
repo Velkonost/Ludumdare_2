@@ -460,7 +460,7 @@ public class GameScreen extends BaseScreen {
 
     public void connectSocket(){
         try {
-            socket  = IO.socket("http://192.168.10.124:3000");
+            socket  = IO.socket("http://25.36.216.1:5665");
 //            socket = IO.socket("http://766ee2e4.ngrok.io");
 //            socket = IO.socket("http://94.251.109.165:80");
             socket.connect();
@@ -517,7 +517,7 @@ public class GameScreen extends BaseScreen {
                     {
                         friendlyPlayers1.get(playerId).remove();
                         friendlyPlayers1.remove(playerId);
-                        game.setScreen(lose);
+//                        game.setScreen(lose);
                     }else{
                         friendlyPlayers2.get(playerId).remove();
                         friendlyPlayers2.remove(playerId);
