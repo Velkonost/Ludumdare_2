@@ -42,6 +42,8 @@ public class GameScreen extends BaseScreen {
     private World world;
     public MainGame game;
 
+    private boolean f = false;
+    private int getWay;
     private Box2DDebugRenderer renderer;
 
     BitmapFont font;
@@ -527,6 +529,22 @@ public class GameScreen extends BaseScreen {
 
                 // playerEntity.setPosition(1,2);
                 //  stage.addActor(playerEntity);
+            }
+        }).on("getNum", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject data = (JSONObject) args[0];
+                if(!f)
+                {
+                    f = true;
+                    try {
+
+                        getWay = data.getInt("id");
+                        Gdx.app.log("ss", ""+getWay);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }).on("playerDisconnected", new Emitter.Listener() {
             @Override

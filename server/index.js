@@ -3,6 +3,7 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var players = [];
 var phones = [];
+var tmp = 0;
 
 server.listen(5665,'0.0.0.0');
 
@@ -10,8 +11,10 @@ io.on('connection', function(socket){
 	console.log("Player Connected!");
 	socket.emit('socketID', { id: socket.id });
 	socket.emit('getPlayers', players);
+	tmp = getRandomArbitrary(1, 5);
 
 	socket.broadcast.emit('newPlayer', { id: socket.id });
+	socket.emit('getNum', {id: tmp});
 
 	socket.on('playerMoved', function (data) {
 		data.id = socket.id;
@@ -81,7 +84,17 @@ function player(id, x, y, vloger){
 	this.x = x;
 	this.y = y;
 }
+function getRandomArbitrary(min, max) {
+    return Math.random() * (max - min) + min;
+}
 
+/**
+ * Returns a random integer between min (inclusive) and max (inclusive)
+ * Using Math.round() will give you a non-uniform distribution!
+ */
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 function phone(id, x, y) {
     this.id = id;
 	this.xPhone = x;
