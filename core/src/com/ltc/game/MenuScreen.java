@@ -17,7 +17,7 @@ public class MenuScreen extends BaseScreen {
 
     private Texture pl1, pl2, vl1, vl2, btnPlay, ramatext, ramatext2;
     private Texture chooseProg, chooseVlog;
-    private String choosenProg = "", choosenVlog="";
+    private String choosenProg = "", choosenVlog="" ;
     public MenuScreen(MainGame game) {
         super();
         this.game = game;

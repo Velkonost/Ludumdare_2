@@ -65,13 +65,16 @@ public class GameScreen extends BaseScreen {
     private Texture phoneTexture;
     private Texture botIdleTexture;
 
+    public WinScreen win;
+    public LoseScreen lose;
+
     private boolean checkPlayer = false;
 
     private ArrayList<Texture> botsIdleTexture;
 
     private float deltatime, tmp = 0;
 
-    private int a = 180;
+    private int a = 10;
     boolean kf = false;
 
     private GuiMenu guiMenu;
@@ -100,6 +103,8 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public void show() {
+        win = new WinScreen(game);
+        lose = new LoseScreen(game);
         connectSocket();
         configSocketEvents();
         renderer = new Box2DDebugRenderer();
@@ -133,10 +138,9 @@ public class GameScreen extends BaseScreen {
 
                 wall.add(new WallEntiy(wallT, world, 14.5f, 0.5f, 21f, 1f, 10f, 0));
                 wall.add(new WallEntiy(wallT, world, 25.5f, 6f, 1f, 12f, 0, 6.0f));
-               wall.add(new WallEntiy(wallT, world, 24f, 12.0f, 4f, 1f, 1.5f, 0));
+                wall.add(new WallEntiy(wallT, world, 24f, 12.0f, 4f, 1f, 1.5f, 0));
                 wall.add(new WallEntiy(wallT, world, 4.0f, 5.0f, 1f, 9f, 0, 4.0f));
-
-                        wall.add(new WallEntiy(wallT, world, 22.5f, 14f, 1f, 2f, 0, 1f));
+                wall.add(new WallEntiy(wallT, world, 22.5f, 14f, 1f, 2f, 0, 1f));
                 wall.add(new WallEntiy(wallT, world, 22.5f, 18.5f, 1f, 9f, 0, 4f));
                 wall.add(new WallEntiy(wallT, world, 21f, 22.5f, 6f, 1f, 2.5f, 0));
                 wall.add(new WallEntiy(wallT, world, 18.5f, 20f, 1f, 4f, 0, 1.5f));
@@ -150,12 +154,12 @@ public class GameScreen extends BaseScreen {
                 wall.add(new WallEntiy(wallT, world, 11.5f, 9.5f, 1f,1f, 0, 0));
                 wall.add(new WallEntiy(wallT, world, 18.5f, 9.5f, 1f,1f, 0, 0));
 
-                        table.add(new TableEntity(tableTextures.get(6), world, 7f, 17f, 6f, 2f, 2.5f, 0.5f));
+                table.add(new TableEntity(tableTextures.get(6), world, 7f, 17f, 6f, 2f, 2.5f, 0.5f));
                 table.add(new TableEntity(tableTextures.get(1), world, 20.f, 4.f, 2f, 6f, 0.5f, 2.5f));
                 table.add(new TableEntity(tableTextures.get(2), world, 5.5f, 4.f, 2f, 6f, 0.5f, 2.5f));
                 table.add(new TableEntity(tableTextures.get(3), world, 24.f, 4.f, 2f, 6f, 0.5f, 2.5f));
                 table.add(new TableEntity(tableTextures.get(4), world, 10.5f, 4.f, 2f, 6f, 0.5f, 2.5f));
-         table.add(new TableEntity(tableTextures.get(5), world, 15.f, 4.f, 2f, 6f, 0.5f, 2.5f));
+                table.add(new TableEntity(tableTextures.get(5), world, 15.f, 4.f, 2f, 6f, 0.5f, 2.5f));
 
 
 
@@ -291,12 +295,17 @@ public class GameScreen extends BaseScreen {
         phoneTexture = game.getManager().get("mobile.png");
         botIdleTexture = game.getManager().get("myach2hero.png");
     }
-
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         updateServer(Gdx.graphics.getDeltaTime());
+        //////////////////////////////////////для прогера
+        if(checkPlayer) game.setScreen(lose);
+        else if (kf) game.setScreen(win);
+        ///////////////////////////////для блогера
+        /*if(checkPlayer) game.setScreen(win);
+        else if (kf) game.setScreen(lose);*/
 
         if(checkPlayer && !hasChecked)
         {
@@ -307,10 +316,10 @@ public class GameScreen extends BaseScreen {
             playerProger.boom(true);
         }
 
-        if(kf)
+        /*if(kf)
         {
             game.setScreen(new GuiMenu(game, 'l', 0));
-        }
+        }*/
         if(a%60>9){
             str = ""+(int)floor(a/60)+":"+a%60;
         }else{
