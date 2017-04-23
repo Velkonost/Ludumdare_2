@@ -185,7 +185,7 @@ public class GameScreen extends BaseScreen {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
+///////////////////////////////////////////////////////////////////////
 //        for (int i = 1; i <= 3; i++) {
 //            botsIdle.add(new BotIdleEntity(botsIdleTexture.get(i - 1), this, world, i * 5, i * 2));
 //            stage.addActor(botsIdle.get(i - 1));
@@ -388,8 +388,7 @@ public class GameScreen extends BaseScreen {
                     e.printStackTrace();
                 }
                 socket.emit("phoneDropped", data);
-            }
-        }else{
+            } else{
             stage.getCamera().position.set(playerProger.getX(),playerProger.getY(), 0);
             for (HashMap.Entry<String, PlayerVlogerEntity> entry : friendlyPlayers1.entrySet()) {
                stage.addActor(entry.getValue());
@@ -408,8 +407,7 @@ public class GameScreen extends BaseScreen {
         stage.draw();
     }
 
-    @Override
-    public void hide() {
+        public void hide() {
         playerVloger.detach();
         playerProger.detach();
         telephone.detach();
