@@ -31,7 +31,7 @@ import static java.lang.Math.floor;
  */
 public class GameScreen extends BaseScreen {
 
-    private final float UPDATE_TIME = 1/60f;
+    private final float UPDATE_TIME = 1 / 60f;
     private float timer;
     private HashMap<String, PlayerVlogerEntity> friendlyPlayers1;
     private HashMap<String, PlayerProgerEntity> friendlyPlayers2;
@@ -142,8 +142,7 @@ public class GameScreen extends BaseScreen {
             @Override
             public void run() {
                 a--;
-                if(a==0)
-                {
+                if (a == 0) {
                     kf = true;
                     game.setScreen(win);
                     cancel();
@@ -160,7 +159,7 @@ public class GameScreen extends BaseScreen {
         botsMoveTexture.add((Texture) game.getManager().get("player1hero.png"));
         botsMoveTexture.add((Texture) game.getManager().get("player2hero.png"));
 
-        for (int i = 0; i < botsMoveTexture.size(); i++ ) {
+        for (int i = 0; i < botsMoveTexture.size(); i++) {
             botsMove.add(new BotMoveEntity(botsMoveTexture.get(i), world, i * 5 + 10, i * 5 + 10));
         }
 
@@ -176,11 +175,11 @@ public class GameScreen extends BaseScreen {
         wall.add(new WallEntiy(wallT, world, 14.5f, 20f, 1f, 2f, 0, 0.5f));
         wall.add(new WallEntiy(wallT, world, 12f, 20.5f, 4f, 1f, 1.5f, 0));
         wall.add(new WallEntiy(wallT, world, 10.5f, 19.5f, 1f, 1f, 0, 0));
-        wall.add(new WallEntiy(wallT, world, 5.5f, 18.5f, 11f,1f, 5f, 0));
+        wall.add(new WallEntiy(wallT, world, 5.5f, 18.5f, 11f, 1f, 5f, 0));
         wall.add(new WallEntiy(wallT, world, 0.5f, 14f, 1f, 8f, 0, 3.5f));
-        wall.add(new WallEntiy(wallT, world, 2f, 9.5f, 4f,1f, 1f, 0));
-        wall.add(new WallEntiy(wallT, world, 11.5f, 9.5f, 1f,1f, 0, 0));
-        wall.add(new WallEntiy(wallT, world, 18.5f, 9.5f, 1f,1f, 0, 0));
+        wall.add(new WallEntiy(wallT, world, 2f, 9.5f, 4f, 1f, 1f, 0));
+        wall.add(new WallEntiy(wallT, world, 11.5f, 9.5f, 1f, 1f, 0, 0));
+        wall.add(new WallEntiy(wallT, world, 18.5f, 9.5f, 1f, 1f, 0, 0));
 
         table.add(new TableEntity(tableTextures.get(6), world, 7f, 17f, 6f, 2f, 2.5f, 0.5f));
         table.add(new TableEntity(tableTextures.get(1), world, 20.f, 4.f, 2f, 6f, 0.5f, 2.5f));
@@ -193,7 +192,7 @@ public class GameScreen extends BaseScreen {
         bot.add(new BotEntity(botTextures.get(2), world, 8.5f, 4.5f, 1f, 1f));
         bot.add(new BotEntity(botTextures.get(0), world, 7.5f, 5.5f, 1f, 1f));
 
-        playerVloger = new PlayerVlogerEntity(playerVlogerTexture, playerVlogerCameraTexture, this, world, 9f, 7f);
+        playerVloger = new PlayerVlogerEntity(playerVlogerTexture, playerVlogerCameraTexture, this, world, 6.5f, 3.5f);
         playerProger = new PlayerProgerEntity(playerProgerTexture, phoneTexture, this, world, 6.5f, 3.5f);
         telephone = new TelephoneEntity(telephoneTexture, world, 19.5f, 21.5f, 1, 1, 0, 0);
         //guiMenu = new GuiMenu()
@@ -221,7 +220,7 @@ public class GameScreen extends BaseScreen {
             stage.addActor(aTable);
         }
 
-        for(BotEntity aBot : bot){
+        for (BotEntity aBot : bot) {
             stage.addActor(aBot);
         }
 
@@ -232,13 +231,13 @@ public class GameScreen extends BaseScreen {
         world.setContactListener(new ContactListener() {
             @Override
             public void beginContact(Contact contact) {
-                Fixture fixtureA = contact.getFixtureA();
-                Fixture fixtureB = contact.getFixtureB();
+         /*       Fixture fixtureA = contact.getFixtureA();
+                Fixture fixtureB = contact.getFixtureB();*/
 
                 if (playerProger != null) playerProger.processInput();
                 if (playerVloger != null) playerVloger.processInput();
 
-                if ((fixtureA.getUserData().equals("vloger") && fixtureB.getUserData().equals("telephone"))
+               /* if ((fixtureA.getUserData().equals("vloger") && fixtureB.getUserData().equals("telephone"))
                         || (fixtureA.getUserData().equals("telephone") && fixtureB.getUserData().equals("vloger"))) {
                     isTelephoneCollision = true;
                 }
@@ -267,15 +266,14 @@ public class GameScreen extends BaseScreen {
                             ) {
                         hasPhone = true;
                     }
-                }
+                }*/
             }
-
 
 
             @Override
             public void endContact(Contact contact) {
 
-                Fixture fixtureA = contact.getFixtureA();
+              /*  Fixture fixtureA = contact.getFixtureA();
                 Fixture fixtureB = contact.getFixtureB();
 
 
@@ -298,7 +296,7 @@ public class GameScreen extends BaseScreen {
                                 || (fixtureA.getUserData().equals("botmove") && fixtureB.getUserData().equals("vloger"))
                         ) {
                     collisionVlogerWithBot = false;
-                }
+                }*/
             }
 
             @Override
@@ -320,14 +318,13 @@ public class GameScreen extends BaseScreen {
         if (choosenVlog.equals("myach1")) {
             playerVlogerTexture = game.getManager().get("myachhero.png");
             playerVlogerCameraTexture = game.getManager().get("myachheroCamera.png");
-        }
-        else {
+        } else {
             playerVlogerTexture = game.getManager().get("myach2hero.png");
             playerVlogerCameraTexture = game.getManager().get("myach2heroCamera.png");
         }
 
 
-        if(choosenProg.equals("player1")) {
+        if (choosenProg.equals("player1")) {
             playerProgerTexture = game.getManager().get("player1hero.png");
         } else if (choosenProg.equals("player2")) {
             playerProgerTexture = game.getManager().get("player2hero.png");
@@ -342,6 +339,7 @@ public class GameScreen extends BaseScreen {
         phoneTexture = game.getManager().get("mobile.png");
         botIdleTexture = game.getManager().get("myach2hero.png");
     }
+
     @Override
     public void render(float delta) {
 
@@ -356,14 +354,15 @@ public class GameScreen extends BaseScreen {
         ///////////////////////////////для блогера
         /*if(checkPlayer) game.setScreen(win);
         else if (kf) game.setScreen(lose);*/
-        if(hasDrop && tel.size() > 0) stage.addActor(tel.get(0));
-        if(checkPlayer && !hasChecked)
-        {
+        if (hasDrop && tel.size() > 0) stage.addActor(tel.get(0));
+        if (checkPlayer && !hasChecked) {
             stage.addActor(playerVloger);
             playerVloger.boom(true);
-        }else if(!checkPlayer && !hasChecked){
+            hasChecked = true;
+        } else if (!checkPlayer && !hasChecked) {
             stage.addActor(playerProger);
             playerProger.boom(true);
+            hasChecked = true;
         }
 
 
@@ -373,38 +372,37 @@ public class GameScreen extends BaseScreen {
         {
             game.setScreen(new GuiMenu(game, 'l', 0));
         }*/
-        if(a%60>9){
-            str = ""+(int)floor(a/60)+":"+a%60;
-        }else{
-            str = ""+(int)floor(a/60)+":0"+a%60;
+        if (a % 60 > 9) {
+            str = "" + (int) floor(a / 60) + ":" + a % 60;
+        } else {
+            str = "" + (int) floor(a / 60) + ":0" + a % 60;
         }
 
         sp.begin();
         font.getData().setScale(3, 3);
-        font.draw(sp, str, Gdx.graphics.getWidth()-200,  Gdx.graphics.getHeight()-50);
+        font.draw(sp, str, Gdx.graphics.getWidth() - 200, Gdx.graphics.getHeight() - 50);
         sp.end();
 
         stage.act();
 
         if (playerVloger != null) playerVloger.processInput();
         if (playerProger != null) playerProger.processInput();
-        if(checkPlayer) {
-            stage.getCamera().position.set(playerVloger.getX(),playerVloger.getY(), 0);
+        if (checkPlayer) {
+            stage.getCamera().position.set(playerVloger.getX(), playerVloger.getY(), 0);
             for (HashMap.Entry<String, PlayerProgerEntity> entry : friendlyPlayers2.entrySet()) {
 
                 stage.addActor(entry.getValue());
                 entry.getValue().processInput();
             }
-        }else{
-            stage.getCamera().position.set(playerProger.getX(),playerProger.getY(), 0);
+        } else {
+            stage.getCamera().position.set(playerProger.getX(), playerProger.getY(), 0);
             for (HashMap.Entry<String, PlayerVlogerEntity> entry : friendlyPlayers1.entrySet()) {
 
                 stage.addActor(entry.getValue());
                 entry.getValue().processInput();
 
             }
-            if(Gdx.input.isKeyJustPressed(Input.Keys.E))
-            {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
                 JSONObject data = new JSONObject();
                 try {
                     data.put("x", playerProger.phoneX);
@@ -413,29 +411,22 @@ public class GameScreen extends BaseScreen {
                     e.printStackTrace();
                 }
                 socket.emit("phoneDropped", data);
-            } else {
-                stage.getCamera().position.set(playerProger.getX(),playerProger.getY(), 0);
-                for (HashMap.Entry<String, PlayerVlogerEntity> entry : friendlyPlayers1.entrySet()) {
-                    stage.addActor(entry.getValue());
-                    entry.getValue().processInput();
-                }
-                playerProger.processInput();
-                stage.getCamera().position.set(playerProger.getX(), playerProger.getY(), 0);
             }
+        }
         for (BotIdleEntity aBotsIdle : botsIdle) aBotsIdle.processInput();
 
-      //  stage.getCamera().position.set(playerProger.getX(),playerProger.getY(), 0);
+        //  stage.getCamera().position.set(playerProger.getX(),playerProger.getY(), 0);
 
         world.step(delta, 6, 2);
         camera.update();
         renderer.render(world, camera.combined);
         stage.draw();
-        }
     }
 
+
         public void hide() {
-            playerVloger.detach();
-            playerProger.detach();
+//            playerVloger.detach();
+         //   playerProger.detach();
             telephone.detach();
 
             for (BotMoveEntity aBotsMove : botsMove) aBotsMove.detach();
@@ -514,7 +505,7 @@ public class GameScreen extends BaseScreen {
 
     public void connectSocket(){
         try {
-            socket  = IO.socket("http://25.36.204.209:5665");
+            socket  = IO.socket("http://localhost:5665");
 //            socket = IO.socket("http://766ee2e4.ngrok.io");
 //            socket = IO.socket("http://94.251.109.165:80");
             socket.connect();
@@ -648,7 +639,7 @@ public class GameScreen extends BaseScreen {
                 }
 
             }
-        }).on("getPhone", new Emitter.Listener() {
+        })/*.on("getPhone", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
 
@@ -663,6 +654,6 @@ public class GameScreen extends BaseScreen {
                     }
                 }
             }
-        });
+        })*/;
     }
 }

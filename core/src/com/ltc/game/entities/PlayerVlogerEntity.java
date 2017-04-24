@@ -91,8 +91,8 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
         final PolygonShape box = new PolygonShape();
         box.setAsBox(0.25f, 0.5f);
 
-        fixture = body.createFixture(box, 1000);
-        fixture.setUserData("vloger");
+  //      fixture = body.createFixture(box, 1000);
+      //  fixture.setUserData("vloger");
 
         box.dispose();
 
@@ -124,7 +124,7 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
 
 
 
-        if (withCamera) {
+      //  if (withCamera) {
 
             batch.draw(textureCamera, getX(), getY(), getWidth(), getHeight());
             Timer.schedule(new Timer.Task() {
@@ -136,7 +136,7 @@ public class PlayerVlogerEntity extends Actor implements InputProcessor {
                 }
             }, 10).run();
 
-        } else batch.draw(texture, getX(), getY(), getWidth(), getHeight());
+        //} else batch.draw(texture, getX(), getY(), getWidth(), getHeight());
 
         if (isCircleDraw) {
             if (circleGetCoords) {

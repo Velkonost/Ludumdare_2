@@ -72,8 +72,8 @@ public class PlayerProgerEntity extends Actor implements InputProcessor {
         final PolygonShape box = new PolygonShape();
         box.setAsBox(0.25f, 0.5f);
 
-        fixture = body.createFixture(box, 1000);
-        fixture.setUserData("proger");
+     //   fixture = body.createFixture(box, 1000);
+       // fixture.setUserData("proger");
 
         box.dispose();
 
